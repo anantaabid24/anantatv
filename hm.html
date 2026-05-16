@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlassTV • Live</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.13/dist/hls.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --glass: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.25);
+            --accent: #22d3ee;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e2937);
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(34, 211, 238, 0.15), transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.15), transparent 50%);
+            z-index: -1;
+        }
+
+        /* Top Right Menu - Appears ONLY after login */
+        .top-right-menu {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 8px 12px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 300;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: 0.3s;
+        }
+        
+        .user-profile:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Player */
+        #main-interface {
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+        }
+        
+        .player-container {
+            flex: 1;
+            position: relative;
+            background: #000;
+            padding: 20px 20px 0;
+            max-height: 82vh;
+        }
+        
+        #video-player {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .player-overlay {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            padding: 12px 20px;
+            border-radius: 9999px;
+            border: 1px solid var(--glass-border);
+            z-index: 10;
+            max-width: 420px;
+        }
+
+        /* Bottom Channel Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border-top: 1px solid var(--glass-border);
+            padding: 12px 20px;
+            z-index: 200;
+            overflow-x: auto;
+            white-space: nowrap;
+            transition: all 0.4s ease;
+        }
+        
+        .bottom-bar.hidden {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+
+        .channel-list {
+            display: flex;
+            gap: 14px;
+        }
+        
+        .channel-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            width: 118px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 8px;
+            border-radius: 18px;
+        }
+        
+        .channel-item:hover, .channel-item.active {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.08);
+        }
+        
+        .channel-logo {
+            width: 78px; height: 78px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 2px solid rgba(255,255,255,0.4);
+            margin-bottom: 8px;
+        }
+        
+        .channel-name { font-size: 13.5px; font-weight: 600; margin-bottom: 2px; }
+        .channel-epg { font-size: 11px; color: #67e8f9; }
+
+        /* Modals */
+        .auth-screen, .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        .auth-box, .modal-content {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            padding: 45px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        .glass-input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid var(--glass-border);
+            padding: 16px 20px;
+            border-radius: 16px;
+            color: white;
+            margin-bottom: 16px;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #22d3ee, #67e8f9);
+            color: #0f172a;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login / Register Page (Shown to all visitors first) -->
+    <div id="login-screen" class="auth-screen">
+        <div class="auth-box">
+            <div style="font-size:52px; font-weight:800; background:linear-gradient(90deg,#22d3ee,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:10px;">GlassTV</div>
+            <h2>Welcome Back</h2>
+            <input type="text" id="login-username" class="glass-input" placeholder="Username" value="admin">
+            <input type="password" id="login-password" class="glass-input" placeholder="Password" value="admin">
+            <button onclick="login()" class="btn-primary">Login</button>
+            <div onclick="showRegister()" style="margin-top:20px; color:#94a3b8; cursor:pointer;">
+                Don't have an account? <span style="color:#22d3ee;">Register</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="register-screen" class="auth-screen" style="display:none;">
+        <div class="auth-box">
+            <div style="font-size:52px; font-weight:800; background:linear-gradient(90deg,#22d3ee,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:10px;">GlassTV</div>
+            <h2>Create Account</h2>
+            <input type="text" id="reg-username" class="glass-input" placeholder="Username">
+            <input type="email" id="reg-email" class="glass-input" placeholder="Email">
+            <input type="password" id="reg-password" class="glass-input" placeholder="Password">
+            <button onclick="register()" class="btn-primary">Create Account</button>
+            <div onclick="showLogin()" style="margin-top:20px; color:#94a3b8; cursor:pointer;">
+                Already have an account? <span style="color:#22d3ee;">Login</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="main-interface">
+        <!-- Top Right Menu - Appears After Login -->
+        <div class="top-right-menu" id="top-right-menu">
+            <div class="user-profile" onclick="showProfileModal()">
+                <i class="fas fa-user-circle" style="font-size:24px;"></i>
+                <span id="display-username" class="user-name">User</span>
+            </div>
+            <button onclick="logout()" style="background:rgba(255,255,255,0.15); border:none; color:white; padding:8px 14px; border-radius:12px; cursor:pointer; font-size:14px;">
+                Logout
+            </button>
+        </div>
+
+        <!-- Player -->
+        <div class="player-container">
+            <video id="video-player" autoplay controls></video>
+            
+            <div class="player-overlay">
+                <div id="current-channel-name" style="font-size:19px; font-weight:700;"></div>
+                <div id="current-epg" style="color:#67e8f9; font-size:14px;"></div>
+            </div>
+        </div>
+        
+        <!-- Bottom Channel Bar -->
+        <div class="bottom-bar" id="bottom-bar">
+            <div class="channel-list" id="bottom-channel-list"></div>
+        </div>
+    </div>
+
+    <!-- Add Channel Modal (Admin Only) -->
+    <div class="modal" id="channel-modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px;">Add New Channel</h2>
+            <label style="display:block; margin:10px 0 5px; color:#cbd5e1;">Channel Name</label>
+            <input type="text" id="new-name" class="glass-input">
+            <label style="display:block; margin:10px 0 5px; color:#cbd5e1;">Stream URL</label>
+            <input type="text" id="new-url" class="glass-input">
+            <label style="display:block; margin:10px 0 5px; color:#cbd5e1;">Logo URL (optional)</label>
+            <input type="text" id="new-logo" class="glass-input">
+            <div style="display:flex; gap:10px; margin-top:25px;">
+                <button onclick="saveChannel()" style="flex:1;padding:16px;background:#22d3ee;color:#0f172a;border:none;border-radius:16px;font-weight:600;">Save</button>
+                <button onclick="hideModal()" style="flex:1;padding:16px;background:rgba(255,255,255,0.2);border:none;border-radius:16px;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom:20px;">Edit Profile</h2>
+            
+            <label style="display:block; margin:10px 0 5px; color:#cbd5e1;">Username</label>
+            <input type="text" id="edit-username" class="glass-input">
+            
+            <label style="display:block; margin:10px 0 5px; color:#cbd5e1;">Email</label>
+            <input type="email" id="edit-email" class="glass-input">
+            
+            <label style="display:block; margin:15px 0 5px; color:#cbd5e1;">New Password (optional)</label>
+            <input type="password" id="edit-password" class="glass-input" placeholder="Leave blank to keep current">
+            
+            <div style="display:flex; gap:10px; margin-top:25px;">
+                <button onclick="saveProfile()" style="flex:1;padding:16px;background:#22d3ee;color:#0f172a;border:none;border-radius:16px;font-weight:600;">Save Changes</button>
+                <button onclick="hideProfileModal()" style="flex:1;padding:16px;background:rgba(255,255,255,0.2);border:none;border-radius:16px;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let channels = [];
+        let currentChannel = null;
+        let hls = null;
+        let currentUser = null;
+        let hideTimeout;
+        const video = document.getElementById('video-player');
+
+        let users = JSON.parse(localStorage.getItem('glassTV_users')) || [
+            { username: "admin", password: "admin", email: "admin@glasstv.live", isAdmin: true }
+        ];
+
+        function loadChannels() {
+            const saved = localStorage.getItem('glassTV_channels');
+            if (saved) channels = JSON.parse(saved);
+        }
+
+        function saveChannels() { localStorage.setItem('glassTV_channels', JSON.stringify(channels)); }
+        function saveUsers() { localStorage.setItem('glassTV_users', JSON.stringify(users)); }
+
+        function isAdminUser() {
+            return currentUser && currentUser.username.toLowerCase() === "admin";
+        }
+
+        function showLogin() {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('register-screen').style.display = 'none';
+        }
+
+        function showRegister() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('register-screen').style.display = 'flex';
+        }
+
+        function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            
+            const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-interface').style.display = 'flex';
+                document.getElementById('top-right-menu').style.display = 'flex';
+                document.getElementById('display-username').textContent = user.username;
+                
+                renderBottomChannels();
+                if (channels.length > 0) playChannel(channels[0]);
+            } else {
+                alert("Invalid username or password!");
+            }
+        }
+
+        function register() {
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+            
+            if (!username || !email || !password) return alert("All fields are required");
+            if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) return alert("Username already taken");
+            
+            users.push({ 
+                username, 
+                password, 
+                email, 
+                isAdmin: username.toLowerCase() === "admin" 
+            });
+            saveUsers();
+            alert("Registration successful! Please login.");
+            showLogin();
+        }
+
+        function logout() {
+            if (confirm("Logout?")) {
+                currentUser = null;
+                document.getElementById('main-interface').style.display = 'none';
+                document.getElementById('top-right-menu').style.display = 'none';
+                showLogin();
+            }
+        }
+
+        function setupAutoHide() {
+            const bottomBar = document.getElementById('bottom-bar');
+            function hideBar() { bottomBar.classList.add('hidden'); }
+            function showBar() {
+                bottomBar.classList.remove('hidden');
+                clearTimeout(hideTimeout);
+                hideTimeout = setTimeout(hideBar, 5000);
+            }
+            document.addEventListener('mousemove', showBar);
+            document.addEventListener('touchstart', showBar);
+            hideTimeout = setTimeout(hideBar, 8000);
+        }
+
+        function renderBottomChannels() {
+            const container = document.getElementById('bottom-channel-list');
+            container.innerHTML = '';
+            
+            channels.forEach(channel => {
+                const div = document.createElement('div');
+                div.className = `channel-item ${currentChannel && currentChannel.id === channel.id ? 'active' : ''}`;
+                div.innerHTML = `
+                    <img src="${channel.logo || 'https://picsum.photos/id/237/200/200'}" class="channel-logo" onerror="this.src='https://picsum.photos/id/237/200/200'">
+                    <div class="channel-name">${channel.name}</div>
+                    <div class="channel-epg">${channel.epg || 'Live'}</div>
+                `;
+                div.onclick = () => playChannel(channel);
+                container.appendChild(div);
+            });
+
+            if (isAdminUser()) {
+                const addBtn = document.createElement('div');
+                addBtn.className = 'channel-item';
+                addBtn.style.border = '2px dashed rgba(255,255,255,0.5)';
+                addBtn.innerHTML = `<i class="fas fa-plus" style="font-size:32px; margin:20px 0; color:#67e8f9;"></i><div class="channel-name">Add</div>`;
+                addBtn.onclick = () => document.getElementById('channel-modal').style.display = 'flex';
+                container.appendChild(addBtn);
+            }
+        }
+
+        async function fetchEPG(channelName) {
+            const epgEl = document.getElementById('current-epg');
+            try {
+                const res = await fetch(`https://api.tvmaze.com/search/shows?q=${encodeURIComponent(channelName)}`);
+                const data = await res.json();
+                epgEl.textContent = data?.[0]?.show?.name ? data[0].show.name + " • Live" : "Live Now";
+            } catch {
+                epgEl.textContent = "Live Now";
+            }
+        }
+
+        function playChannel(channel) {
+            currentChannel = channel;
+            document.getElementById('current-channel-name').textContent = channel.name;
+            fetchEPG(channel.name);
+            renderBottomChannels();
+
+            if (hls) { hls.destroy(); hls = null; }
+            if (channel.url.includes('.m3u8') && Hls.isSupported()) {
+                hls = new Hls({ lowLatencyMode: true });
+                hls.loadSource(channel.url);
+                hls.attachMedia(video);
+            } else {
+                video.src = channel.url;
+            }
+            video.play().catch(() => {});
+        }
+
+        function hideModal() {
+            document.getElementById('channel-modal').style.display = 'none';
+        }
+
+        function saveChannel() {
+            const name = document.getElementById('new-name').value.trim();
+            const url = document.getElementById('new-url').value.trim();
+            const logo = document.getElementById('new-logo').value.trim();
+            if (!name || !url) return alert("Name and URL are required");
+            
+            channels.unshift({
+                id: Date.now(),
+                name, url,
+                logo: logo || `https://picsum.photos/id/${Math.floor(Math.random()*400)}/200/200`,
+                epg: "Live"
+            });
+            saveChannels();
+            hideModal();
+            renderBottomChannels();
+        }
+
+        function showProfileModal() {
+            if (!currentUser) return;
+            document.getElementById('edit-username').value = currentUser.username;
+            document.getElementById('edit-email').value = currentUser.email;
+            document.getElementById('edit-password').value = '';
+            document.getElementById('profile-modal').style.display = 'flex';
+        }
+
+        function hideProfileModal() {
+            document.getElementById('profile-modal').style.display = 'none';
+        }
+
+        function saveProfile() {
+            if (!currentUser) return;
+            const newUsername = document.getElementById('edit-username').value.trim();
+            const newEmail = document.getElementById('edit-email').value.trim();
+            const newPassword = document.getElementById('edit-password').value.trim();
+
+            if (newUsername && newUsername !== currentUser.username) {
+                if (users.find(u => u.username.toLowerCase() === newUsername.toLowerCase() && u !== currentUser)) {
+                    return alert("Username already taken");
+                }
+                currentUser.username = newUsername;
+                document.getElementById('display-username').textContent = newUsername;
+            }
+            if (newEmail) currentUser.email = newEmail;
+            if (newPassword) currentUser.password = newPassword;
+
+            saveUsers();
+            alert("Profile updated successfully!");
+            hideProfileModal();
+        }
+
+        window.onload = () => {
+            loadChannels();
+            document.getElementById('login-screen').style.display = 'flex';
+            setupAutoHide();
+        };
+    </script>
+</body>
+</html>
