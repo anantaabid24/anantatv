@@ -12,7 +12,7 @@
         :root {
             --bg: #030208;
             --glass: rgba(255, 255, 255, 0.03);
-            --glass-thick: rgba(0, 0, 0, 0.9);
+            --glass-thick: rgba(0, 0, 0, 0.95);
             --glass-border: rgba(255, 255, 255, 0.15);
             --accent: #d11fb5;
             --live-red: #ff3131;
@@ -26,84 +26,44 @@
         }
 
         /* --- Logo & Tagline --- */
-        .brand-logo {
-            position: absolute; top: 25px; left: 40px; z-index: 100;
-            display: flex; flex-direction: column; gap: 4px;
-        }
+        .brand-logo { position: absolute; top: 25px; left: 40px; z-index: 100; display: flex; flex-direction: column; gap: 4px; }
         .logo-main { display: flex; align-items: center; gap: 12px; }
-        .logo-symbol {
-            width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), #701fd1);
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(209, 31, 181, 0.4); font-weight: 900; font-size: 1.2rem;
-        }
+        .logo-symbol { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent), #701fd1); border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(209, 31, 181, 0.4); font-weight: 900; font-size: 1.2rem; }
         .logo-text { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.5px; color: white; }
-        
-        .tagline {
-            font-size: 0.7rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
-            background: linear-gradient(90deg, rgba(255,255,255,0.4) 0%, #fff 50%, rgba(255,255,255,0.4) 100%);
-            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: shimmer 3s linear infinite; margin-left: 5px;
-        }
-
+        .tagline { font-size: 0.7rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; background: linear-gradient(90deg, rgba(255,255,255,0.4) 0%, #fff 50%, rgba(255,255,255,0.4) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: shimmer 3s linear infinite; margin-left: 5px; }
         @keyframes shimmer { to { background-position: 200% center; } }
 
-        .main-content { flex: 1; display: flex; flex-direction: column; padding: 115px 30px 30px 40px; gap: 20px; }
+        .main-content { flex: 1; display: flex; flex-direction: column; padding: 130px 45px 40px 45px; gap: 30px; }
 
-        /* --- Player Container --- */
-        #player-container {
-            flex: 1; position: relative; background: #000; border-radius: 40px;
-            overflow: hidden; border: 1px solid var(--glass-border);
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
-        }
+        /* --- Player --- */
+        #player-container { flex: 1; position: relative; background: #000; border-radius: 40px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 50px 100px rgba(0,0,0,0.9); }
         video { width: 100%; height: 100%; object-fit: contain; }
 
-        /* --- NEW PRO CONTROLLER --- */
-        .controls-bar {
-            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
-            background: var(--glass-transparent); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 120px;
-            padding: 9px 120px; display: flex; align-items: center; gap: 45px;
-            opacity: 0; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            z-index: 10;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(209, 31, 181, 0.1);
-        }
+        .controls-bar { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--glass-transparent); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 120px; padding: 9px 140px; display: flex; align-items: center; gap: 45px; opacity: 0; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); }
         #player-container:hover .controls-bar { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .btn { background: none; border: none; color: white; cursor: pointer; font-size: 2rem; padding: 12px; transition: 0.3s; }
+        .btn:hover { color: var(--accent); transform: scale(1.2); }
 
-        .btn { background: none; border: none; color: white; cursor: pointer; font-size: 2rem; padding: 12px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-        .btn:hover { color: var(--accent); transform: scale(1.2); text-shadow: 0 0 15px var(--accent); }
-
-        #exit-fs { display: none; position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.1); color: white; border-radius: 50%; width: 55px; height: 55px; font-weight: bold; border: 1px solid var(--glass-border); cursor: pointer; z-index: 20; backdrop-filter: blur(15px); font-size: 1.2rem; }
+        #exit-fs { display: none; position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.1); color: white; border-radius: 50%; width: 55px; height: 55px; border: 1px solid var(--glass-border); cursor: pointer; z-index: 20; backdrop-filter: blur(15px); }
         :fullscreen #exit-fs { display: block; }
 
-        /* --- Status Info Bar --- */
-        .status-bar {
-            background: var(--glass-thick); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 35px;
-            padding: 28px 50px; display: flex; align-items: center; justify-content: space-between;
-        }
-        .active-ch-info { display: flex; align-items: center; gap: 20px; }
-        .active-ch-info h2 { margin: 0; font-size: 2.3rem; font-weight: 800; }
-
+        /* --- Status Bar --- */
+        .status-bar { background: var(--glass-thick); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 35px; padding: 28px 50px; display: flex; align-items: center; justify-content: space-between; }
+        .active-ch-info h2 { margin: 0; font-size: 2.1rem; font-weight: 800; }
         .live-tag { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--live-red); font-size: 0.8rem; letter-spacing: 3px; }
         .pulse { width: 12px; height: 12px; background: var(--live-red); border-radius: 50%; position: relative; }
         .pulse::after { content: ''; position: absolute; width: 100%; height: 100%; background: var(--live-red); border-radius: 50%; animation: ring 2s infinite; }
         @keyframes ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(4.2); opacity: 0; } }
 
         /* --- Sidebar --- */
-        .sidebar {
-            width: 420px; margin: 25px; background: var(--glass);
-            backdrop-filter: blur(40px); border: 1px solid var(--glass-border);
-            border-radius: 40px; padding: 35px 20px; display: flex; flex-direction: column;
-        }
-        .channel-list { flex: 1; overflow-y: auto; padding-right: 10px; }
-        .card {
-            padding: 20px; margin-bottom: 12px; border-radius: 22px;
-            background: rgba(255,255,255,0.02); border: 1px solid transparent;
+        .sidebar { width: 420px; margin: 25px; background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 40px; padding: 30px 20px; display: flex; flex-direction: column; }
+        .channel-list { flex: 1; overflow-y: auto; padding-right: 5px; }
+        .card { padding: 20px; margin-bottom: 12px; border-radius: 22px; 
+        background: rgba(255,255,255,0.02);border: 1px solid transparent; }border: 1px solid transparent;
             cursor: pointer; transition: 0.3s;
-        }
         .card:hover { background: rgba(255,255,255,0.08); transform: translateX(10px); }
         .card.active { border-color: var(--accent); background: rgba(209, 31, 181, 0.15); }
-        
+
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
@@ -111,53 +71,48 @@
 <body>
 
     <div class="brand-logo">
-        <div class="logo-main">
-            <div class="logo-symbol">A</div>
-            <div class="logo-text">ANANTA STREAM</div>
-        </div>
+        <div class="logo-main"><div class="logo-symbol">A</div><div class="logo-text">ANANTA STREAM</div></div>
         <div class="tagline">Premium TV Experience</div>
     </div>
 
     <main class="main-content">
         <div id="player-container">
-            <button id="exit-fs" onclick="exitFullscreen()">✕</button>
-            <video id="video" autoplay></video>
-            
+            <button id="exit-fs" onclick="exitFullscreen()">⛶</button>
+            <video id="video" autoplay playsinline crossorigin="anonymous"></video>
             <div class="controls-bar">
-                <button class="btn" onclick="togglePlay()" id="play-btn" title="Play/Pause">⏸</button>
-                <button class="btn" onclick="toggleMute()" id="mute-btn" title="Mute/Unmute">🔊</button>
-                <div style="width: 2px; height: 40px; background: rgba(255,255,255,0.15);"></div>
-                <button class="btn" onclick="enterFullscreen()" title="Fullscreen">⛶</button>
+                <button class="btn" onclick="togglePlay()" id="play-btn">⏸</button>
+                <button class="btn" onclick="toggleMute()" id="mute-btn">🔊</button>
+<div style="width: 2px; height: 40px; background: rgba(255,255,255,0.15);" bis_skin_checked="1"></div>
+                <button class="btn" onclick="enterFullscreen()">⛶</button>
             </div>
-        </div>
-
+        </div> 
         <div class="status-bar">
             <div class="active-ch-info">
                 <div class="live-tag"><div class="pulse"></div> LIVE</div>
                 <h2 id="current-name">Select a Channel</h2>
             </div>
-            <div style="text-align: right;">
+            <div id="epg-box" style="text-align: right;">
                 <div id="epg-title" style="font-size: 1.4rem; font-weight: 700; color: var(--accent);">Program Info Loading...</div>
-                <div id="epg-time" style="color: rgba(255,255,255,0.5); font-size: 1rem; margin-top: 5px;">--:-- - --:--</div>
+                <div id="epg-time" style="color: rgba(255,255,255,0.5); font-size: 1rem; margin-top: 4px;">--:--</div>
             </div>
         </div>
     </main>
 
     <aside class="sidebar">
-        <div style="font-size: 0.75rem; letter-spacing: 5px; opacity: 0.3; font-weight: 800; text-align: center; margin-bottom: 25px;">CHANNEL LIST</div>
+        <div style="font-size: 0.75rem; letter-spacing: 5px; opacity: 0.3; text-align: center; margin-bottom: 25px; font-weight: 800;">CHANNEL LIST</div>
         <div class="channel-list" id="ui-list"></div>
     </aside>
 
     <script>
-        const EPG_URL = 'https://avkb.short.gy/tsepg.xml.gz'
-        
+        const EPG_URL = 'https://corsproxy.io/?' + encodeURIComponent('https://avkb.short.gy/tsepg.xml.gz');
+
         const channels = [
+            { id: 19, name: 'T SPORTS HD', xmlId: 'TSports.bd', category: 'Sports', url: 'http://172.16.29.2:8090/hls/tsportshd.m3u8' },
             { id: 49, name: 'Star Sports Select 1 HD', xmlId: 'StarSportsSelect1.in', category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect1HD.m3u8' },
             { id: 48, name: 'Star Sports Select 2 HD', xmlId: 'StarSportsSelect2.in', category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect2HD.m3u8' },
             { id: 33, name: 'TNT SPORTS 4', xmlId: 'TNTSports4.uk', category: 'Sports', url: 'http://172.16.29.3:8090/hls/tntsports4hd.m3u8' },
             { id: 34, name: 'TEN SPORTS 5 HD', xmlId: 'SonyTen3.in', category: 'Sports', url: 'http://172.16.29.3:8090/hls/SonyTen3hd.m3u8' },
             { id: 20, name: 'Will SPORTS HD', xmlId: 'Willow.us', category: 'Sports', url: 'https://playztv-apps.pages.dev/willow/index.m3u8' },
-            { id: 19, name: 'T SPORTS HD', xmlId: 'TSports.bd', category: 'Sports', url: 'https://playztv-apps.pages.dev/tsports/index.m3u8' },
             { id: 22, name: 'PTV SPORTS HD', xmlId: 'PTVSports.pk', category: 'Sports', url: 'https://playztv-apps.pages.dev/ptvsports/index.m3u8' },
             { id: 21, name: 'A SPORTS HD', xmlId: 'ASports.pk', category: 'Sports', url: 'https://playztv-apps.pages.dev/asports/index.m3u8' },
             { id: 1, name: 'Channel 24 HD', xmlId: 'Channel24.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8' },
@@ -218,7 +173,7 @@
         }
 
         function updateEPG() {
-            const active = channels.find(c => document.getElementById(`ch-${c.id}`).classList.contains('active'));
+            const active = channels.find(c => document.getElementById(`ch-${c.id}`)?.classList.contains('active'));
             if (!active) return;
             document.getElementById('current-name').textContent = active.name;
             if (!epgDoc) return;
@@ -229,7 +184,7 @@
                 document.getElementById('epg-title').textContent = curr.querySelector('title').textContent;
                 document.getElementById('epg-time').textContent = `${fTime(curr.getAttribute('start'))} - ${fTime(curr.getAttribute('stop'))}`;
             } else {
-                document.getElementById('epg-title').textContent = "Program Guide Unavailable";
+                document.getElementById('epg-title').textContent = "No Guide Data";
                 document.getElementById('epg-time').textContent = "--:--";
             }
         }
@@ -239,33 +194,37 @@
 
         function selectChannel(ch) {
             document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            const el = document.getElementById(`ch-${ch.id}`);
-            if(el) el.classList.add('active');
+            document.getElementById(`ch-${ch.id}`)?.classList.add('active');
+            
             if (Hls.isSupported()) {
                 if (hls) hls.destroy();
-                hls = new Hls(); hls.loadSource(ch.url); hls.attachMedia(video);
+                hls = new Hls({ enableWorker: true });
+                hls.loadSource(ch.url);
+                hls.attachMedia(video);
                 hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = ch.url;
             }
             updateEPG();
         }
 
-        function togglePlay() { video.paused ? (video.play(), document.getElementById('play-btn').textContent='⏸') : (video.pause(), document.getElementById('play-btn').textContent='▶'); }
-        function toggleMute() { video.muted = !video.muted; document.getElementById('mute-btn').textContent = video.muted ? '🔇' : '🔊'; }
-        function enterFullscreen() { const c = document.getElementById('player-container'); if (c.requestFullscreen) c.requestFullscreen(); else if (c.webkitRequestFullscreen) c.webkitRequestFullscreen(); }
-        function exitFullscreen() { if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); }
+        function togglePlay() { video.paused ? video.play() : video.pause(); }
+        function toggleMute() { video.muted = !video.muted; }
+        function enterFullscreen() { const c = document.getElementById('player-container'); if (c.requestFullscreen) c.requestFullscreen(); }
+        function exitFullscreen() { if (document.exitFullscreen) document.exitFullscreen(); }
 
         const list = document.getElementById('ui-list');
         channels.forEach(ch => {
             const el = document.createElement('div');
             el.className = 'card'; el.id = `ch-${ch.id}`;
-            el.innerHTML = `<div style="font-size:0.6rem; opacity:0.3; letter-spacing:1px;">${ch.category}</div><strong>${ch.name}</strong>`;
+            el.innerHTML = `<div style="font-size:0.6rem; opacity:0.3;">${ch.category}</div><strong>${ch.name}</strong>`;
             el.onclick = () => selectChannel(ch);
             list.appendChild(el);
         });
 
         fetchEPG();
         selectChannel(channels[0]);
-        setInterval(updateEPG, 30000);
+        setInterval(updateEPG, 60000);
     </script>
 </body>
 </html>
