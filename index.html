@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ananta TV Stream - IPTV Player</title>
-  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;type=content-script&amp;dmn=c901eewf0c6dtskn.canvacode.com&amp;url=https%3A%2F%2Fc901eewf0c6dtskn.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..zWCv9awnb98QYWLF.m6SSd-cWnk1y773VeLsc6Jh4r8L7dczax9NU8c4sdBpjAt2Us6ztxsNhw9dVpZ2CGBegUxRBRyCaqoc.3iPAZ4UPSEcaB-lBQM5lXQ%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;type=content-script&amp;dmn=c901kyx4e9pkpw6s.canvacode.com&amp;url=https%3A%2F%2Fc901kyx4e9pkpw6s.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..AnIofE5r-vPXyyL7.U5euMQlZFMBHazxbQXtqv2LdoSIoZqnH-1QkQKy5boxLNVDs5v8DQFa2CmjmUgFMNTsqeR9f-Flt8UQ.9vmfDoIKMJVXcwSIH7SEMQ%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
   <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -375,32 +375,41 @@
 
         .channels-sidebar {
             width: 100%;
-            height: auto;
-            max-height: 150px;
+            height: 200px;
             display: flex;
             flex-direction: column;
             gap: 12px;
             min-height: 0;
+            padding: 0;
+            background: none;
+            border: none;
+            box-shadow: none;
         }
 
         @media (min-width: 480px) {
             .channels-sidebar {
-                max-height: 180px;
+                height: 220px;
                 gap: 12px;
             }
         }
 
         @media (min-width: 640px) {
             .channels-sidebar {
-                max-height: 220px;
+                height: 240px;
                 gap: 14px;
             }
         }
 
         @media (min-width: 768px) {
             .channels-sidebar {
-                max-height: 240px;
+                height: 280px;
                 gap: 16px;
+                padding: 20px;
+                background: rgba(15, 23, 42, 0.4);
+                backdrop-filter: blur(30px) saturate(180%);
+                border: 1px solid rgba(148, 163, 184, 0.15);
+                border-radius: 24px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             }
         }
 
@@ -1772,5 +1781,5 @@
             playChannel(channels[0]);
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fcec3ca95355942',t:'MTc3ODk4MDQ2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fcec86b365b5942',t:'MTc3ODk4MDY1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
