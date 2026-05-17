@@ -1,1804 +1,271 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ananta TV Stream - IPTV Player</title>
-  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;type=content-script&amp;dmn=c901kyx4e9pkpw6s.canvacode.com&amp;url=https%3A%2F%2Fc901kyx4e9pkpw6s.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..AnIofE5r-vPXyyL7.U5euMQlZFMBHazxbQXtqv2LdoSIoZqnH-1QkQKy5boxLNVDs5v8DQFa2CmjmUgFMNTsqeR9f-Flt8UQ.9vmfDoIKMJVXcwSIH7SEMQ%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
-  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ananta Stream Pro</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 
-        html, body {
-            height: 100%;
-            width: 100%;
+    <style>
+        :root {
+            --bg: #030208;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-thick: rgba(0, 0, 0, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #d11fb5;
+            --live-red: #ff3131;
         }
 
         body {
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a0033 25%, #2d0052 50%, #1a0033 75%, #0f0f1e 100%);
-            background-attachment: fixed;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(ellipse at 20% 50%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .app-wrapper {
-            height: 100%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 12px;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (min-width: 768px) {
-            .app-wrapper {
-                padding: 24px;
-                gap: 24px;
-            }
-        }
-
-        .glass-effect {
-            background: rgba(15, 23, 42, 0.4);
-            backdrop-filter: blur(30px) saturate(180%);
-            border: 1px solid rgba(148, 163, 184, 0.15);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-
-        .player-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column-reverse;
-            gap: 12px;
-            min-height: 0;
-        }
-
-        @media (min-width: 1024px) {
-            .player-container {
-                flex-direction: row;
-                gap: 24px;
-            }
-        }
-
-        .video-player-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            min-height: 0;
-            height: 100%;
-        }
-
-        .video-area {
-            width: 100%;
-            height: 250px;
-            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1e 100%);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            transition: all 0.3s ease;
-        }
-
-        @media (min-width: 640px) {
-            .video-area {
-                height: 400px;
-                border-radius: 20px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .video-area {
-                height: 650px;
-                border-radius: 24px;
-            }
-        }
-
-        .video-area.fullscreen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 0;
-            z-index: 9999;
-            margin: 0;
-            padding: 0;
-        }
-
-        .video-area::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%, rgba(168, 85, 247, 0.05) 100%);
-            pointer-events: none;
-        }
-
-        .video-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            color: rgba(255, 255, 255, 0.6);
-            position: relative;
-            z-index: 1;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        .video-controls-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.7));
-            padding: 40px 30px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .video-area:hover .video-controls-overlay {
-            opacity: 1;
-        }
-
-        .player-controls-left {
-            display: flex;
-            gap: 12px;
-        }
-
-        .player-control-btn {
-            width: 44px;
-            height: 44px;
-            border: none;
-            border-radius: 12px;
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-        }
-
-        .player-control-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(236, 72, 153, 0.6);
-            transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
-        }
-
-        .player-control-btn:active {
-            transform: scale(0.95);
-        }
-
-        .player-control-btn.active {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.4), rgba(139, 92, 246, 0.4));
-            border-color: rgba(236, 72, 153, 0.8);
-            box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
-        }
-
-        .live-badge-channel {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-left: 8px;
-            opacity: 0;
-            animation: fadeInBadge 0.4s ease-out forwards;
-        }
-
-        @keyframes fadeInBadge {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .live-dot-small {
-            width: 6px;
-            height: 6px;
-            background: #ff6b6b;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 0 6px #ff6b6b;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .video-placeholder i {
-            width: 100px;
-            height: 100px;
-            opacity: 0.25;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .channel-info {
-            padding: 16px;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.8);
-            position: relative;
-            overflow: hidden;
-        }
-
-        @media (min-width: 1024px) {
-            .channel-info {
-                padding: 24px;
-            }
-        }
-
-        .channel-info::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
-        }
-
-        .channel-name {
-            font-size: 20px;
-            font-weight: 800;
-            color: #fff;
-            margin-bottom: 6px;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @media (min-width: 640px) {
-            .channel-name {
-                font-size: 26px;
-                margin-bottom: 8px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .channel-name {
-                font-size: 32px;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .channel-status {
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.5);
-            letter-spacing: 0.3px;
-        }
-
-        .live-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(239, 68, 68, 0.15);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #ff6b6b;
-            font-weight: 700;
-            margin-top: 12px;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #ff6b6b;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-            box-shadow: 0 0 8px #ff6b6b;
-        }
-
-        @keyframes pulse {
-            0%, 100% { 
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.4;
-                transform: scale(1.2);
-            }
-        }
-
-        .channels-sidebar {
-            width: 100%;
-            height: 200px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            min-height: 0;
-            padding: 0;
-            background: none;
-            border: none;
-            box-shadow: none;
-        }
-
-        @media (min-width: 480px) {
-            .channels-sidebar {
-                height: 220px;
-                gap: 12px;
-            }
-        }
-
-        @media (min-width: 640px) {
-            .channels-sidebar {
-                height: 240px;
-                gap: 14px;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .channels-sidebar {
-                height: 280px;
-                gap: 16px;
-                padding: 20px;
-                background: rgba(15, 23, 42, 0.4);
-                backdrop-filter: blur(30px) saturate(180%);
-                border: 1px solid rgba(148, 163, 184, 0.15);
-                border-radius: 24px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .channels-sidebar {
-                width: 400px;
-                height: auto;
-                max-height: none;
-                gap: 18px;
-            }
-        }
-
-        .channels-header {
-            color: #fff;
-            font-size: 12px;
-            font-weight: 800;
-            padding: 0 8px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.8;
-        }
-
-        @media (min-width: 1024px) {
-            .channels-header {
-                font-size: 14px;
-            }
-        }
-
-        .channels-header i {
-            width: 18px;
-            height: 18px;
-            color: #ec4899;
-        }
-
-        .channels-list {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow-y: auto;
-            padding-right: 8px;
-            scroll-behavior: smooth;
-            scroll-padding-top: 10px;
-        }
-
-        .channels-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .channels-list::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .channels-list::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, rgba(59, 130, 246, 0.5), rgba(168, 85, 247, 0.5));
-            border-radius: 10px;
-            transition: all 0.3s;
-        }
-
-        .channels-list::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, rgba(59, 130, 246, 0.7), rgba(168, 85, 247, 0.7));
-        }
-
-        .channel-btn {
-            padding: 12px 14px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.6);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-align: left;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            position: relative;
-            overflow: hidden;
-            animation: slideInChannel 0.5s ease-out backwards;
-        }
-
-        @media (min-width: 768px) {
-            .channel-btn {
-                padding: 18px 20px;
-                font-size: 14px;
-                border-radius: 14px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .channel-btn {
-                padding: 35px 30px;
-                font-size: 15px;
-                border-radius: 16px;
-            }
-        }
-
-        @keyframes slideInChannel {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .channel-btn:nth-child(1) { animation-delay: 0.05s; }
-        .channel-btn:nth-child(2) { animation-delay: 0.1s; }
-        .channel-btn:nth-child(3) { animation-delay: 0.15s; }
-        .channel-btn:nth-child(4) { animation-delay: 0.2s; }
-        .channel-btn:nth-child(5) { animation-delay: 0.25s; }
-        .channel-btn:nth-child(6) { animation-delay: 0.3s; }
-        .channel-btn:nth-child(7) { animation-delay: 0.35s; }
-        .channel-btn:nth-child(8) { animation-delay: 0.4s; }
-        .channel-btn:nth-child(9) { animation-delay: 0.45s; }
-        .channel-btn:nth-child(10) { animation-delay: 0.5s; }
-
-        .channel-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.2), transparent);
-            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .channel-btn:hover::before {
-            left: 100%;
-        }
-
-        .channel-btn:hover {
-            background: rgba(236, 72, 153, 0.15);
-            color: #fff;
-            transform: translateX(6px) scale(1.02);
-            border-color: rgba(236, 72, 153, 0.4);
-            box-shadow: 0 12px 30px rgba(236, 72, 153, 0.2);
-        }
-
-        .channel-btn.active {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.6);
-            color: #fff;
-            box-shadow: 0 0 30px rgba(236, 72, 153, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            font-weight: 700;
-            transform: scale(1.05);
-        }
-
-        .channel-number {
-            font-size: 11px;
-            opacity: 0.5;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 700;
-        }
-
-        .controls-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 24px;
-            gap: 20px;
-            border-top: 1px solid rgba(148, 163, 184, 0.1);
-        }
-
-        .control-group {
-            display: flex;
-            gap: 12px;
-        }
-
-        .control-btn {
-            width: 48px;
-            height: 48px;
-            border: none;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            cursor: pointer;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .control-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.3), transparent);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(59, 130, 246, 0.5);
-            transform: scale(1.08);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
-        }
-
-        .control-btn:active {
-            transform: scale(0.95);
-        }
-
-        .control-btn.active {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(99, 102, 241, 0.3));
-            border-color: rgba(59, 130, 246, 0.6);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-        }
-
-        .app-title {
-            color: #fff;
-            font-size: 20px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        @media (min-width: 640px) {
-            .app-title {
-                font-size: 26px;
-                gap: 12px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .app-title {
-                font-size: 32px;
-                gap: 14px;
-            }
-        }
-
-        .app-title i {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
-        }
-
-        @media (min-width: 1024px) {
-            .app-title i {
-                width: 40px;
-                height: 40px;
-                border-radius: 12px;
-            }
-        }
-
-        .top-bar {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 8px;
-            animation: slideDown 0.6s ease-out;
-        }
-
-        @media (min-width: 640px) {
-            .top-bar {
-                flex-direction: row;
-                align-items: center;
-                gap: 0;
-            }
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            background-image: radial-gradient(circle at 0% 0%, #1a0b35 0%, transparent 60%);
+            margin: 0; display: flex; height: 100vh; color: #fff; overflow: hidden;
+        }
+
+        /* --- Logo & Tagline --- */
+        .brand-logo {
+            position: absolute; top: 25px; left: 40px; z-index: 100;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .logo-main { display: flex; align-items: center; gap: 12px; }
+        .logo-symbol {
+            width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), #701fd1);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(209, 31, 181, 0.4); font-weight: 900; font-size: 1.2rem;
+        }
+        .logo-text { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.5px; color: white; }
+        
         .tagline {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        @media (min-width: 640px) {
-            .tagline {
-                font-size: 12px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .tagline {
-                font-size: 13px;
-            }
-        }
-
-        .epg-section {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            min-height: 0;
-        }
-
-        .epg-header {
-            color: #fff;
-            font-size: 14px;
-            font-weight: 800;
-            padding: 0 8px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            opacity: 0.8;
-        }
-
-        .epg-header i {
-            width: 18px;
-            height: 18px;
-            color: #ec4899;
-        }
-
-        .epg-list {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow-y: auto;
-            padding-right: 8px;
-        }
-
-        .epg-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .epg-list::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-        }
-
-        .epg-list::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, rgba(168, 85, 247, 0.5), rgba(59, 130, 246, 0.5));
-            border-radius: 10px;
-        }
-
-        .epg-item {
-            padding: 12px 14px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 12px;
-            transition: all 0.3s;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .epg-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(168, 85, 247, 0.4);
-            transform: translateX(4px);
-        }
-
-        .epg-time {
-            font-size: 11px;
-            color: #ec4899;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .epg-title {
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 4px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .epg-description {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .channel-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            flex-shrink: 0;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        @media (min-width: 1024px) {
-            .channel-logo {
-                width: 50px;
-                height: 50px;
-                border-radius: 10px;
-                margin-right: 12px;
-            }
-        }
-
-        .channel-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 4px;
-        }
-
-        .channel-btn-content {
-            display: flex;
-            align-items: center;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .channel-name-text {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .loading-spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-top-color: #8b5cf6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .epg-loading {
-            padding: 20px;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-            font-size: 12px;
-        }
-
-        .epg-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: auto;
-            background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, transparent 100%);
-            padding: 20px 30px 20px 30px;
-            max-height: 100%;
-            max-width: 400px;
-            overflow-y: auto;
-            z-index: 9;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            border-right: 1px solid rgba(236, 72, 153, 0.3);
-            border-bottom: 1px solid rgba(236, 72, 153, 0.3);
-        }
-
-        .video-area:hover .epg-overlay {
-            opacity: 1;
-        }
-
-        .epg-overlay-title {
-            color: #fff;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #ec4899;
-        }
-
-        .epg-overlay-items {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .epg-overlay-item {
-            padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            border-radius: 8px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .epg-overlay-time {
-            font-size: 10px;
-            color: #ec4899;
-            font-weight: 700;
-            margin-bottom: 2px;
-        }
-
-        .epg-overlay-show {
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 2px;
-        }
-
-        .epg-overlay-desc {
-            font-size: 10px;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .m3u-import-btn {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-            border: 2px dashed rgba(236, 72, 153, 0.4);
-            border-radius: 12px;
-            background: rgba(236, 72, 153, 0.08);
-            color: #ec4899;
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .m3u-import-btn:hover {
-            background: rgba(236, 72, 153, 0.15);
-            border-color: rgba(236, 72, 153, 0.7);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.2);
-        }
-
-        #m3uFileInput {
-            display: none;
-        }
-
-        .m3u-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .m3u-modal.active {
-            display: flex;
-        }
-
-        .m3u-modal-content {
-            background: linear-gradient(135deg, rgba(20, 20, 35, 0.95) 0%, rgba(30, 15, 50, 0.95) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .m3u-modal-header {
-            color: #fff;
-            font-size: 22px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .m3u-modal-header i {
-            color: #ec4899;
-        }
-
-        .m3u-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .m3u-input-field {
-            flex: 1;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: #fff;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .m3u-input-field:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(236, 72, 153, 0.5);
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.2);
-        }
-
-        .m3u-input-field::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .m3u-modal-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .m3u-modal-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .m3u-modal-btn-primary {
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            color: #fff;
-            border: 1px solid rgba(236, 72, 153, 0.5);
-        }
-
-        .m3u-modal-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(236, 72, 153, 0.3);
-        }
-
-        .m3u-modal-btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .m3u-modal-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .m3u-modal-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .m3u-separator {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 12px;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .m3u-separator::before,
-        .m3u-separator::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .m3u-separator::before {
-            left: 0;
-        }
-
-        .m3u-separator::after {
-            right: 0;
-        }
-
-        .m3u-file-info {
-            padding: 12px;
-            background: rgba(236, 72, 153, 0.1);
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            border-radius: 8px;
-            color: rgba(236, 72, 153, 0.9);
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        .channel-context-menu {
-            display: none;
-            position: fixed;
-            background: linear-gradient(135deg, rgba(20, 20, 35, 0.98) 0%, rgba(30, 15, 50, 0.98) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            border-radius: 12px;
-            padding: 8px 0;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-            z-index: 1001;
-            min-width: 180px;
-        }
-
-        .channel-context-menu.active {
-            display: block;
-        }
-
-        .context-menu-item {
-            padding: 10px 14px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 12px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
-        }
-
-        .context-menu-item:hover {
-            background: rgba(236, 72, 153, 0.2);
-            color: #fff;
-            border-left: 2px solid rgba(236, 72, 153, 0.6);
-            padding-left: 12px;
-        }
-
-        .context-menu-item i {
-            width: 14px;
-            height: 14px;
-        }
-
-        .edit-channel-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            z-index: 1002;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .edit-channel-modal.active {
-            display: flex;
-        }
-
-        .edit-channel-modal-content {
-            background: linear-gradient(135deg, rgba(20, 20, 35, 0.95) 0%, rgba(30, 15, 50, 0.95) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.3s ease-out;
-        }
-
-        .edit-channel-modal-header {
-            color: #fff;
-            font-size: 22px;
-            font-weight: 800;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .edit-channel-modal-header i {
-            color: #ec4899;
-        }
-
-        .edit-channel-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .edit-channel-input {
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 12px;
-            color: #fff;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .edit-channel-input:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(236, 72, 153, 0.5);
-            box-shadow: 0 0 15px rgba(236, 72, 153, 0.2);
-        }
-
-        .edit-channel-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .edit-channel-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .edit-channel-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .edit-channel-btn-primary {
-            background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            color: #fff;
-            border: 1px solid rgba(236, 72, 153, 0.5);
-        }
-
-        .edit-channel-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 25px rgba(236, 72, 153, 0.3);
-        }
-
-        .edit-channel-btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .edit-channel-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
+            font-size: 0.7rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
+            background: linear-gradient(90deg, rgba(255,255,255,0.4) 0%, #fff 50%, rgba(255,255,255,0.4) 100%);
+            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            animation: shimmer 3s linear infinite; margin-left: 5px;
+        }
+
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        .main-content { flex: 1; display: flex; flex-direction: column; padding: 115px 30px 30px 40px; gap: 20px; }
+
+        /* --- Player Container --- */
+        #player-container {
+            flex: 1; position: relative; background: #000; border-radius: 40px;
+            overflow: hidden; border: 1px solid var(--glass-border);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
+        }
+        video { width: 100%; height: 100%; object-fit: contain; }
+
+        /* --- NEW PRO CONTROLLER --- */
+        .controls-bar {
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: var(--glass-transparent); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 120px;
+            padding: 9px 120px; display: flex; align-items: center; gap: 45px;
+            opacity: 0; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            z-index: 10;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(209, 31, 181, 0.1);
+        }
+        #player-container:hover .controls-bar { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .btn { background: none; border: none; color: white; cursor: pointer; font-size: 2rem; padding: 12px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .btn:hover { color: var(--accent); transform: scale(1.2); text-shadow: 0 0 15px var(--accent); }
+
+        #exit-fs { display: none; position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.1); color: white; border-radius: 50%; width: 55px; height: 55px; font-weight: bold; border: 1px solid var(--glass-border); cursor: pointer; z-index: 20; backdrop-filter: blur(15px); font-size: 1.2rem; }
+        :fullscreen #exit-fs { display: block; }
+
+        /* --- Status Info Bar --- */
+        .status-bar {
+            background: var(--glass-thick); backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border); border-radius: 35px;
+            padding: 28px 50px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .active-ch-info { display: flex; align-items: center; gap: 20px; }
+        .active-ch-info h2 { margin: 0; font-size: 2.3rem; font-weight: 800; }
+
+        .live-tag { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--live-red); font-size: 0.8rem; letter-spacing: 3px; }
+        .pulse { width: 12px; height: 12px; background: var(--live-red); border-radius: 50%; position: relative; }
+        .pulse::after { content: ''; position: absolute; width: 100%; height: 100%; background: var(--live-red); border-radius: 50%; animation: ring 2s infinite; }
+        @keyframes ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(4.2); opacity: 0; } }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 420px; margin: 25px; background: var(--glass);
+            backdrop-filter: blur(40px); border: 1px solid var(--glass-border);
+            border-radius: 40px; padding: 35px 20px; display: flex; flex-direction: column;
+        }
+        .channel-list { flex: 1; overflow-y: auto; padding-right: 10px; }
+        .card {
+            padding: 20px; margin-bottom: 12px; border-radius: 22px;
+            background: rgba(255,255,255,0.02); border: 1px solid transparent;
+            cursor: pointer; transition: 0.3s;
+        }
+        .card:hover { background: rgba(255,255,255,0.08); transform: translateX(10px); }
+        .card.active { border-color: var(--accent); background: rgba(209, 31, 181, 0.15); }
+        
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body>
-  <div class="app-wrapper">
-   <div class="top-bar">
-    <div class="app-title"><i data-lucide="tv"></i> <span>Ananta TV Stream</span>
-    </div>
-    <div class="tagline">
-     Premium IPTV Experience
-    </div>
-   </div>
-   <div class="player-container">
-    <div class="video-player-wrapper">
-     <div class="video-area glass-effect">
-      <video id="videoPlayer" style="width: 100%; height: 100%; display: none;"></video>
-      <div class="video-placeholder" id="videoPlaceholder"><i data-lucide="play-circle"></i>
-       <div style="text-align: center;">
-        <div style="font-size: 16px; margin-bottom: 5px;">
-         Select a channel to start watching
+</head>
+<body>
+
+    <div class="brand-logo">
+        <div class="logo-main">
+            <div class="logo-symbol">A</div>
+            <div class="logo-text">ANANTA STREAM</div>
         </div>
-        <div style="font-size: 12px; opacity: 0.5;">
-         Click any channel from the list
+        <div class="tagline">Premium TV Experience</div>
+    </div>
+
+    <main class="main-content">
+        <div id="player-container">
+            <button id="exit-fs" onclick="exitFullscreen()">✕</button>
+            <video id="video" autoplay></video>
+            
+            <div class="controls-bar">
+                <button class="btn" onclick="togglePlay()" id="play-btn" title="Play/Pause">⏸</button>
+                <button class="btn" onclick="toggleMute()" id="mute-btn" title="Mute/Unmute">🔊</button>
+                <div style="width: 2px; height: 40px; background: rgba(255,255,255,0.15);"></div>
+                <button class="btn" onclick="enterFullscreen()" title="Fullscreen">⛶</button>
+            </div>
         </div>
-       </div>
-      </div>
-      <div class="epg-overlay" id="epgOverlay">
-       <div class="epg-overlay-title">
-        <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> Now Playing
-       </div>
-       <div class="epg-overlay-items" id="epgOverlayItems">
-        <div style="color: rgba(255, 255, 255, 0.5); font-size: 11px;">
-         Loading schedule...
+
+        <div class="status-bar">
+            <div class="active-ch-info">
+                <div class="live-tag"><div class="pulse"></div> LIVE</div>
+                <h2 id="current-name">Select a Channel</h2>
+            </div>
+            <div style="text-align: right;">
+                <div id="epg-title" style="font-size: 1.4rem; font-weight: 700; color: var(--accent);">Program Info Loading...</div>
+                <div id="epg-time" style="color: rgba(255,255,255,0.5); font-size: 1rem; margin-top: 5px;">--:-- - --:--</div>
+            </div>
         </div>
-       </div>
-      </div>
-      <div class="video-controls-overlay">
-       <div class="player-controls-left"><button class="player-control-btn" id="playerPlayBtn" title="Play"> <i data-lucide="play" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerPauseBtn" title="Pause"> <i data-lucide="pause" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerVolumeBtn" title="Mute"> <i data-lucide="volume-2" style="width: 18px; height: 18px;"></i> </button>
-       </div><button class="player-control-btn" id="playerFullscreenBtn" title="Fullscreen"> <i data-lucide="maximize" style="width: 18px; height: 18px;"></i> </button>
-      </div>
-     </div>
-     <div class="glass-effect" style="padding: 0;">
-      <div class="channel-info">
-       <div style="display: flex; align-items: center; justify-content: center;">
-        <div class="channel-name" id="channelName">
-         Select Channel
-        </div><span class="live-badge-channel" id="liveBadge" style="display: none;">
-         <div class="live-dot-small"></div><span style="font-size: 11px; color: #ff6b6b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Live</span> </span>
-       </div>
-       <div class="channel-status" id="channelStatus">
-        Ready to stream
-       </div>
-      </div>
-     </div>
-    </div>
-    <div class="channels-sidebar glass-effect" style="padding: 20px;">
-     <div class="channels-header">
-      <i data-lucide="list"></i> Channels <button class="control-btn" style="margin-left: auto; width: 40px; height: 40px;" onclick="openM3UModal()" title="Add channels"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
-     </div>
-     <div class="channels-list" id="channelsList"></div>
-    </div>
-   </div>
-   <div class="m3u-modal" id="m3uModal">
-    <div class="m3u-modal-content">
-     <div class="m3u-modal-header">
-      <i data-lucide="upload"></i> Import M3U Playlist
-     </div>
-     <div style="margin-bottom: 20px;">
-      <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 8px; font-weight: 600;">
-       Import M3U Playlist
-      </div>
-      <div class="m3u-input-group"><input type="text" class="m3u-input-field" id="m3uUrlInput" placeholder="Paste M3U URL here...">
-      </div>
-      <div class="m3u-separator">
-       Or
-      </div>
-      <div class="m3u-modal-buttons"><button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="document.getElementById('m3uFileInput').click()"><i data-lucide="file" style="width: 14px; height: 14px; display: inline; margin-right: 4px;"></i> Choose File </button>
-      </div><input type="file" id="m3uFileInput" accept=".m3u,.m3u8" onchange="handleM3UFileSelect(event)">
-      <div class="m3u-file-info" id="m3uFileInfo" style="display: none;"></div>
-      <div class="m3u-modal-buttons" style="margin-top: 20px;"><button class="m3u-modal-btn m3u-modal-btn-primary" onclick="importM3UPlaylist()">Import Channels </button> <button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="closeM3UModal()">Cancel </button>
-      </div>
-     </div>
-     <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px;">
-      <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 12px; font-weight: 600;">
-       Or Add Single Channel
-      </div>
-      <div class="m3u-input-group" style="flex-direction: column; gap: 12px;"><input type="text" class="m3u-input-field" id="singleChannelName" placeholder="Channel name (e.g., Sports HD)"> <input type="text" class="m3u-input-field" id="singleChannelUrl" placeholder="M3U8 stream URL">
-      </div>
-      <div class="m3u-modal-buttons" style="margin-top: 12px;"><button class="m3u-modal-btn m3u-modal-btn-primary" onclick="addSingleChannel()">Add Channel </button>
-      </div>
-     </div>
-    </div>
-   </div>
-   <div class="channel-context-menu" id="channelContextMenu">
-    <button class="context-menu-item" onclick="editChannel()"><i data-lucide="edit"></i> Edit Channel </button> <button class="context-menu-item" onclick="favoriteChannel()"><i data-lucide="heart"></i> Add to Favorites </button> <button class="context-menu-item" onclick="removeChannel()"><i data-lucide="trash-2"></i> Remove Channel </button>
-   </div>
-   <div class="edit-channel-modal" id="editChannelModal">
-    <div class="edit-channel-modal-content">
-     <div class="edit-channel-modal-header"><i data-lucide="edit"></i> Edit Channel
-     </div>
-     <div class="edit-channel-input-group"><input type="text" class="edit-channel-input" id="editChannelName" placeholder="Channel name"> <input type="text" class="edit-channel-input" id="editChannelUrl" placeholder="M3U8 stream URL"> <input type="number" class="edit-channel-input" id="editChannelNumber" placeholder="Channel number" min="1">
-     </div>
-     <div class="edit-channel-buttons"><button class="edit-channel-btn edit-channel-btn-primary" onclick="saveChannelEdits()">Save Changes </button> <button class="edit-channel-btn edit-channel-btn-secondary" onclick="closeEditChannelModal()">Cancel </button>
-     </div>
-    </div>
-   </div>
-  </div>
-  <script>
+    </main>
+
+    <aside class="sidebar">
+        <div style="font-size: 0.75rem; letter-spacing: 5px; opacity: 0.3; font-weight: 800; text-align: center; margin-bottom: 25px;">CHANNEL LIST</div>
+        <div class="channel-list" id="ui-list"></div>
+    </aside>
+
+    <script>
+        const EPG_URL = 'https://avkb.short.gy/tsepg.xml.gz'
+        
         const channels = [
-			{ id: 49, name: 'Star Sports Select 1 HD', number: 093, category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect1HD.m3u8' },
-			{ id: 48, name: 'Star Sports Select 2 HD', number: 094, category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect2HD.m3u8' },
-			{ id: 33, name: 'TNT SPORTS 4', number: 095, category: 'Sports', url: 'http://172.16.29.3:8090/hls/tntsports4hd.m3u8' },
-			{ id: 34, name: 'TEN SPORTS 5 HD', number: 096, category: 'Sports', url: 'http://172.16.29.3:8090/hls/SonyTen3hd.m3u8' },
-	        { id: 20, name: 'Will SPORTS HD', number: 097, category: 'Sports', url: 'https://playztv-apps.pages.dev/willow/index.m3u8' },
-            { id: 19, name: 'T SPORTS HD', number: 098, category: 'Sports', url: 'https://playztv-apps.pages.dev/tsports/index.m3u8' },
-	        { id: 22, name: 'PTV SPORTS HD', number: 099, category: 'Sports', url: 'https://playztv-apps.pages.dev/ptvsports/index.m3u8' },
-	        { id: 21, name: 'A SPORTS HD', number: 100, category: 'Sports', url: 'https://playztv-apps.pages.dev/asports/index.m3u8' },
-  	        { id: 1, name: 'Channel 24 HD', number: 101, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8' },
-            { id: 2, name: 'Independent tv', number: 102, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8' },
-            { id: 3, name: 'Somoy Tv HD', number: 103, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8' },
-            { id: 4, name: 'Ekattor TV  HD', number: 104, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8' },
-            { id: 5, name: 'ATN NEWS HD', number: 105, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8' },
-            { id: 6, name: 'News 24 HD', number: 106, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8' },
-            { id: 7, name: 'Star News HD', number: 107, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8' },
-            { id: 8, name: 'Deepto TV HD HD', number: 108, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8' },
-            { id: 9, name: 'Banglavision HD', number: 109, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8' },
-            { id: 10, name: 'NTV HD', number: 110, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8' },
-	        { id: 11, name: 'BTV HD', number: 111, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8' },
-	        { id: 12, name: 'Maasranga HD', number: 112, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8' },
-	        { id: 13, name: 'Channel I HD', number: 113, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8' },
-	        { id: 14, name: 'DBC NEWS HD', number: 114, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8' },
-	        { id: 15, name: 'Channel 9 HD', number: 115, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8' },
-	        { id: 16, name: 'Islamic Tv HD', number: 116, category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8' },
-	        { id: 17, name: 'Al Jazeera HD', number: 117, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8' },
-	        { id: 18, name: 'Sunnah TV HD', number: 118, category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8' },
-	     { id: 23, name: 'ATN BANGLA HD', number: 119, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/atn-bangla/index.m3u8' },
-	     { id: 24, name: 'RTV HD', number: 120, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/rtv/index.m3u8' },
-	     { id: 25, name: 'DURANTO TV HD', number: 121, category: 'KIDS', url: 'https://playztv-apps.pages.dev/duronto-tv/index.m3u8' },
-	     { id: 26, name: 'BOISHAKHI TV HD', number: 122, category: 'NEWS', url: 'https://playztv-apps.pages.dev/boishakhi-tv/index.m3u8' },
-	     { id: 27, name: 'MY TV HD', number: 123, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/my-tv/index.m3u8' },
-	     { id: 28, name: 'ASIAN TV HD', number: 124, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/asian-tv/index.m3u8' },
-	     { id: 29, name: 'DESH TV HD', number: 125, category: 'NEWS', url: 'https://playztv-apps.pages.dev/desh-tv/index.m3u8' },
-	     { id: 30, name: 'MOHONA TV HD', number: 126, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/mohona-tv/index.m3u8' },
-	     { id: 31, name: 'ANANDA TV HD', number: 127, category: 'MOVIE', url: 'https://playztv-apps.pages.dev/ananda-tv/index.m3u8' },
-	     { id: 32, name: 'BIJOY TV HD', number: 128, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/bijoy-tv/index.m3u8' },
-         { id: 35, name: 'Rajdhani TV HD', number: 129, category: 'NEWS', url: 'https://stream.shariarsuvo.com/hls6/rajdhaniweb.m3u8' },
-	     { id: 36, name: 'NRB TV HD', number: 130, category: 'Entertainment', url: 'https://app.ncare.live/live-orgin/nrb-eu.stream/playlist.m3u8' },
-		 { id: 37, name: 'Channel S HD', number: 131, category: 'Entertainment', url: 'https://app.ncare.live/live-orgin/channels.stream/playlist.m3u8' },
-		 { id: 38, name: 'SRK TV HD', number: 132, category: 'Entertainment', url: 'https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/playlist.m3u8' },
-		 { id: 39, name: 'GAZI TV', number: 133, category: 'Movie', url: 'https://app.ncare.live/live-orgin/gazibdz.stream/playlist.m3u8' },
-	     { id: 40, name: 'Mix Hollywood HD', number: 134, category: 'Movies', url: 'https://ml-pull-hwc.myco.io/MixTV/hls/index.m3u8' },
-	     { id: 41, name: 'Crimes HD', number: 135, category: 'Movies', url: 'https://nomawnoijl.gpcdn.net/akash/crimes/chunks.m3u8' },
-	     { id: 42, name: 'Goldmine', number: 136, category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1459/master.m3u8' },
-         { id: 43, name: 'Goldmine Movies', number: 137, category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1461/master.m3u8' },
-         { id: 44, name: 'Goldmine Movies 2', number: 138, category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1460/master.m3u8' },
-		 { id: 45, name: 'Cinex', number: 139, category: 'Movies', url: 'https://gcinemahls.wns.live/hls/stream.m3u8' },
-		 { id: 46, name: 'Uniques HD', number: 140, category: 'Movies', url: 'https://nomawnoijl.gpcdn.net/akash/uniques/chunks.m3u8' },
-	     { id: 47, name: 'Zoom HD', number: 141, category: 'Music', url: 'https://mumbai-edge.smartplaytv.in/Zoom/tracks-v1a1/mono.m3u8' },
-	   
-			
-		];
+            { id: 49, name: 'Star Sports Select 1 HD', xmlId: 'StarSportsSelect1.in', category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect1HD.m3u8' },
+            { id: 48, name: 'Star Sports Select 2 HD', xmlId: 'StarSportsSelect2.in', category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect2HD.m3u8' },
+            { id: 33, name: 'TNT SPORTS 4', xmlId: 'TNTSports4.uk', category: 'Sports', url: 'http://172.16.29.3:8090/hls/tntsports4hd.m3u8' },
+            { id: 34, name: 'TEN SPORTS 5 HD', xmlId: 'SonyTen3.in', category: 'Sports', url: 'http://172.16.29.3:8090/hls/SonyTen3hd.m3u8' },
+            { id: 20, name: 'Will SPORTS HD', xmlId: 'Willow.us', category: 'Sports', url: 'https://playztv-apps.pages.dev/willow/index.m3u8' },
+            { id: 19, name: 'T SPORTS HD', xmlId: 'TSports.bd', category: 'Sports', url: 'https://playztv-apps.pages.dev/tsports/index.m3u8' },
+            { id: 22, name: 'PTV SPORTS HD', xmlId: 'PTVSports.pk', category: 'Sports', url: 'https://playztv-apps.pages.dev/ptvsports/index.m3u8' },
+            { id: 21, name: 'A SPORTS HD', xmlId: 'ASports.pk', category: 'Sports', url: 'https://playztv-apps.pages.dev/asports/index.m3u8' },
+            { id: 1, name: 'Channel 24 HD', xmlId: 'Channel24.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8' },
+            { id: 2, name: 'Independent tv', xmlId: 'IndependentTV.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8' },
+            { id: 3, name: 'Somoy Tv HD', xmlId: 'SomoyTV.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8' },
+            { id: 4, name: 'Ekattor TV HD', xmlId: 'EkattorTV.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8' },
+            { id: 5, name: 'ATN NEWS HD', xmlId: 'ATNNews.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8' },
+            { id: 6, name: 'News 24 HD', xmlId: 'News24.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8' },
+            { id: 7, name: 'Star News HD', xmlId: 'StarNews.in', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8' },
+            { id: 8, name: 'Deepto TV HD', xmlId: 'DeeptoTV.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8' },
+            { id: 9, name: 'Banglavision HD', xmlId: 'Banglavision.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8' },
+            { id: 10, name: 'NTV HD', xmlId: 'NTV.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8' },
+            { id: 11, name: 'BTV HD', xmlId: 'BTV.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8' },
+            { id: 12, name: 'Maasranga HD', xmlId: 'Maasranga.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8' },
+            { id: 13, name: 'Channel I HD', xmlId: 'ChannelI.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8' },
+            { id: 14, name: 'DBC NEWS HD', xmlId: 'DBCNews.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8' },
+            { id: 15, name: 'Channel 9 HD', xmlId: 'Channel9.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8' },
+            { id: 16, name: 'Islamic Tv HD', xmlId: 'IslamicTV.bd', category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8' },
+            { id: 17, name: 'Al Jazeera HD', xmlId: 'AlJazeera.qa', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8' },
+            { id: 18, name: 'Sunnah TV HD', xmlId: 'SunnahTV.sa', category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8' },
+            { id: 23, name: 'ATN BANGLA HD', xmlId: 'ATNBangla.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/atn-bangla/index.m3u8' },
+            { id: 24, name: 'RTV HD', xmlId: 'RTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/rtv/index.m3u8' },
+            { id: 25, name: 'DURANTO TV HD', xmlId: 'DurantoTV.bd', category: 'KIDS', url: 'https://playztv-apps.pages.dev/duronto-tv/index.m3u8' },
+            { id: 26, name: 'BOISHAKHI TV HD', xmlId: 'BoishakhiTV.bd', category: 'NEWS', url: 'https://playztv-apps.pages.dev/boishakhi-tv/index.m3u8' },
+            { id: 27, name: 'MY TV HD', xmlId: 'MyTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/my-tv/index.m3u8' },
+            { id: 28, name: 'ASIAN TV HD', xmlId: 'AsianTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/asian-tv/index.m3u8' },
+            { id: 29, name: 'DESH TV HD', xmlId: 'DeshTV.bd', category: 'NEWS', url: 'https://playztv-apps.pages.dev/desh-tv/index.m3u8' },
+            { id: 30, name: 'MOHONA TV HD', xmlId: 'MohonaTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/mohona-tv/index.m3u8' },
+            { id: 31, name: 'ANANDA TV HD', xmlId: 'AnandaTV.bd', category: 'MOVIE', url: 'https://playztv-apps.pages.dev/ananda-tv/index.m3u8' },
+            { id: 32, name: 'BIJOY TV HD', xmlId: 'BijoyTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/bijoy-tv/index.m3u8' },
+            { id: 35, name: 'Rajdhani TV HD', xmlId: 'RajdhaniTV.bd', category: 'NEWS', url: 'https://stream.shariarsuvo.com/hls6/rajdhaniweb.m3u8' },
+            { id: 36, name: 'NRB TV HD', xmlId: 'NRBTV.eu', category: 'Entertainment', url: 'https://app.ncare.live/live-orgin/nrb-eu.stream/playlist.m3u8' },
+            { id: 37, name: 'Channel S HD', xmlId: 'ChannelS.uk', category: 'Entertainment', url: 'https://app.ncare.live/live-orgin/channels.stream/playlist.m3u8' },
+            { id: 38, name: 'SRK TV HD', xmlId: 'SRKTV.in', category: 'Entertainment', url: 'https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/playlist.m3u8' },
+            { id: 39, name: 'GAZI TV', xmlId: 'GTV.bd', category: 'Movie', url: 'https://app.ncare.live/live-orgin/gazibdz.stream/playlist.m3u8' },
+            { id: 40, name: 'Mix Hollywood HD', xmlId: 'MixHollywood.us', category: 'Movies', url: 'https://ml-pull-hwc.myco.io/MixTV/hls/index.m3u8' },
+            { id: 41, name: 'Crimes HD', xmlId: 'Crimes.in', category: 'Movies', url: 'https://nomawnoijl.gpcdn.net/akash/crimes/chunks.m3u8' },
+            { id: 42, name: 'Goldmine', xmlId: 'Goldmine.in', category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1459/master.m3u8' },
+            { id: 43, name: 'Goldmine Movies', xmlId: 'GoldmineMovies.in', category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1461/master.m3u8' },
+            { id: 44, name: 'Goldmine Movies 2', xmlId: 'GoldmineMovies2.in', category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1460/master.m3u8' },
+            { id: 45, name: 'Cinex', xmlId: 'Cinex.in', category: 'Movies', url: 'https://gcinemahls.wns.live/hls/stream.m3u8' },
+            { id: 46, name: 'Uniques HD', xmlId: 'Uniques.in', category: 'Movies', url: 'https://nomawnoijl.gpcdn.net/akash/uniques/chunks.m3u8' },
+            { id: 47, name: 'Zoom HD', xmlId: 'Zoom.in', category: 'Music', url: 'https://mumbai-edge.smartplaytv.in/Zoom/tracks-v1a1/mono.m3u8' }
+        ];
 
-        let currentChannel = null;
-        let isPlaying = false;
-        let epgData = {};
-        let logoCache = {};
-        let nextChannelId = 11;
-        let m3uFileContent = '';
-        let contextMenuChannel = null;
-        let editingChannelId = null;
+        let hls = null;
+        let epgDoc = null;
+        const video = document.getElementById('video');
 
-        lucide.createIcons();
-
-        // M3U Modal Functions
-        function openM3UModal() {
-            document.getElementById('m3uModal').classList.add('active');
-            document.getElementById('m3uUrlInput').value = '';
-            document.getElementById('m3uFileInfo').style.display = 'none';
-            m3uFileContent = '';
+        async function fetchEPG() {
+            try {
+                const r = await fetch(EPG_URL);
+                const b = await r.arrayBuffer();
+                const d = pako.ungzip(new Uint8Array(b), { to: 'string' });
+                epgDoc = new DOMParser().parseFromString(d, "application/xml");
+                updateEPG();
+            } catch (e) { document.getElementById('epg-title').textContent = "Live Broadcast"; }
         }
 
-        function closeM3UModal() {
-            document.getElementById('m3uModal').classList.remove('active');
-            document.getElementById('m3uUrlInput').value = '';
-            document.getElementById('m3uFileInfo').style.display = 'none';
-            document.getElementById('singleChannelName').value = '';
-            document.getElementById('singleChannelUrl').value = '';
-            m3uFileContent = '';
-        }
-
-        function addSingleChannel() {
-            const name = document.getElementById('singleChannelName').value.trim();
-            const url = document.getElementById('singleChannelUrl').value.trim();
-
-            if (!name || !url) {
-                alert('Please enter both channel name and M3U8 URL');
-                return;
+        function updateEPG() {
+            const active = channels.find(c => document.getElementById(`ch-${c.id}`).classList.contains('active'));
+            if (!active) return;
+            document.getElementById('current-name').textContent = active.name;
+            if (!epgDoc) return;
+            const now = new Date();
+            const progs = Array.from(epgDoc.querySelectorAll(`programme[channel="${active.xmlId}"]`));
+            const curr = progs.find(p => now >= pDate(p.getAttribute('start')) && now <= pDate(p.getAttribute('stop')));
+            if (curr) {
+                document.getElementById('epg-title').textContent = curr.querySelector('title').textContent;
+                document.getElementById('epg-time').textContent = `${fTime(curr.getAttribute('start'))} - ${fTime(curr.getAttribute('stop'))}`;
+            } else {
+                document.getElementById('epg-title').textContent = "Program Guide Unavailable";
+                document.getElementById('epg-time').textContent = "--:--";
             }
-
-            if (!url.includes('.m3u8') && !url.includes('.m3u')) {
-                alert('Please enter a valid M3U8 or M3U stream URL');
-                return;
-            }
-
-            channels.push({
-                id: nextChannelId++,
-                name: name,
-                number: channels.length + 1,
-                category: 'Custom',
-                url: url
-            });
-
-            renderChannels();
-            document.getElementById('singleChannelName').value = '';
-            document.getElementById('singleChannelUrl').value = '';
-            closeM3UModal();
-            alert(`Channel "${name}" added successfully!`);
         }
 
-        function handleM3UFileSelect(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function pDate(s) { return new Date(`${s.substr(0,4)}-${s.substr(4,2)}-${s.substr(6,2)}T${s.substr(8,2)}:${s.substr(10,2)}:00`); }
+        function fTime(s) { return `${s.substr(8,2)}:${s.substr(10,2)}`; }
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                m3uFileContent = e.target.result;
-                const lineCount = m3uFileContent.split('\n').filter(line => line.startsWith('#EXTINF')).length;
-                document.getElementById('m3uFileInfo').innerHTML = `✓ File loaded: <strong>${file.name}</strong><br>Channels found: <strong>${lineCount}</strong>`;
-                document.getElementById('m3uFileInfo').style.display = 'block';
-            };
-            reader.readAsText(file);
-        }
-
-        function parseM3U(content) {
-            const lines = content.split('\n');
-            const parsedChannels = [];
-            let currentChannel = null;
-
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i].trim();
-
-                if (line.startsWith('#EXTINF:')) {
-                    const parts = line.split(',');
-                    const name = parts[parts.length - 1].trim();
-                    const logoMatch = line.match(/tvg-logo="([^"]*)"/);
-                    const logo = logoMatch ? logoMatch[1] : '';
-                    const idMatch = line.match(/tvg-id="([^"]*)"/);
-                    const id = idMatch ? idMatch[1] : '';
-
-                    currentChannel = {
-                        name: name,
-                        logo: logo,
-                        tvgId: id,
-                        url: ''
-                    };
-                } else if (line && !line.startsWith('#') && currentChannel) {
-                    currentChannel.url = line;
-                    parsedChannels.push(currentChannel);
-                    currentChannel = null;
-                }
-            }
-
-            return parsedChannels;
-        }
-
-        async function importM3UPlaylist() {
-            let m3uContent = m3uFileContent;
-            const urlInput = document.getElementById('m3uUrlInput').value.trim();
-
-            if (!m3uContent && urlInput) {
-                try {
-                    const response = await fetch(urlInput);
-                    if (!response.ok) throw new Error('Failed to fetch M3U');
-                    m3uContent = await response.text();
-                } catch (error) {
-                    alert('Error: Could not fetch M3U file from URL. Please check the URL and try again.');
-                    return;
-                }
-            }
-
-            if (!m3uContent) {
-                alert('Please provide either a file or URL');
-                return;
-            }
-
-            const parsedChannels = parseM3U(m3uContent);
-            
-            if (parsedChannels.length === 0) {
-                alert('No channels found in the M3U file');
-                return;
-            }
-
-            parsedChannels.forEach(ch => {
-                channels.push({
-                    id: nextChannelId++,
-                    name: ch.name,
-                    number: channels.length + 1,
-                    category: 'Imported',
-                    logo: ch.logo,
-                    url: ch.url
-                });
-            });
-
-            renderChannels();
-            closeM3UModal();
-            alert(`Successfully imported ${parsedChannels.length} channels!`);
-        }
-
-        function renderChannels() {
-            const channelsList = document.getElementById('channelsList');
-            channelsList.innerHTML = '';
-
-            channels.forEach(channel => {
-                const btn = document.createElement('button');
-                btn.className = 'channel-btn';
-                btn.dataset.channelId = channel.id;
-                
-                btn.innerHTML = `
-                    <div class="channel-btn-content">
-                        <div class="channel-logo">
-                            ${channel.logo ? `<img src="${channel.logo}" alt="${channel.name}" onerror="this.style.display='none'">` : '<i data-lucide="tv" style="width: 24px; height: 24px;"></i>'}
-                        </div>
-                        <div class="channel-name-text">
-                            <div style="font-weight: 600;">${channel.name}</div>
-                            <div style="font-size: 11px; opacity: 0.6;">${channel.category}</div>
-                        </div>
-                    </div>
-                    <span class="channel-number">#${channel.number}</span>
-                `;
-
-                btn.onclick = () => playChannel(channel);
-                btn.oncontextmenu = (e) => showContextMenu(e, channel.id);
-
-                channelsList.appendChild(btn);
-            });
-
-            lucide.createIcons();
-        }
-
-        function playChannel(channel) {
-            currentChannel = channel;
-            
-            // Update UI
-            document.querySelectorAll('.channel-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-channel-id="${channel.id}"]`)?.classList.add('active');
-            
-            document.getElementById('channelName').textContent = channel.name;
-            document.getElementById('channelStatus').textContent = `Now playing: ${channel.category}`;
-            document.getElementById('videoPlaceholder').style.display = 'none';
-            document.getElementById('liveBadge').style.display = 'inline-flex';
-
-            // Video player setup
-            const video = document.getElementById('videoPlayer');
-            
+        function selectChannel(ch) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            const el = document.getElementById(`ch-${ch.id}`);
+            if(el) el.classList.add('active');
             if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(channel.url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    video.play();
-                    isPlaying = true;
-                    updatePlayerControls();
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = channel.url;
-                video.play();
-                isPlaying = true;
-                updatePlayerControls();
+                if (hls) hls.destroy();
+                hls = new Hls(); hls.loadSource(ch.url); hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
             }
-
-            video.style.display = 'block';
+            updateEPG();
         }
 
-        function updatePlayerControls() {
-            const playBtn = document.getElementById('playerPlayBtn');
-            const pauseBtn = document.getElementById('playerPauseBtn');
-            
-            if (isPlaying) {
-                pauseBtn.classList.add('active');
-                playBtn.classList.remove('active');
-            } else {
-                playBtn.classList.add('active');
-                pauseBtn.classList.remove('active');
-            }
-        }
+        function togglePlay() { video.paused ? (video.play(), document.getElementById('play-btn').textContent='⏸') : (video.pause(), document.getElementById('play-btn').textContent='▶'); }
+        function toggleMute() { video.muted = !video.muted; document.getElementById('mute-btn').textContent = video.muted ? '🔇' : '🔊'; }
+        function enterFullscreen() { const c = document.getElementById('player-container'); if (c.requestFullscreen) c.requestFullscreen(); else if (c.webkitRequestFullscreen) c.webkitRequestFullscreen(); }
+        function exitFullscreen() { if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); }
 
-        // Player Control Event Listeners
-        document.getElementById('playerPlayBtn')?.addEventListener('click', () => {
-            document.getElementById('videoPlayer').play();
-            isPlaying = true;
-            updatePlayerControls();
+        const list = document.getElementById('ui-list');
+        channels.forEach(ch => {
+            const el = document.createElement('div');
+            el.className = 'card'; el.id = `ch-${ch.id}`;
+            el.innerHTML = `<div style="font-size:0.6rem; opacity:0.3; letter-spacing:1px;">${ch.category}</div><strong>${ch.name}</strong>`;
+            el.onclick = () => selectChannel(ch);
+            list.appendChild(el);
         });
 
-        document.getElementById('playerPauseBtn')?.addEventListener('click', () => {
-            document.getElementById('videoPlayer').pause();
-            isPlaying = false;
-            updatePlayerControls();
-        });
-
-        document.getElementById('playerVolumeBtn')?.addEventListener('click', function() {
-            const video = document.getElementById('videoPlayer');
-            if (video.muted) {
-                video.muted = false;
-                this.classList.remove('active');
-            } else {
-                video.muted = true;
-                this.classList.add('active');
-            }
-        });
-
-        document.getElementById('playerFullscreenBtn')?.addEventListener('click', () => {
-            const videoArea = document.querySelector('.video-area');
-            if (!document.fullscreenElement) {
-                videoArea.requestFullscreen().catch(err => console.log(err));
-                videoArea.classList.add('fullscreen');
-            } else {
-                document.exitFullscreen();
-                videoArea.classList.remove('fullscreen');
-            }
-        });
-
-        // Context Menu Functions
-        function showContextMenu(event, channelId) {
-            event.preventDefault();
-            contextMenuChannel = channelId;
-            const menu = document.getElementById('channelContextMenu');
-            menu.classList.add('active');
-            menu.style.top = event.clientY + 'px';
-            menu.style.left = event.clientX + 'px';
-        }
-
-        function hideContextMenu() {
-            const menu = document.getElementById('channelContextMenu');
-            menu.classList.remove('active');
-            contextMenuChannel = null;
-        }
-
-        function favoriteChannel() {
-            if (!contextMenuChannel) return;
-            const channel = channels.find(ch => ch.id === contextMenuChannel);
-            if (channel) {
-                channel.favorite = !channel.favorite;
-                hideContextMenu();
-                alert(`${channel.name} ${channel.favorite ? 'added to' : 'removed from'} favorites!`);
-            }
-        }
-
-        function removeChannel() {
-            if (!contextMenuChannel) return;
-            const index = channels.findIndex(ch => ch.id === contextMenuChannel);
-            if (index > -1) {
-                const channel = channels[index];
-                channels.splice(index, 1);
-                renderChannels();
-                hideContextMenu();
-                alert(`${channel.name} removed!`);
-            }
-        }
-
-        function editChannel() {
-            if (!contextMenuChannel) return;
-            editingChannelId = contextMenuChannel;
-            const channel = channels.find(ch => ch.id === contextMenuChannel);
-            if (channel) {
-                document.getElementById('editChannelName').value = channel.name;
-                document.getElementById('editChannelUrl').value = channel.url;
-                document.getElementById('editChannelNumber').value = channel.number;
-                document.getElementById('editChannelModal').classList.add('active');
-                hideContextMenu();
-            }
-        }
-
-        function saveChannelEdits() {
-            const channel = channels.find(ch => ch.id === editingChannelId);
-            if (channel) {
-                channel.name = document.getElementById('editChannelName').value;
-                channel.url = document.getElementById('editChannelUrl').value;
-                channel.number = parseInt(document.getElementById('editChannelNumber').value);
-                renderChannels();
-                closeEditChannelModal();
-                alert('Channel updated successfully!');
-            }
-        }
-
-        function closeEditChannelModal() {
-            document.getElementById('editChannelModal').classList.remove('active');
-            editingChannelId = null;
-        }
-
-        // Close context menu when clicking elsewhere
-        document.addEventListener('click', hideContextMenu);
-
-        // Initialize
-        renderChannels();
-        if (channels.length > 0) {
-            playChannel(channels[0]);
-        }
+        fetchEPG();
+        selectChannel(channels[0]);
+        setInterval(updateEPG, 30000);
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fcec86b365b5942',t:'MTc3ODk4MDY1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
