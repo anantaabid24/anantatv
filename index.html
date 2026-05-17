@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StreamVue - IPTV Player</title>
-  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;type=content-script&amp;dmn=c8zzh7d8z72xccnq.canvacode.com&amp;url=https%3A%2F%2Fc8zzh7d8z72xccnq.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..gPt_5tpgRuJhxsUV.o00_YaHAYE17d0gJgWKuwzUym8W4BEAHnzayN53rTIOtySDO7BTHSubOAI5kPh3iM2c9HkpB7K5FQ6U.ewKeCJDaf3qtLQFPdi6jyw%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778974462882&amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778974462882&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.0/dist/hls.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="/_sdk/element_sdk.js"></script>
   <style>
         * {
             margin: 0;
@@ -323,7 +324,7 @@
         }
 
         .channels-sidebar {
-            width: 300px;
+            width: 400px;
             display: flex;
             flex-direction: column;
             gap: 18px;
@@ -380,7 +381,7 @@
         }
 
         .channel-btn {
-            padding: 40px 24px;
+            padding: 35px 30px;
             border: none;
             border-radius: 16px;
             cursor: pointer;
@@ -439,7 +440,7 @@
         .channel-btn:hover {
             background: rgba(236, 72, 153, 0.15);
             color: #fff;
-            transform: translateX(8px) scale(1.02);
+            transform: translateX(6px) scale(1.02);
             border-color: rgba(236, 72, 153, 0.4);
             box-shadow: 0 12px 30px rgba(236, 72, 153, 0.2);
         }
@@ -1135,7 +1136,6 @@
     </style>
   <style>body { box-sizing: border-box; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
  <body>
   <div class="app-wrapper">
@@ -1250,16 +1250,38 @@
   </div>
   <script>
         const channels = [
-            { id: 1, name: 'Sports HD', number: 101, category: 'Sports', url: 'https://example.com/sports.m3u8' },
-            { id: 2, name: 'Movies Plus', number: 102, category: 'Movies', url: 'https://example.com/movies.m3u8' },
-            { id: 3, name: 'News 24/7', number: 103, category: 'News', url: 'https://example.com/news.m3u8' },
-            { id: 4, name: 'Entertainment', number: 104, category: 'Entertainment', url: 'https://example.com/entertainment.m3u8' },
-            { id: 5, name: 'Music Box', number: 105, category: 'Music', url: 'https://example.com/music.m3u8' },
-            { id: 6, name: 'Documentary', number: 106, category: 'Documentaries', url: 'https://example.com/documentary.m3u8' },
-            { id: 7, name: 'Kids Zone', number: 107, category: 'Kids', url: 'https://example.com/kids.m3u8' },
-            { id: 8, name: 'Nature HD', number: 108, category: 'Nature', url: 'https://example.com/nature.m3u8' },
-            { id: 9, name: 'Cinema Classics', number: 109, category: 'Movies', url: 'https://example.com/cinema.m3u8' },
-            { id: 10, name: 'Tech Today', number: 110, category: 'Technology', url: 'https://example.com/tech.m3u8' },
+	    { id: 20, name: 'Will SPORTS HD', number: 097, category: 'Sports', url: 'https://playztv-apps.pages.dev/willow/index.m3u8' },
+            { id: 19, name: 'T SPORTS HD', number: 098, category: 'Sports', url: 'https://playztv-apps.pages.dev/tsports/index.m3u8' },
+	    { id: 22, name: 'PTV SPORTS HD', number: 099, category: 'Sports', url: 'https://playztv-apps.pages.dev/ptvsports/index.m3u8' },
+	    { id: 21, name: 'ATV SPORTS HD', number: 100, category: 'Sports', url: 'https://playztv-apps.pages.dev/asports/index.m3u8' },
+  	    { id: 1, name: 'Channel 24 HD', number: 101, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8' },
+            { id: 2, name: 'Independent tv', number: 102, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8' },
+            { id: 3, name: 'Somoy Tv HD', number: 103, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8' },
+            { id: 4, name: 'Ekattor TV  HD', number: 104, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8' },
+            { id: 5, name: 'ATN NEWS HD', number: 105, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8' },
+            { id: 6, name: 'News 24 HD', number: 106, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8' },
+            { id: 7, name: 'Star News HD', number: 107, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8' },
+            { id: 8, name: 'Deepto TV HD HD', number: 108, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8' },
+            { id: 9, name: 'Banglavision HD', number: 109, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8' },
+            { id: 10, name: 'NTV HD', number: 110, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8' },
+	    { id: 11, name: 'BTV HD', number: 111, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8' },
+	    { id: 12, name: 'Maasranga HD', number: 112, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8' },
+	    { id: 13, name: 'Channel I HD', number: 113, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8' },
+	    { id: 14, name: 'DBC NEWS HD', number: 114, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8' },
+	    { id: 15, name: 'Channel 9 HD', number: 115, category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8' },
+	    { id: 16, name: 'Islamic Tv HD', number: 116, category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8' },
+	    { id: 17, name: 'Al Jazeera HD', number: 117, category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8' },
+	    { id: 18, name: 'Sunnah TV HD', number: 118, category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8' },
+	     { id: 23, name: 'ATN BANGLA HD', number: 119, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/atn-bangla/index.m3u8' },
+	     { id: 24, name: 'RTV HD', number: 120, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/rtv/index.m3u8' },
+	     { id: 25, name: 'DURANTO TV HD', number: 121, category: 'KIDS', url: 'https://playztv-apps.pages.dev/duronto-tv/index.m3u8' },
+	     { id: 26, name: 'BOISHAKHI TV HD', number: 122, category: 'NEWS', url: 'https://playztv-apps.pages.dev/boishakhi-tv/index.m3u8' },
+	     { id: 27, name: 'MY TV HD', number: 123, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/my-tv/index.m3u8' },
+	     { id: 28, name: 'ASIAN TV HD', number: 124, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/asian-tv/index.m3u8' },
+	     { id: 29, name: 'DESH TV HD', number: 125, category: 'NEWS', url: 'https://playztv-apps.pages.dev/desh-tv/index.m3u8' },
+	     { id: 30, name: 'MOHONA TV HD', number: 126, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/mohona-tv/index.m3u8' },
+	     { id: 31, name: 'ANANDA TV HD', number: 127, category: 'MOVIE', url: 'https://playztv-apps.pages.dev/ananda-tv/index.m3u8' },
+	     { id: 32, name: 'BIJOY TV HD', number: 128, category: 'Entertainment', url: 'https://playztv-apps.pages.dev/bijoy-tv/index.m3u8' },
         ];
 
         let currentChannel = null;
@@ -1404,6 +1426,106 @@
             });
 
             renderChannels();
+
+        function showContextMenu(event, channelId) {
+            event.preventDefault();
+            contextMenuChannel = channelId;
+            const menu = document.getElementById('channelContextMenu');
+            menu.classList.add('active');
+            menu.style.top = event.clientY + 'px';
+            menu.style.left = event.clientX + 'px';
+        }
+
+        function hideContextMenu() {
+            const menu = document.getElementById('channelContextMenu');
+            menu.classList.remove('active');
+            contextMenuChannel = null;
+        }
+
+        function favoriteChannel() {
+            if (!contextMenuChannel) return;
+            const channel = channels.find(ch => ch.id === contextMenuChannel);
+            if (channel) {
+                channel.favorite = !channel.favorite;
+                hideContextMenu();
+                // Visual feedback
+                alert(`${channel.name} ${channel.favorite ? 'added to' : 'removed from'} favorites!`);
+            }
+        }
+
+        function removeChannel() {
+            if (!contextMenuChannel) return;
+            const channel = channels.find(ch => ch.id === contextMenuChannel);
+            if (channel) {
+                channels = channels.filter(ch => ch.id !== contextMenuChannel);
+                if (currentChannel && currentChannel.id === contextMenuChannel) {
+                    currentChannel = null;
+                    document.getElementById('channelName').textContent = 'Select Channel';
+                    document.getElementById('channelStatus').textContent = 'Ready to stream';
+                    document.getElementById('liveBadge').style.display = 'none';
+                }
+                renderChannels();
+                hideContextMenu();
+            }
+        }
+
+        function openEditChannelModal() {
+            const channel = channels.find(ch => ch.id === editingChannelId);
+            if (!channel) return;
+
+            document.getElementById('editChannelName').value = channel.name;
+            document.getElementById('editChannelUrl').value = channel.url || '';
+            document.getElementById('editChannelNumber').value = channel.number;
+            document.getElementById('editChannelModal').classList.add('active');
+        }
+
+        function closeEditChannelModal() {
+            document.getElementById('editChannelModal').classList.remove('active');
+            editingChannelId = null;
+        }
+
+        function editChannel() {
+            if (!contextMenuChannel) return;
+            editingChannelId = contextMenuChannel;
+            hideContextMenu();
+            openEditChannelModal();
+        }
+
+        function saveChannelEdits() {
+            if (!editingChannelId) return;
+
+            const channel = channels.find(ch => ch.id === editingChannelId);
+            if (!channel) return;
+
+            const newName = document.getElementById('editChannelName').value.trim();
+            const newUrl = document.getElementById('editChannelUrl').value.trim();
+            const newNumber = parseInt(document.getElementById('editChannelNumber').value) || channel.number;
+
+            if (!newName) {
+                alert('Channel name cannot be empty');
+                return;
+            }
+
+            channel.name = newName;
+            channel.url = newUrl;
+            channel.number = newNumber;
+
+            renderChannels();
+            closeEditChannelModal();
+            alert('Channel updated successfully!');
+        }
+
+        document.addEventListener('click', function(event) {
+            const editModal = document.getElementById('editChannelModal');
+            const editContent = document.querySelector('.edit-channel-modal-content');
+            if (event.target === editModal) {
+                closeEditChannelModal();
+            }
+        });
+
+        document.addEventListener('click', function() {
+            hideContextMenu();
+        });
             closeM3UModal();
             alert(`Successfully imported ${parsedChannels.length} channels!`);
         }
@@ -1797,5 +1919,5 @@
 
         renderChannels();
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fce92cfd55b5942',t:'MTc3ODk3ODQ1NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fce4b03b5739cba',t:'MTc3ODk3NTUxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
