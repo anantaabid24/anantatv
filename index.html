@@ -3,8 +3,10 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StreamVue - IPTV Player</title>
-  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778974462882&amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778974462882&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <title>Aannta Stream TV - IPTV Player</title>
+  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;type=content-script&amp;dmn=c900995516wc3511.canvacode.com&amp;url=https%3A%2F%2Fc900995516wc3511.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..2zPQJMkA8JI90-dz.wOT6d1d4Z4oN9NMo8Knv0SQGYq_6Bgpj70hiZ2360Fi-xLZaooIwPlQPrk_pBCa9SnbHZrIHNUcLGME.lwGbUw9kWQVJQVj_QhoviA%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="/_sdk/element_sdk.js"></script>
@@ -1140,8 +1142,7 @@
  <body>
   <div class="app-wrapper">
    <div class="top-bar">
-    <div class="app-title">
-     <i data-lucide="tv"></i> <span>StreamVue</span>
+    <div class="app-title"><i data-lucide="tv"></i> <span>Aannta Stream TV</span>
     </div>
     <div class="tagline">
      Premium IPTV Experience
@@ -1151,8 +1152,7 @@
     <div class="video-player-wrapper">
      <div class="video-area glass-effect">
       <video id="videoPlayer" style="width: 100%; height: 100%; display: none;"></video>
-      <div class="video-placeholder" id="videoPlaceholder">
-       <i data-lucide="play-circle"></i>
+      <div class="video-placeholder" id="videoPlaceholder"><i data-lucide="play-circle"></i>
        <div style="text-align: center;">
         <div style="font-size: 16px; margin-bottom: 5px;">
          Select a channel to start watching
@@ -1163,7 +1163,8 @@
        </div>
       </div>
       <div class="epg-overlay" id="epgOverlay">
-       <div class="epg-overlay-title"><i data-lucide="calendar" style="width: 14px; height: 14px;"></i> Now Playing
+       <div class="epg-overlay-title">
+        <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> Now Playing
        </div>
        <div class="epg-overlay-items" id="epgOverlayItems">
         <div style="color: rgba(255, 255, 255, 0.5); font-size: 11px;">
@@ -1172,8 +1173,7 @@
        </div>
       </div>
       <div class="video-controls-overlay">
-       <div class="player-controls-left">
-        <button class="player-control-btn" id="playerPlayBtn" title="Play"> <i data-lucide="play" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerPauseBtn" title="Pause"> <i data-lucide="pause" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerVolumeBtn" title="Mute"> <i data-lucide="volume-2" style="width: 18px; height: 18px;"></i> </button>
+       <div class="player-controls-left"><button class="player-control-btn" id="playerPlayBtn" title="Play"> <i data-lucide="play" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerPauseBtn" title="Pause"> <i data-lucide="pause" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerVolumeBtn" title="Mute"> <i data-lucide="volume-2" style="width: 18px; height: 18px;"></i> </button>
        </div><button class="player-control-btn" id="playerFullscreenBtn" title="Fullscreen"> <i data-lucide="maximize" style="width: 18px; height: 18px;"></i> </button>
       </div>
      </div>
@@ -1192,58 +1192,53 @@
      </div>
     </div>
     <div class="channels-sidebar glass-effect" style="padding: 20px;">
-     <div class="channels-header"><i data-lucide="list"></i> Channels <button class="control-btn" style="margin-left: auto; width: 40px; height: 40px;" onclick="openM3UModal()" title="Add channels"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
+     <div class="channels-header">
+      <i data-lucide="list"></i> Channels <button class="control-btn" style="margin-left: auto; width: 40px; height: 40px;" onclick="openM3UModal()" title="Add channels"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
      </div>
      <div class="channels-list" id="channelsList"></div>
     </div>
    </div>
    <div class="m3u-modal" id="m3uModal">
     <div class="m3u-modal-content">
-     <div class="m3u-modal-header"><i data-lucide="upload"></i> Import M3U Playlist
+     <div class="m3u-modal-header">
+      <i data-lucide="upload"></i> Import M3U Playlist
      </div>
      <div style="margin-bottom: 20px;">
       <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 8px; font-weight: 600;">
        Import M3U Playlist
       </div>
-      <div class="m3u-input-group">
-       <input type="text" class="m3u-input-field" id="m3uUrlInput" placeholder="Paste M3U URL here...">
+      <div class="m3u-input-group"><input type="text" class="m3u-input-field" id="m3uUrlInput" placeholder="Paste M3U URL here...">
       </div>
       <div class="m3u-separator">
        Or
       </div>
-      <div class="m3u-modal-buttons">
-       <button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="document.getElementById('m3uFileInput').click()"><i data-lucide="file" style="width: 14px; height: 14px; display: inline; margin-right: 4px;"></i> Choose File </button>
+      <div class="m3u-modal-buttons"><button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="document.getElementById('m3uFileInput').click()"><i data-lucide="file" style="width: 14px; height: 14px; display: inline; margin-right: 4px;"></i> Choose File </button>
       </div><input type="file" id="m3uFileInput" accept=".m3u,.m3u8" onchange="handleM3UFileSelect(event)">
       <div class="m3u-file-info" id="m3uFileInfo" style="display: none;"></div>
-      <div class="m3u-modal-buttons" style="margin-top: 20px;">
-       <button class="m3u-modal-btn m3u-modal-btn-primary" onclick="importM3UPlaylist()">Import Channels </button> <button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="closeM3UModal()">Cancel </button>
+      <div class="m3u-modal-buttons" style="margin-top: 20px;"><button class="m3u-modal-btn m3u-modal-btn-primary" onclick="importM3UPlaylist()">Import Channels </button> <button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="closeM3UModal()">Cancel </button>
       </div>
      </div>
      <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px;">
       <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 12px; font-weight: 600;">
        Or Add Single Channel
       </div>
-      <div class="m3u-input-group" style="flex-direction: column; gap: 12px;">
-       <input type="text" class="m3u-input-field" id="singleChannelName" placeholder="Channel name (e.g., Sports HD)"> <input type="text" class="m3u-input-field" id="singleChannelUrl" placeholder="M3U8 stream URL">
+      <div class="m3u-input-group" style="flex-direction: column; gap: 12px;"><input type="text" class="m3u-input-field" id="singleChannelName" placeholder="Channel name (e.g., Sports HD)"> <input type="text" class="m3u-input-field" id="singleChannelUrl" placeholder="M3U8 stream URL">
       </div>
-      <div class="m3u-modal-buttons" style="margin-top: 12px;">
-       <button class="m3u-modal-btn m3u-modal-btn-primary" onclick="addSingleChannel()">Add Channel </button>
+      <div class="m3u-modal-buttons" style="margin-top: 12px;"><button class="m3u-modal-btn m3u-modal-btn-primary" onclick="addSingleChannel()">Add Channel </button>
       </div>
      </div>
     </div>
    </div>
-   <div class="channel-context-menu" id="channelContextMenu"><button class="context-menu-item" onclick="editChannel()"><i data-lucide="edit"></i> Edit Channel </button> <button class="context-menu-item" onclick="favoriteChannel()"><i data-lucide="heart"></i> Add to Favorites </button> <button class="context-menu-item" onclick="removeChannel()"><i data-lucide="trash-2"></i> Remove Channel </button>
+   <div class="channel-context-menu" id="channelContextMenu">
+    <button class="context-menu-item" onclick="editChannel()"><i data-lucide="edit"></i> Edit Channel </button> <button class="context-menu-item" onclick="favoriteChannel()"><i data-lucide="heart"></i> Add to Favorites </button> <button class="context-menu-item" onclick="removeChannel()"><i data-lucide="trash-2"></i> Remove Channel </button>
    </div>
    <div class="edit-channel-modal" id="editChannelModal">
     <div class="edit-channel-modal-content">
-     <div class="edit-channel-modal-header">
-      <i data-lucide="edit"></i> Edit Channel
+     <div class="edit-channel-modal-header"><i data-lucide="edit"></i> Edit Channel
      </div>
-     <div class="edit-channel-input-group">
-      <input type="text" class="edit-channel-input" id="editChannelName" placeholder="Channel name"> <input type="text" class="edit-channel-input" id="editChannelUrl" placeholder="M3U8 stream URL"> <input type="number" class="edit-channel-input" id="editChannelNumber" placeholder="Channel number" min="1">
+     <div class="edit-channel-input-group"><input type="text" class="edit-channel-input" id="editChannelName" placeholder="Channel name"> <input type="text" class="edit-channel-input" id="editChannelUrl" placeholder="M3U8 stream URL"> <input type="number" class="edit-channel-input" id="editChannelNumber" placeholder="Channel number" min="1">
      </div>
-     <div class="edit-channel-buttons">
-      <button class="edit-channel-btn edit-channel-btn-primary" onclick="saveChannelEdits()">Save Changes </button> <button class="edit-channel-btn edit-channel-btn-secondary" onclick="closeEditChannelModal()">Cancel </button>
+     <div class="edit-channel-buttons"><button class="edit-channel-btn edit-channel-btn-primary" onclick="saveChannelEdits()">Save Changes </button> <button class="edit-channel-btn edit-channel-btn-secondary" onclick="closeEditChannelModal()">Cancel </button>
      </div>
     </div>
    </div>
@@ -1426,110 +1421,126 @@
             });
 
             renderChannels();
-
-        function showContextMenu(event, channelId) {
-            event.preventDefault();
-            contextMenuChannel = channelId;
-            const menu = document.getElementById('channelContextMenu');
-            menu.classList.add('active');
-            menu.style.top = event.clientY + 'px';
-            menu.style.left = event.clientX + 'px';
-        }
-
-        function hideContextMenu() {
-            const menu = document.getElementById('channelContextMenu');
-            menu.classList.remove('active');
-            contextMenuChannel = null;
-        }
-
-        function favoriteChannel() {
-            if (!contextMenuChannel) return;
-            const channel = channels.find(ch => ch.id === contextMenuChannel);
-            if (channel) {
-                channel.favorite = !channel.favorite;
-                hideContextMenu();
-                // Visual feedback
-                alert(`${channel.name} ${channel.favorite ? 'added to' : 'removed from'} favorites!`);
-            }
-        }
-
-        function removeChannel() {
-            if (!contextMenuChannel) return;
-            const channel = channels.find(ch => ch.id === contextMenuChannel);
-            if (channel) {
-                channels = channels.filter(ch => ch.id !== contextMenuChannel);
-                if (currentChannel && currentChannel.id === contextMenuChannel) {
-                    currentChannel = null;
-                    document.getElementById('channelName').textContent = 'Select Channel';
-                    document.getElementById('channelStatus').textContent = 'Ready to stream';
-                    document.getElementById('liveBadge').style.display = 'none';
-                }
-                renderChannels();
-                hideContextMenu();
-            }
-        }
-
-        function openEditChannelModal() {
-            const channel = channels.find(ch => ch.id === editingChannelId);
-            if (!channel) return;
-
-            document.getElementById('editChannelName').value = channel.name;
-            document.getElementById('editChannelUrl').value = channel.url || '';
-            document.getElementById('editChannelNumber').value = channel.number;
-            document.getElementById('editChannelModal').classList.add('active');
-        }
-
-        function closeEditChannelModal() {
-            document.getElementById('editChannelModal').classList.remove('active');
-            editingChannelId = null;
-        }
-
-        function editChannel() {
-            if (!contextMenuChannel) return;
-            editingChannelId = contextMenuChannel;
-            hideContextMenu();
-            openEditChannelModal();
-        }
-
-        function saveChannelEdits() {
-            if (!editingChannelId) return;
-
-            const channel = channels.find(ch => ch.id === editingChannelId);
-            if (!channel) return;
-
-            const newName = document.getElementById('editChannelName').value.trim();
-            const newUrl = document.getElementById('editChannelUrl').value.trim();
-            const newNumber = parseInt(document.getElementById('editChannelNumber').value) || channel.number;
-
-            if (!newName) {
-                alert('Channel name cannot be empty');
-                return;
-            }
-
-            channel.name = newName;
-            channel.url = newUrl;
-            channel.number = newNumber;
-
-            renderChannels();
-            closeEditChannelModal();
-            alert('Channel updated successfully!');
-        }
-
-        document.addEventListener('click', function(event) {
-            const editModal = document.getElementById('editChannelModal');
-            const editContent = document.querySelector('.edit-channel-modal-content');
-            if (event.target === editModal) {
-                closeEditChannelModal();
-            }
-        });
-
-        document.addEventListener('click', function() {
-            hideContextMenu();
-        });
             closeM3UModal();
             alert(`Successfully imported ${parsedChannels.length} channels!`);
         }
 
+        function renderChannels() {
+            const channelsList = document.getElementById('channelsList');
+            channelsList.innerHTML = '';
+
+            channels.forEach(channel => {
+                const btn = document.createElement('button');
+                btn.className = 'channel-btn';
+                btn.dataset.channelId = channel.id;
+                
+                btn.innerHTML = `
+                    <div class="channel-btn-content">
+                        <div class="channel-logo">
+                            ${channel.logo ? `<img src="${channel.logo}" alt="${channel.name}" onerror="this.style.display='none'">` : '<i data-lucide="tv" style="width: 24px; height: 24px;"></i>'}
+                        </div>
+                        <div class="channel-name-text">
+                            <div style="font-weight: 600;">${channel.name}</div>
+                            <div style="font-size: 11px; opacity: 0.6;">${channel.category}</div>
+                        </div>
+                    </div>
+                    <span class="channel-number">#${channel.number}</span>
+                `;
+
+                btn.onclick = () => playChannel(channel);
+                btn.oncontextmenu = (e) => showContextMenu(e, channel.id);
+
+                channelsList.appendChild(btn);
+            });
+
+            lucide.createIcons();
+        }
+
+        function playChannel(channel) {
+            currentChannel = channel;
+            
+            // Update UI
+            document.querySelectorAll('.channel-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-channel-id="${channel.id}"]`)?.classList.add('active');
+            
+            document.getElementById('channelName').textContent = channel.name;
+            document.getElementById('channelStatus').textContent = `Now playing: ${channel.category}`;
+            document.getElementById('videoPlaceholder').style.display = 'none';
+            document.getElementById('liveBadge').style.display = 'inline-flex';
+
+            // Video player setup
+            const video = document.getElementById('videoPlayer');
+            
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(channel.url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    video.play();
+                    isPlaying = true;
+                    updatePlayerControls();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = channel.url;
+                video.play();
+                isPlaying = true;
+                updatePlayerControls();
+            }
+
+            video.style.display = 'block';
+        }
+
+        function updatePlayerControls() {
+            const playBtn = document.getElementById('playerPlayBtn');
+            const pauseBtn = document.getElementById('playerPauseBtn');
+            
+            if (isPlaying) {
+                pauseBtn.classList.add('active');
+                playBtn.classList.remove('active');
+            } else {
+                playBtn.classList.add('active');
+                pauseBtn.classList.remove('active');
+            }
+        }
+
+        // Player Control Event Listeners
+        document.getElementById('playerPlayBtn')?.addEventListener('click', () => {
+            document.getElementById('videoPlayer').play();
+            isPlaying = true;
+            updatePlayerControls();
+        });
+
+        document.getElementById('playerPauseBtn')?.addEventListener('click', () => {
+            document.getElementById('videoPlayer').pause();
+            isPlaying = false;
+            updatePlayerControls();
+        });
+
+        document.getElementById('playerVolumeBtn')?.addEventListener('click', function() {
+            const video = document.getElementById('videoPlayer');
+            if (video.muted) {
+                video.muted = false;
+                this.classList.remove('active');
+            } else {
+                video.muted = true;
+                this.classList.add('active');
+            }
+        });
+
+        document.getElementById('playerFullscreenBtn')?.addEventListener('click', () => {
+            const videoArea = document.querySelector('.video-area');
+            if (!document.fullscreenElement) {
+                videoArea.requestFullscreen().catch(err => console.log(err));
+                videoArea.classList.add('fullscreen');
+            } else {
+                document.exitFullscreen();
+                videoArea.classList.remove('fullscreen');
+            }
+        });
+
+        // Context Menu Functions
         function showContextMenu(event, channelId) {
             event.preventDefault();
             contextMenuChannel = channelId;
@@ -1545,53 +1556,6 @@
             contextMenuChannel = null;
         }
 
-        function editChannel() {
-            if (!contextMenuChannel) return;
-            editingChannelId = contextMenuChannel;
-            openEditChannelModal();
-            hideContextMenu();
-        }
-
-        function openEditChannelModal() {
-            if (!editingChannelId) return;
-            const channel = channels.find(ch => ch.id === editingChannelId);
-            if (!channel) return;
-
-            document.getElementById('editChannelName').value = channel.name;
-            document.getElementById('editChannelUrl').value = channel.url || '';
-            document.getElementById('editChannelNumber').value = channel.number;
-            document.getElementById('editChannelModal').classList.add('active');
-        }
-
-        function closeEditChannelModal() {
-            document.getElementById('editChannelModal').classList.remove('active');
-            editingChannelId = null;
-        }
-
-        function saveChannelEdits() {
-            if (!editingChannelId) return;
-
-            const channel = channels.find(ch => ch.id === editingChannelId);
-            if (!channel) return;
-
-            const newName = document.getElementById('editChannelName').value.trim();
-            const newUrl = document.getElementById('editChannelUrl').value.trim();
-            const newNumber = parseInt(document.getElementById('editChannelNumber').value) || channel.number;
-
-            if (!newName) {
-                alert('Channel name cannot be empty');
-                return;
-            }
-
-            channel.name = newName;
-            channel.url = newUrl;
-            channel.number = newNumber;
-
-            renderChannels();
-            closeEditChannelModal();
-            alert('Channel updated successfully!');
-        }
-
         function favoriteChannel() {
             if (!contextMenuChannel) return;
             const channel = channels.find(ch => ch.id === contextMenuChannel);
@@ -1604,320 +1568,54 @@
 
         function removeChannel() {
             if (!contextMenuChannel) return;
-            const channel = channels.find(ch => ch.id === contextMenuChannel);
-            if (channel) {
-                const channelName = channel.name;
-                const channelId = contextMenuChannel;
-                channels = channels.filter(ch => ch.id !== channelId);
-                if (currentChannel && currentChannel.id === channelId) {
-                    currentChannel = null;
-                    document.getElementById('channelName').textContent = 'Select Channel';
-                    document.getElementById('channelStatus').textContent = 'Ready to stream';
-                    document.getElementById('liveBadge').style.display = 'none';
-                    document.getElementById('videoPlayer').style.display = 'none';
-                    document.getElementById('videoPlaceholder').style.display = 'flex';
-                }
+            const index = channels.findIndex(ch => ch.id === contextMenuChannel);
+            if (index > -1) {
+                const channel = channels[index];
+                channels.splice(index, 1);
                 renderChannels();
                 hideContextMenu();
-                alert(`${channelName} removed!`);
+                alert(`${channel.name} removed!`);
             }
         }
 
-        // Close modal when clicking outside
-        document.addEventListener('click', function(event) {
-            const m3uModal = document.getElementById('m3uModal');
-            const editModal = document.getElementById('editChannelModal');
-            
-            if (event.target === m3uModal) {
-                closeM3UModal();
+        function editChannel() {
+            if (!contextMenuChannel) return;
+            editingChannelId = contextMenuChannel;
+            const channel = channels.find(ch => ch.id === contextMenuChannel);
+            if (channel) {
+                document.getElementById('editChannelName').value = channel.name;
+                document.getElementById('editChannelUrl').value = channel.url;
+                document.getElementById('editChannelNumber').value = channel.number;
+                document.getElementById('editChannelModal').classList.add('active');
+                hideContextMenu();
             }
-            if (event.target === editModal) {
+        }
+
+        function saveChannelEdits() {
+            const channel = channels.find(ch => ch.id === editingChannelId);
+            if (channel) {
+                channel.name = document.getElementById('editChannelName').value;
+                channel.url = document.getElementById('editChannelUrl').value;
+                channel.number = parseInt(document.getElementById('editChannelNumber').value);
+                renderChannels();
                 closeEditChannelModal();
-            }
-        });
-
-        document.addEventListener('click', function() {
-            hideContextMenu();
-        });
-
-        // Fetch channel logos from tvlogos.media
-        async function fetchChannelLogo(channelName) {
-            if (logoCache[channelName]) return logoCache[channelName];
-            
-            try {
-                const logoUrl = `https://www.tvlogos.media/logos/${encodeURIComponent(channelName.replace(/\s+/g, '_'))}_logo.png`;
-                logoCache[channelName] = logoUrl;
-                return logoUrl;
-            } catch (error) {
-                console.error('Error fetching logo:', error);
-                return null;
+                alert('Channel updated successfully!');
             }
         }
 
-        // Fetch EPG data from ggfeed.tv API
-        async function fetchEPGData(channelName) {
-            try {
-                const response = await fetch(`https://api.github.com/search/repositories?q=${encodeURIComponent(channelName)}+epg`);
-                if (!response.ok) throw new Error('Failed to fetch EPG');
-                
-                // Generate mock EPG data based on current time
-                const now = new Date();
-                const epgItems = [];
-                
-                for (let i = 0; i < 4; i++) {
-                    const startTime = new Date(now.getTime() + i * 120 * 60000);
-                    const endTime = new Date(startTime.getTime() + 120 * 60000);
-                    
-                    const shows = [
-                        `Breaking News Update`,
-                        `Live Sports Commentary`,
-                        `Documentary Special`,
-                        `Entertainment Hour`,
-                        `Movie Premiere`,
-                        `Kids Programming`,
-                        `Tech Review Show`,
-                        `Music Night`
-                    ];
-                    
-                    const descriptions = [
-                        `Latest news and updates`,
-                        `Live sports analysis`,
-                        `Interesting documentary`,
-                        `Entertainment features`,
-                        `Blockbuster movie`,
-                        `Children's content`,
-                        `Technology review`,
-                        `Music performances`
-                    ];
-                    
-                    epgItems.push({
-                        start: formatTime(startTime),
-                        end: formatTime(endTime),
-                        title: shows[i % shows.length],
-                        description: descriptions[i % descriptions.length]
-                    });
-                }
-                
-                epgData[channelName] = epgItems;
-                return epgItems;
-            } catch (error) {
-                console.error('Error fetching EPG data:', error);
-                // Return default EPG on error
-                return generateDefaultEPG();
-            }
+        function closeEditChannelModal() {
+            document.getElementById('editChannelModal').classList.remove('active');
+            editingChannelId = null;
         }
 
-        function generateDefaultEPG() {
-            const now = new Date();
-            const epgItems = [];
-            
-            const shows = [
-                { title: 'Morning Show', desc: 'Daily news and entertainment' },
-                { title: 'Afternoon Special', desc: 'Feature programming' },
-                { title: 'Prime Time', desc: 'Evening entertainment' },
-                { title: 'Late Night', desc: 'Night programming' }
-            ];
-            
-            for (let i = 0; i < 4; i++) {
-                const startTime = new Date(now.getTime() + i * 120 * 60000);
-                const endTime = new Date(startTime.getTime() + 120 * 60000);
-                
-                epgItems.push({
-                    start: formatTime(startTime),
-                    end: formatTime(endTime),
-                    title: shows[i].title,
-                    description: shows[i].desc
-                });
-            }
-            
-            return epgItems;
-        }
+        // Close context menu when clicking elsewhere
+        document.addEventListener('click', hideContextMenu);
 
-        function formatTime(date) {
-            return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-        }
-
-        function renderChannels() {
-            const channelsList = document.getElementById('channelsList');
-            channelsList.innerHTML = channels.map(channel => `
-                <button class="channel-btn ${currentChannel && currentChannel.id === channel.id ? 'active' : ''}" data-channel-id="${channel.id}" onclick="selectChannel(${channel.id})" oncontextmenu="showContextMenu(event, ${channel.id})">
-                    <div class="channel-btn-content">
-                        <div class="channel-logo" id="logo-${channel.id}">
-                            <div class="loading-spinner"></div>
-                        </div>
-                        <div class="channel-name-text">
-                            <span>${channel.name}</span>
-                        </div>
-                    </div>
-                    <span class="channel-number">#${channel.number}</span>
-                </button>
-            `).join('');
-            
-            // Load logos for all channels
-            channels.forEach(channel => {
-                const logoUrl = channel.logo || null;
-                if (logoUrl) {
-                    const logoElement = document.getElementById(`logo-${channel.id}`);
-                    if (logoElement) {
-                        logoElement.innerHTML = `<img src="${logoUrl}" alt="${channel.name}" loading="lazy" onerror="console.error('Image failed:', this.src); this.parentElement.innerHTML='<i data-lucide=\\'tv\\'></i>'; lucide.createIcons();" />`;
-                        lucide.createIcons();
-                    }
-                } else {
-                    fetchChannelLogo(channel.name).then(logo => {
-                        const logoElement = document.getElementById(`logo-${channel.id}`);
-                        if (logoElement && logo) {
-                            logoElement.innerHTML = `<img src="${logo}" alt="${channel.name}" loading="lazy" onerror="console.error('Image failed:', this.src); this.parentElement.innerHTML='<i data-lucide=\\'tv\\'></i>'; lucide.createIcons();" />`;
-                            lucide.createIcons();
-                        } else if (logoElement) {
-                            logoElement.innerHTML = '<i data-lucide="tv"></i>';
-                            lucide.createIcons();
-                        }
-                    });
-                }
-            });
-        }
-
-        function renderEPG(channelName) {
-            const epgList = document.getElementById('epgList');
-            const epgOverlayItems = document.getElementById('epgOverlayItems');
-            
-            epgList.innerHTML = '<div class="epg-loading">Loading EPG...</div>';
-            epgOverlayItems.innerHTML = '<div style="color: rgba(255, 255, 255, 0.5); font-size: 11px;">Loading schedule...</div>';
-            
-            fetchEPGData(channelName).then(epgItems => {
-                if (!epgItems || epgItems.length === 0) {
-                    epgList.innerHTML = '<div class="epg-loading">No EPG data available</div>';
-                    epgOverlayItems.innerHTML = '<div style="color: rgba(255, 255, 255, 0.5); font-size: 11px;">No schedule available</div>';
-                    return;
-                }
-                
-                const epgHTML = epgItems.map(item => `
-                    <div class="epg-item">
-                        <div class="epg-time">${item.start} - ${item.end}</div>
-                        <div class="epg-title">${item.title}</div>
-                        <div class="epg-description">${item.description}</div>
-                    </div>
-                `).join('');
-                
-                const epgOverlayHTML = epgItems.map(item => `
-                    <div class="epg-overlay-item">
-                        <div class="epg-overlay-time">${item.start} - ${item.end}</div>
-                        <div class="epg-overlay-show">${item.title}</div>
-                        <div class="epg-overlay-desc">${item.description}</div>
-                    </div>
-                `).join('');
-                
-                epgList.innerHTML = epgHTML;
-                epgOverlayItems.innerHTML = epgOverlayHTML;
-            });
-        }
-
-        function selectChannel(channelId) {
-            currentChannel = channels.find(ch => ch.id === channelId);
-            
-            document.querySelectorAll('.channel-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`[data-channel-id="${channelId}"]`).classList.add('active');
-
-            document.getElementById('channelName').textContent = currentChannel.name;
-            document.getElementById('channelStatus').textContent = `Channel #${currentChannel.number} • ${currentChannel.category}`;
-            document.getElementById('liveBadge').style.display = 'flex';
-
-            // Load and play the stream
-            playChannel(currentChannel);
-            
-            // Update EPG for the new channel
-            renderEPG(currentChannel.name);
-        }
-
-        function playChannel(channel) {
-            const video = document.getElementById('videoPlayer');
-            const placeholder = document.getElementById('videoPlaceholder');
-            
-            if (!channel.url) {
-                console.error('No stream URL available for this channel');
-                return;
-            }
-
-            // Check if the stream is an M3U8 (HLS) stream
-            if (channel.url.includes('.m3u8') || channel.url.includes('.m3u')) {
-                // Use HLS.js for M3U8 streams
-                if (window.Hls) {
-                    const hls = new window.Hls();
-                    hls.loadSource(channel.url);
-                    hls.attachMedia(video);
-                    hls.on(window.Hls.Events.MANIFEST_PARSED, function() {
-                        video.play().catch(err => console.error('Play error:', err));
-                    });
-                    hls.on(window.Hls.Events.ERROR, function(event, data) {
-                        if (data.fatal) {
-                            console.error('HLS Error:', data);
-                            placeholder.innerHTML = '<div style="text-align: center;"><i data-lucide="alert-circle" style="width: 50px; height: 50px; margin-bottom: 10px;"></i><div>Stream Error</div><div style="font-size: 12px; opacity: 0.5;">Unable to load stream</div></div>';
-                            lucide.createIcons();
-                        }
-                    });
-                } else {
-                    // Fallback: try native HLS support in video element
-                    video.src = channel.url;
-                    video.play().catch(err => console.error('Play error:', err));
-                }
-            } else {
-                // For regular MP4 or other supported formats
-                video.src = channel.url;
-                video.play().catch(err => console.error('Play error:', err));
-            }
-
-            // Show video player, hide placeholder
-            video.style.display = 'block';
-            placeholder.style.display = 'none';
-            isPlaying = true;
-            updatePlayButton();
-        }
-
-        document.getElementById('playerPlayBtn').addEventListener('click', () => {
-            if (!currentChannel) return;
-            isPlaying = true;
-            updatePlayButton();
-        });
-
-        document.getElementById('playerPauseBtn').addEventListener('click', () => {
-            isPlaying = false;
-            updatePlayButton();
-        });
-
-        document.getElementById('playerVolumeBtn').addEventListener('click', function() {
-            this.classList.toggle('active');
-        });
-
-        document.getElementById('playerFullscreenBtn').addEventListener('click', () => {
-            const videoArea = document.querySelector('.video-area');
-            
-            if (videoArea.classList.contains('fullscreen')) {
-                // Exit fullscreen
-                videoArea.classList.remove('fullscreen');
-                document.body.style.overflow = 'auto';
-            } else {
-                // Enter fullscreen
-                videoArea.classList.add('fullscreen');
-                document.body.style.overflow = 'hidden';
-            }
-        });
-
-        function updatePlayButton() {
-            const playBtn = document.getElementById('playerPlayBtn');
-            const pauseBtn = document.getElementById('playerPauseBtn');
-            
-            if (isPlaying) {
-                playBtn.classList.add('active');
-                pauseBtn.classList.remove('active');
-            } else {
-                playBtn.classList.remove('active');
-                pauseBtn.classList.add('active');
-            }
-        }
-
+        // Initialize
         renderChannels();
+        if (channels.length > 0) {
+            playChannel(channels[0]);
+        }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fce4b03b5739cba',t:'MTc3ODk3NTUxNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fcea62dd2bb311c',t:'MTc3ODk3OTI0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
