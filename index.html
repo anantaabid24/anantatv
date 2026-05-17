@@ -3,8 +3,8 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aannta Stream TV - IPTV Player</title>
-  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;type=content-script&amp;dmn=c900995516wc3511.canvacode.com&amp;url=https%3A%2F%2Fc900995516wc3511.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..2zPQJMkA8JI90-dz.wOT6d1d4Z4oN9NMo8Knv0SQGYq_6Bgpj70hiZ2360Fi-xLZaooIwPlQPrk_pBCa9SnbHZrIHNUcLGME.lwGbUw9kWQVJQVj_QhoviA%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+  <title>Ananta TV Stream - IPTV Player</title>
+  <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;type=content-script&amp;dmn=c9019baft2gx41z7.canvacode.com&amp;url=https%3A%2F%2Fc9019baft2gx41z7.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..PsfXePs1m-twku5z.mg3adIAT4CxcuDBSmHwT2YCvUq4Ql4JLGQoBbADzjzeV1ivIUmUOOMRgpR01qGEyxKE-_ZqzTO6MTEg.mgAlHbjD_xvF9zWUOwMVIA%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=1778978056621&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script><script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;type=content-script&amp;dmn=c8zwqf9sff3cbz87.canvacode.com&amp;url=https%3A%2F%2Fc8zwqf9sff3cbz87.canvacode.com%2Fcodelet%2FeyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..YXqKya2l7fe_vnQs.SIzEegWPRcLvsO2wL2tNKKlOVrT2KdQ7Tq1fmPna1wZpzG8npyuNDObGCaz7h_P6eH-DRqRYvBdiTFM.38WfvbRPt0KPZ8cE1io-_Q%2Findex.html&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
   <script type="text/javascript" nonce="6a72bf854e83456a813b251b7f8" src="//local.adguard.org?ts=. &amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
@@ -48,10 +48,17 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            padding: 24px;
-            gap: 24px;
+            padding: 12px;
+            gap: 12px;
             position: relative;
             z-index: 1;
+        }
+
+        @media (min-width: 768px) {
+            .app-wrapper {
+                padding: 24px;
+                gap: 24px;
+            }
         }
 
         .glass-effect {
@@ -65,8 +72,16 @@
         .player-container {
             flex: 1;
             display: flex;
-            gap: 24px;
+            flex-direction: column-reverse;
+            gap: 12px;
             min-height: 0;
+        }
+
+        @media (min-width: 1024px) {
+            .player-container {
+                flex-direction: row;
+                gap: 24px;
+            }
         }
 
         .video-player-wrapper {
@@ -80,9 +95,9 @@
 
         .video-area {
             width: 100%;
-            height: 650px;
+            height: 250px;
             background: radial-gradient(ellipse at center, #1a1a2e 0%, #0f0f1e 100%);
-            border-radius: 24px;
+            border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             display: flex;
@@ -91,6 +106,20 @@
             position: relative;
             border: 1px solid rgba(148, 163, 184, 0.1);
             transition: all 0.3s ease;
+        }
+
+        @media (min-width: 640px) {
+            .video-area {
+                height: 400px;
+                border-radius: 20px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .video-area {
+                height: 650px;
+                border-radius: 24px;
+            }
         }
 
         .video-area.fullscreen {
@@ -241,11 +270,17 @@
         }
 
         .channel-info {
-            padding: 24px;
+            padding: 16px;
             text-align: center;
             color: rgba(255, 255, 255, 0.8);
             position: relative;
             overflow: hidden;
+        }
+
+        @media (min-width: 1024px) {
+            .channel-info {
+                padding: 24px;
+            }
         }
 
         .channel-info::before {
@@ -259,16 +294,29 @@
         }
 
         .channel-name {
-            font-size: 32px;
+            font-size: 20px;
             font-weight: 800;
             color: #fff;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             letter-spacing: 0.5px;
             background: linear-gradient(135deg, #ec4899, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             animation: slideIn 0.5s ease-out;
+        }
+
+        @media (min-width: 640px) {
+            .channel-name {
+                font-size: 26px;
+                margin-bottom: 8px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .channel-name {
+                font-size: 32px;
+            }
         }
 
         @keyframes slideIn {
@@ -326,16 +374,32 @@
         }
 
         .channels-sidebar {
-            width: 400px;
+            width: 100%;
+            height: 180px;
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 12px;
             min-height: 0;
+        }
+
+        @media (min-width: 768px) {
+            .channels-sidebar {
+                height: 220px;
+                gap: 18px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .channels-sidebar {
+                width: 400px;
+                height: auto;
+                gap: 18px;
+            }
         }
 
         .channels-header {
             color: #fff;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 800;
             padding: 0 8px;
             text-transform: uppercase;
@@ -344,6 +408,12 @@
             align-items: center;
             gap: 8px;
             opacity: 0.8;
+        }
+
+        @media (min-width: 1024px) {
+            .channels-header {
+                font-size: 14px;
+            }
         }
 
         .channels-header i {
@@ -383,11 +453,11 @@
         }
 
         .channel-btn {
-            padding: 35px 30px;
+            padding: 12px 14px;
             border: none;
-            border-radius: 16px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 600;
             color: rgba(255, 255, 255, 0.6);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -400,6 +470,22 @@
             position: relative;
             overflow: hidden;
             animation: slideInChannel 0.5s ease-out backwards;
+        }
+
+        @media (min-width: 768px) {
+            .channel-btn {
+                padding: 18px 20px;
+                font-size: 14px;
+                border-radius: 14px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .channel-btn {
+                padding: 35px 30px;
+                font-size: 15px;
+                border-radius: 16px;
+            }
         }
 
         @keyframes slideInChannel {
@@ -524,23 +610,37 @@
 
         .app-title {
             color: #fff;
-            font-size: 32px;
+            font-size: 20px;
             font-weight: 800;
             letter-spacing: -1px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             background: linear-gradient(135deg, #ec4899, #8b5cf6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
+        @media (min-width: 640px) {
+            .app-title {
+                font-size: 26px;
+                gap: 12px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .app-title {
+                font-size: 32px;
+                gap: 14px;
+            }
+        }
+
         .app-title i {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             background: linear-gradient(135deg, #ec4899, #8b5cf6);
-            border-radius: 12px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -548,11 +648,29 @@
             box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
         }
 
+        @media (min-width: 1024px) {
+            .app-title i {
+                width: 40px;
+                height: 40px;
+                border-radius: 12px;
+            }
+        }
+
         .top-bar {
             display: flex;
+            flex-direction: column;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            gap: 8px;
             animation: slideDown 0.6s ease-out;
+        }
+
+        @media (min-width: 640px) {
+            .top-bar {
+                flex-direction: row;
+                align-items: center;
+                gap: 0;
+            }
         }
 
         @keyframes slideDown {
@@ -568,10 +686,22 @@
 
         .tagline {
             color: rgba(255, 255, 255, 0.5);
-            font-size: 13px;
+            font-size: 10px;
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+
+        @media (min-width: 640px) {
+            .tagline {
+                font-size: 12px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .tagline {
+                font-size: 13px;
+            }
         }
 
         .epg-section {
@@ -666,18 +796,27 @@
         }
 
         .channel-logo {
-            width: 50px;
-            height: 50px;
-            border-radius: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 12px;
+            margin-right: 10px;
             flex-shrink: 0;
             overflow: hidden;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 1024px) {
+            .channel-logo {
+                width: 50px;
+                height: 50px;
+                border-radius: 10px;
+                margin-right: 12px;
+            }
         }
 
         .channel-logo img {
@@ -1142,7 +1281,8 @@
  <body>
   <div class="app-wrapper">
    <div class="top-bar">
-    <div class="app-title"><i data-lucide="tv"></i> <span>Aannta Stream TV</span>
+    <div class="app-title">
+     <i data-lucide="tv"></i> <span>Ananta TV Stream</span>
     </div>
     <div class="tagline">
      Premium IPTV Experience
@@ -1152,7 +1292,8 @@
     <div class="video-player-wrapper">
      <div class="video-area glass-effect">
       <video id="videoPlayer" style="width: 100%; height: 100%; display: none;"></video>
-      <div class="video-placeholder" id="videoPlaceholder"><i data-lucide="play-circle"></i>
+      <div class="video-placeholder" id="videoPlaceholder">
+       <i data-lucide="play-circle"></i>
        <div style="text-align: center;">
         <div style="font-size: 16px; margin-bottom: 5px;">
          Select a channel to start watching
@@ -1163,8 +1304,7 @@
        </div>
       </div>
       <div class="epg-overlay" id="epgOverlay">
-       <div class="epg-overlay-title">
-        <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> Now Playing
+       <div class="epg-overlay-title"><i data-lucide="calendar" style="width: 14px; height: 14px;"></i> Now Playing
        </div>
        <div class="epg-overlay-items" id="epgOverlayItems">
         <div style="color: rgba(255, 255, 255, 0.5); font-size: 11px;">
@@ -1173,7 +1313,8 @@
        </div>
       </div>
       <div class="video-controls-overlay">
-       <div class="player-controls-left"><button class="player-control-btn" id="playerPlayBtn" title="Play"> <i data-lucide="play" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerPauseBtn" title="Pause"> <i data-lucide="pause" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerVolumeBtn" title="Mute"> <i data-lucide="volume-2" style="width: 18px; height: 18px;"></i> </button>
+       <div class="player-controls-left">
+        <button class="player-control-btn" id="playerPlayBtn" title="Play"> <i data-lucide="play" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerPauseBtn" title="Pause"> <i data-lucide="pause" style="width: 18px; height: 18px;"></i> </button> <button class="player-control-btn" id="playerVolumeBtn" title="Mute"> <i data-lucide="volume-2" style="width: 18px; height: 18px;"></i> </button>
        </div><button class="player-control-btn" id="playerFullscreenBtn" title="Fullscreen"> <i data-lucide="maximize" style="width: 18px; height: 18px;"></i> </button>
       </div>
      </div>
@@ -1192,53 +1333,58 @@
      </div>
     </div>
     <div class="channels-sidebar glass-effect" style="padding: 20px;">
-     <div class="channels-header">
-      <i data-lucide="list"></i> Channels <button class="control-btn" style="margin-left: auto; width: 40px; height: 40px;" onclick="openM3UModal()" title="Add channels"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
+     <div class="channels-header"><i data-lucide="list"></i> Channels <button class="control-btn" style="margin-left: auto; width: 40px; height: 40px;" onclick="openM3UModal()" title="Add channels"><i data-lucide="plus" style="width: 16px; height: 16px;"></i></button>
      </div>
      <div class="channels-list" id="channelsList"></div>
     </div>
    </div>
    <div class="m3u-modal" id="m3uModal">
     <div class="m3u-modal-content">
-     <div class="m3u-modal-header">
-      <i data-lucide="upload"></i> Import M3U Playlist
+     <div class="m3u-modal-header"><i data-lucide="upload"></i> Import M3U Playlist
      </div>
      <div style="margin-bottom: 20px;">
       <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 8px; font-weight: 600;">
        Import M3U Playlist
       </div>
-      <div class="m3u-input-group"><input type="text" class="m3u-input-field" id="m3uUrlInput" placeholder="Paste M3U URL here...">
+      <div class="m3u-input-group">
+       <input type="text" class="m3u-input-field" id="m3uUrlInput" placeholder="Paste M3U URL here...">
       </div>
       <div class="m3u-separator">
        Or
       </div>
-      <div class="m3u-modal-buttons"><button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="document.getElementById('m3uFileInput').click()"><i data-lucide="file" style="width: 14px; height: 14px; display: inline; margin-right: 4px;"></i> Choose File </button>
+      <div class="m3u-modal-buttons">
+       <button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="document.getElementById('m3uFileInput').click()"><i data-lucide="file" style="width: 14px; height: 14px; display: inline; margin-right: 4px;"></i> Choose File </button>
       </div><input type="file" id="m3uFileInput" accept=".m3u,.m3u8" onchange="handleM3UFileSelect(event)">
       <div class="m3u-file-info" id="m3uFileInfo" style="display: none;"></div>
-      <div class="m3u-modal-buttons" style="margin-top: 20px;"><button class="m3u-modal-btn m3u-modal-btn-primary" onclick="importM3UPlaylist()">Import Channels </button> <button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="closeM3UModal()">Cancel </button>
+      <div class="m3u-modal-buttons" style="margin-top: 20px;">
+       <button class="m3u-modal-btn m3u-modal-btn-primary" onclick="importM3UPlaylist()">Import Channels </button> <button class="m3u-modal-btn m3u-modal-btn-secondary" onclick="closeM3UModal()">Cancel </button>
       </div>
      </div>
      <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px;">
       <div style="color: rgba(255, 255, 255, 0.6); font-size: 12px; margin-bottom: 12px; font-weight: 600;">
        Or Add Single Channel
       </div>
-      <div class="m3u-input-group" style="flex-direction: column; gap: 12px;"><input type="text" class="m3u-input-field" id="singleChannelName" placeholder="Channel name (e.g., Sports HD)"> <input type="text" class="m3u-input-field" id="singleChannelUrl" placeholder="M3U8 stream URL">
+      <div class="m3u-input-group" style="flex-direction: column; gap: 12px;">
+       <input type="text" class="m3u-input-field" id="singleChannelName" placeholder="Channel name (e.g., Sports HD)"> <input type="text" class="m3u-input-field" id="singleChannelUrl" placeholder="M3U8 stream URL">
       </div>
-      <div class="m3u-modal-buttons" style="margin-top: 12px;"><button class="m3u-modal-btn m3u-modal-btn-primary" onclick="addSingleChannel()">Add Channel </button>
+      <div class="m3u-modal-buttons" style="margin-top: 12px;">
+       <button class="m3u-modal-btn m3u-modal-btn-primary" onclick="addSingleChannel()">Add Channel </button>
       </div>
      </div>
     </div>
    </div>
-   <div class="channel-context-menu" id="channelContextMenu">
-    <button class="context-menu-item" onclick="editChannel()"><i data-lucide="edit"></i> Edit Channel </button> <button class="context-menu-item" onclick="favoriteChannel()"><i data-lucide="heart"></i> Add to Favorites </button> <button class="context-menu-item" onclick="removeChannel()"><i data-lucide="trash-2"></i> Remove Channel </button>
+   <div class="channel-context-menu" id="channelContextMenu"><button class="context-menu-item" onclick="editChannel()"><i data-lucide="edit"></i> Edit Channel </button> <button class="context-menu-item" onclick="favoriteChannel()"><i data-lucide="heart"></i> Add to Favorites </button> <button class="context-menu-item" onclick="removeChannel()"><i data-lucide="trash-2"></i> Remove Channel </button>
    </div>
    <div class="edit-channel-modal" id="editChannelModal">
     <div class="edit-channel-modal-content">
-     <div class="edit-channel-modal-header"><i data-lucide="edit"></i> Edit Channel
+     <div class="edit-channel-modal-header">
+      <i data-lucide="edit"></i> Edit Channel
      </div>
-     <div class="edit-channel-input-group"><input type="text" class="edit-channel-input" id="editChannelName" placeholder="Channel name"> <input type="text" class="edit-channel-input" id="editChannelUrl" placeholder="M3U8 stream URL"> <input type="number" class="edit-channel-input" id="editChannelNumber" placeholder="Channel number" min="1">
+     <div class="edit-channel-input-group">
+      <input type="text" class="edit-channel-input" id="editChannelName" placeholder="Channel name"> <input type="text" class="edit-channel-input" id="editChannelUrl" placeholder="M3U8 stream URL"> <input type="number" class="edit-channel-input" id="editChannelNumber" placeholder="Channel number" min="1">
      </div>
-     <div class="edit-channel-buttons"><button class="edit-channel-btn edit-channel-btn-primary" onclick="saveChannelEdits()">Save Changes </button> <button class="edit-channel-btn edit-channel-btn-secondary" onclick="closeEditChannelModal()">Cancel </button>
+     <div class="edit-channel-buttons">
+      <button class="edit-channel-btn edit-channel-btn-primary" onclick="saveChannelEdits()">Save Changes </button> <button class="edit-channel-btn edit-channel-btn-secondary" onclick="closeEditChannelModal()">Cancel </button>
      </div>
     </div>
    </div>
@@ -1617,5 +1763,5 @@
             playChannel(channels[0]);
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fcea62dd2bb311c',t:'MTc3ODk3OTI0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fcebfb8e7055942',t:'MTc3ODk4MDI5NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
