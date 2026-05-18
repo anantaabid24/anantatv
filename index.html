@@ -21,9 +21,7 @@
 }
 
 body{
-
     height:100vh;
-
     overflow:hidden;
 
     background:
@@ -35,13 +33,9 @@ body{
 /* MAIN */
 
 .container{
-
     display:flex;
-
     gap:18px;
-
     padding:18px;
-
     height:100vh;
 }
 
@@ -56,12 +50,9 @@ body{
 /* LOGO */
 
 .logo{
-
     display:flex;
     align-items:center;
-
     gap:14px;
-
     margin-bottom:16px;
 }
 
@@ -94,9 +85,7 @@ body{
 .logo-text p{
 
     font-size:10px;
-
     letter-spacing:3px;
-
     color:#888;
 }
 
@@ -133,9 +122,11 @@ video{
     object-fit:cover;
 
     background:black;
+
+    outline:none;
 }
 
-/* EPG OVERLAY */
+/* EPG */
 
 .epg-overlay{
 
@@ -156,7 +147,6 @@ video{
     rgba(0,0,0,0.35);
 
     backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
 
     border:
     1px solid rgba(255,255,255,0.08);
@@ -183,8 +173,6 @@ video{
     font-size:18px;
 
     font-weight:600;
-
-    line-height:1.4;
 
     margin-bottom:5px;
 }
@@ -219,9 +207,7 @@ video{
 .controls{
 
     display:flex;
-
     align-items:center;
-
     gap:14px;
 }
 
@@ -312,7 +298,6 @@ video{
     rgba(255,255,255,0.05);
 
     backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
 
     border:
     1px solid rgba(255,255,255,0.06);
@@ -325,9 +310,7 @@ video{
 
     display:flex;
     align-items:center;
-
     gap:10px;
-
     margin-bottom:12px;
 }
 
@@ -375,7 +358,7 @@ video{
 
 .sidebar{
 
-    width:360px;
+    width:460px;
 
     overflow:hidden;
 
@@ -432,7 +415,7 @@ video{
     border-radius:20px;
 }
 
-/* CHANNEL ITEM */
+/* CHANNEL */
 
 .channel{
 
@@ -443,8 +426,6 @@ video{
     border-radius:16px;
 
     cursor:pointer;
-
-    overflow:hidden;
 
     background:
     linear-gradient(
@@ -482,8 +463,6 @@ video{
     1px solid rgba(255,0,200,0.45);
 }
 
-/* CATEGORY */
-
 .category{
 
     font-size:9px;
@@ -496,8 +475,6 @@ video{
 
     margin-bottom:4px;
 }
-
-/* NAME */
 
 .name{
 
@@ -557,16 +534,16 @@ video{
 
         <div class="player-box">
 
-            <!-- VIDEO -->
-
             <video
                 id="video"
                 autoplay
                 playsinline
-                crossorigin="anonymous">
+                webkit-playsinline
+                crossorigin="anonymous"
+                preload="auto">
             </video>
 
-            <!-- TOP LEFT EPG -->
+            <!-- EPG -->
 
             <div class="epg-overlay">
 
@@ -989,7 +966,7 @@ const channels = [
 
 ];
 
-/* EPG DATA */
+/* EPG */
 
 const epgData = {
 
@@ -1048,75 +1025,147 @@ document.getElementById("currentChannel");
 
 let hls;
 
-/* LOAD STREAM */
+/* LOAD IPTV / HLS STREAM */
 
 function loadStream(url){
 
+    console.log("Loading:",url);
+
+    /* DESTROY OLD PLAYER */
+
     if(hls){
         hls.destroy();
+        hls = null;
     }
 
-    /* HLS STREAM */
+    video.pause();
 
-    if(
-        url.includes(".m3u8") &&
-        Hls.isSupported()
-    ){
+    video.removeAttribute("src");
 
-        hls = new Hls({
+    video.load();
 
-            enableWorker:true,
+    /* HLS / M3U8 */
 
-            lowLatencyMode:true,
+    if(url.includes(".m3u8")){
 
-            backBufferLength:90
+        /* HLS.JS SUPPORTED */
 
-        });
+        if(Hls.isSupported()){
 
-        hls.loadSource(url);
+            hls = new Hls({
 
-        hls.attachMedia(video);
+                debug:false,
 
-        hls.on(
-            Hls.Events.MANIFEST_PARSED,
-            function(){
+                enableWorker:true,
 
-                video.play().catch(()=>{});
+                lowLatencyMode:true,
 
-            }
-        );
+                backBufferLength:90,
 
-        hls.on(
-            Hls.Events.ERROR,
-            function(event,data){
+                maxBufferLength:120,
 
-                console.log("HLS ERROR:",data);
+                liveSyncDurationCount:3,
 
-            }
-        );
+                liveMaxLatencyDurationCount:10,
+
+                xhrSetup:function(xhr){
+
+                    xhr.withCredentials = false;
+
+                }
+
+            });
+
+            hls.loadSource(url);
+
+            hls.attachMedia(video);
+
+            /* READY */
+
+            hls.on(
+                Hls.Events.MANIFEST_PARSED,
+                function(){
+
+                    console.log("HLS READY");
+
+                    video.muted = false;
+
+                    video.play()
+                    .then(()=>{
+
+                        playBtn.innerText = "❚❚";
+
+                    })
+                    .catch(err=>{
+
+                        console.log(err);
+
+                    });
+
+                }
+            );
+
+            /* ERROR HANDLING */
+
+            hls.on(
+                Hls.Events.ERROR,
+                function(event,data){
+
+                    console.log("HLS ERROR:",data);
+
+                    if(data.fatal){
+
+                        switch(data.type){
+
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+
+                                console.log("NETWORK ERROR");
+
+                                hls.startLoad();
+
+                                break;
+
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+
+                                console.log("MEDIA ERROR");
+
+                                hls.recoverMediaError();
+
+                                break;
+
+                            default:
+
+                                hls.destroy();
+
+                                break;
+                        }
+                    }
+                }
+            );
+        }
+
+        /* IOS / SAFARI */
+
+        else if(
+            video.canPlayType(
+                'application/vnd.apple.mpegurl'
+            )
+        ){
+
+            video.src = url;
+
+            video.addEventListener(
+                'loadedmetadata',
+                function(){
+
+                    video.play();
+
+                }
+            );
+        }
     }
 
-    /* NATIVE HLS */
-
-    else if(
-        video.canPlayType(
-            'application/vnd.apple.mpegurl'
-        )
-    ){
-
-        video.src = url;
-
-        video.addEventListener(
-            'loadedmetadata',
-            function(){
-
-                video.play().catch(()=>{});
-
-            }
-        );
-    }
-
-    /* HTTP / MP4 / LOCAL STREAM */
+    /* NORMAL VIDEO */
 
     else{
 
@@ -1124,7 +1173,17 @@ function loadStream(url){
 
         video.load();
 
-        video.play().catch(()=>{});
+        video.play()
+        .then(()=>{
+
+            playBtn.innerText = "❚❚";
+
+        })
+        .catch(err=>{
+
+            console.log(err);
+
+        });
     }
 }
 
