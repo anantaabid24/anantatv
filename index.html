@@ -1,272 +1,1226 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ananta Stream Pro</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
 
-    <style>
-        :root {
-            --bg: #030208;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-thick: rgba(0, 0, 0, 0.9);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --accent: #d11fb5;
-            --live-red: #ff3131;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg);
-            background-image: radial-gradient(circle at 0% 0%, #1a0b35 0%, transparent 60%);
-            margin: 0; display: flex; height: 100vh; color: #fff; overflow: hidden;
-        }
+<title>ANANTA STREAM IPTV</title>
 
-        /* --- Logo & Tagline --- */
-        .brand-logo {
-            position: absolute; top: 25px; left: 40px; z-index: 100;
-            display: flex; flex-direction: column; gap: 4px;
-        }
-        .logo-main { display: flex; align-items: center; gap: 12px; }
-        .logo-symbol {
-            width: 48px; height: 48px; background: linear-gradient(135deg, var(--accent), #701fd1);
-            border-radius: 10px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 20px rgba(209, 31, 181, 0.4); font-weight: 900; font-size: 1.2rem;
-        }
-        .logo-text { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.5px; color: white; }
-        
-        .tagline {
-            font-size: 0.7rem; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase;
-            background: linear-gradient(90deg, rgba(255,255,255,0.4) 0%, #fff 50%, rgba(255,255,255,0.4) 100%);
-            background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            animation: shimmer 3s linear infinite; margin-left: 5px;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        @keyframes shimmer { to { background-position: 200% center; } }
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-        .main-content { flex: 1; display: flex; flex-direction: column; padding: 115px 30px 30px 40px; gap: 20px; }
+<style>
 
-        /* --- Player Container --- */
-        #player-container {
-            flex: 1; position: relative; background: #000; border-radius: 40px;
-            overflow: hidden; border: 1px solid var(--glass-border);
-            box-shadow: 0 50px 100px rgba(0,0,0,0.9);
-        }
-        video { width: 100%; height: 100%; object-fit: contain; }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
 
-        /* --- NEW PRO CONTROLLER --- */
-        .controls-bar {
-            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
-            background: var(--glass-transparent); backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 120px;
-            padding: 9px 120px; display: flex; align-items: center; gap: 45px;
-            opacity: 0; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            z-index: 10;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 30px rgba(209, 31, 181, 0.1);
-        }
-        #player-container:hover .controls-bar { opacity: 1; transform: translateX(-50%) translateY(0); }
+body{
 
-        .btn { background: none; border: none; color: white; cursor: pointer; font-size: 2rem; padding: 12px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-        .btn:hover { color: var(--accent); transform: scale(1.2); text-shadow: 0 0 15px var(--accent); }
+    height:100vh;
 
-        #exit-fs { display: none; position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.1); color: white; border-radius: 50%; width: 55px; height: 55px; font-weight: bold; border: 1px solid var(--glass-border); cursor: pointer; z-index: 20; backdrop-filter: blur(15px); font-size: 1.2rem; }
-        :fullscreen #exit-fs { display: block; }
+    overflow:hidden;
 
-        /* --- Status Info Bar --- */
-        .status-bar {
-            background: var(--glass-transparent); backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border); border-radius: 35px;
-            padding: 28px 50px; display: flex; align-items: center; justify-content: space-between;
-        }
-        .active-ch-info { display: flex; align-items: center; gap: 20px; }
-        .active-ch-info h2 { margin: 0; font-size: 2.3rem; font-weight: 800; }
+    background:
+    radial-gradient(circle at top left,#4f00ff 0%,#130022 35%,#05010d 100%);
 
-        .live-tag { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--live-red); font-size: 0.8rem; letter-spacing: 3px; }
-        .pulse { width: 12px; height: 12px; background: var(--live-red); border-radius: 50%; position: relative; }
-        .pulse::after { content: ''; position: absolute; width: 100%; height: 100%; background: var(--live-red); border-radius: 50%; animation: ring 2s infinite; }
-        @keyframes ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(4.2); opacity: 0; } }
+    color:white;
+}
 
-        /* --- Sidebar --- */
-        .sidebar {
-            width: 420px; margin: 25px; background: var(--glass);
-            backdrop-filter: blur(40px); border: 1px solid var(--glass-border);
-            border-radius: 40px; padding: 35px 20px; display: flex; flex-direction: column;
-        }
-        .channel-list { flex: 1; overflow-y: auto; padding-right: 10px; }
-        .card {
-            padding: 20px; margin-bottom: 12px; border-radius: 22px;
-            background: rgba(255,255,255,0.02); border: 1px solid transparent;
-            cursor: pointer; transition: 0.3s;
-        }
-        .card:hover { background: rgba(255,255,255,0.08); transform: translateX(10px); }
-        .card.active { border-color: var(--accent); background: rgba(209, 31, 181, 0.15); }
-        
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-    </style>
+/* MAIN */
+
+.container{
+
+    display:flex;
+
+    gap:18px;
+
+    padding:18px;
+
+    height:100vh;
+}
+
+/* LEFT */
+
+.left{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+/* LOGO */
+
+.logo{
+
+    display:flex;
+    align-items:center;
+
+    gap:14px;
+
+    margin-bottom:16px;
+}
+
+.logo-icon{
+
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
+    background:
+    linear-gradient(135deg,#ff00cc,#7d2cff);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:22px;
+    font-weight:700;
+
+    box-shadow:
+    0 0 18px rgba(255,0,200,0.35);
+}
+
+.logo-text h1{
+    font-size:28px;
+    font-weight:700;
+}
+
+.logo-text p{
+
+    font-size:10px;
+
+    letter-spacing:3px;
+
+    color:#888;
+}
+
+/* PLAYER */
+
+.player-box{
+
+    position:relative;
+
+    flex:1;
+
+    overflow:hidden;
+
+    border-radius:28px;
+
+    background:
+    rgba(255,255,255,0.05);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:
+    1px solid rgba(255,255,255,0.05);
+
+    box-shadow:
+    0 8px 30px rgba(0,0,0,0.4);
+}
+
+video{
+
+    width:100%;
+    height:120%;
+
+    object-fit:cover;
+
+    background:black;
+}
+
+/* EPG OVERLAY */
+
+.epg-overlay{
+
+    position:absolute;
+
+    top:18px;
+    left:18px;
+
+    z-index:20;
+
+    min-width:260px;
+
+    padding:16px 18px;
+
+    border-radius:20px;
+
+    background:
+    rgba(0,0,0,0.35);
+
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    box-shadow:
+    0 8px 30px rgba(0,0,0,0.3);
+}
+
+.epg-live{
+
+    font-size:10px;
+
+    color:#ff4c7a;
+
+    letter-spacing:2px;
+
+    margin-bottom:8px;
+
+    font-weight:700;
+}
+
+.epg-title{
+
+    font-size:18px;
+
+    font-weight:600;
+
+    line-height:1.4;
+
+    margin-bottom:5px;
+}
+
+.epg-time{
+
+    font-size:12px;
+
+    color:#ccc;
+}
+
+/* PLAYER CONTROLS */
+
+.player-overlay{
+
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    padding:20px;
+
+    background:
+    linear-gradient(
+        to top,
+        rgba(0,0,0,0.78),
+        transparent
+    );
+}
+
+.controls{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+}
+
+.glass-btn{
+
+    width:46px;
+    height:46px;
+
+    border:none;
+
+    border-radius:14px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:18px;
+
+    background:
+    rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(14px);
+
+    border:
+    1px solid rgba(255,255,255,0.08);
+
+    transition:.25s;
+}
+
+.glass-btn:hover{
+
+    transform:scale(1.08);
+
+    background:
+    rgba(255,255,255,0.16);
+}
+
+/* PROGRESS */
+
+.progress-wrap{
+
+    flex:1;
+
+    height:6px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    background:
+    rgba(255,255,255,0.12);
+
+    cursor:pointer;
+}
+
+.progress{
+
+    width:0%;
+
+    height:100%;
+
+    border-radius:20px;
+
+    background:
+    linear-gradient(90deg,#ff00cc,#7d2cff);
+}
+
+/* TIME */
+
+.time{
+
+    font-size:13px;
+
+    color:#ddd;
+}
+
+/* CHANNEL CARD */
+
+.channel-card{
+
+    margin-top:16px;
+
+    padding:22px 24px;
+
+    border-radius:24px;
+
+    background:
+    rgba(255,255,255,0.05);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:
+    1px solid rgba(255,255,255,0.06);
+
+    box-shadow:
+    0 8px 30px rgba(0,0,0,0.3);
+}
+
+.channel-live{
+
+    display:flex;
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:12px;
+}
+
+.live-dot{
+
+    width:10px;
+    height:10px;
+
+    border-radius:50%;
+
+    background:#ff3355;
+
+    box-shadow:
+    0 0 12px #ff3355;
+}
+
+.channel-live span{
+
+    font-size:11px;
+
+    letter-spacing:2px;
+
+    color:#ff4b73;
+
+    font-weight:600;
+}
+
+.channel-main-name{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:6px;
+}
+
+.channel-sub{
+
+    font-size:13px;
+
+    color:#999;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+    width:460px;
+
+    overflow:hidden;
+
+    border-radius:30px;
+
+    padding:16px;
+
+    background:
+    rgba(8,8,15,0.72);
+
+    backdrop-filter:blur(24px);
+
+    border:
+    1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-title{
+
+    text-align:center;
+
+    font-size:11px;
+
+    letter-spacing:4px;
+
+    color:#777;
+
+    margin-bottom:14px;
+}
+
+/* CHANNEL LIST */
+
+.channel-list{
+
+    max-height:calc(100vh - 70px);
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding-right:2px;
+}
+
+/* SCROLLBAR */
+
+.channel-list::-webkit-scrollbar{
+    width:3px;
+}
+
+.channel-list::-webkit-scrollbar-thumb{
+
+    background:
+    rgba(255,255,255,0.15);
+
+    border-radius:20px;
+}
+
+/* CHANNEL ITEM */
+
+.channel{
+
+    padding:12px 14px;
+
+    margin-bottom:9px;
+
+    border-radius:16px;
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(255,255,255,0.03),
+        rgba(255,255,255,0.01)
+    );
+
+    border:
+    1px solid rgba(255,255,255,0.03);
+
+    transition:.25s;
+}
+
+.channel:hover{
+
+    transform:translateX(6px);
+
+    background:
+    rgba(255,255,255,0.06);
+}
+
+.channel.active{
+
+    transform:translateX(6px);
+
+    background:
+    linear-gradient(
+        135deg,
+        rgba(180,0,255,0.22),
+        rgba(255,0,180,0.12)
+    );
+
+    border:
+    1px solid rgba(255,0,200,0.45);
+}
+
+/* CATEGORY */
+
+.category{
+
+    font-size:9px;
+
+    color:#909090;
+
+    letter-spacing:1.4px;
+
+    text-transform:uppercase;
+
+    margin-bottom:4px;
+}
+
+/* NAME */
+
+.name{
+
+    font-size:14px;
+
+    font-weight:600;
+}
+
+/* MOBILE */
+
+@media(max-width:1100px){
+
+    body{
+        overflow:auto;
+    }
+
+    .container{
+        flex-direction:column;
+        height:auto;
+    }
+
+    .sidebar{
+        width:100%;
+    }
+}
+
+</style>
 </head>
+
 <body>
 
-    <div class="brand-logo">
-        <div class="logo-main">
-            <div class="logo-symbol">A</div>
-            <div class="logo-text">ANANTA STREAM</div>
+<div class="container">
+
+    <!-- LEFT -->
+
+    <div class="left">
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                A
+            </div>
+
+            <div class="logo-text">
+
+                <h1>ANANTA STREAM</h1>
+
+                <p>PREMIUM TV EXPERIENCE</p>
+
+            </div>
+
         </div>
-        <div class="tagline">Premium TV Experience</div>
+
+        <!-- PLAYER -->
+
+        <div class="player-box">
+
+            <!-- VIDEO -->
+
+            <video
+                id="video"
+                autoplay
+                playsinline>
+            </video>
+
+            <!-- TOP LEFT EPG -->
+
+            <div class="epg-overlay">
+
+                <div class="epg-live">
+                    ● LIVE NOW
+                </div>
+
+                <div
+                    class="epg-title"
+                    id="epgTitle">
+
+                    Loading EPG...
+
+                </div>
+
+                <div
+                    class="epg-time"
+                    id="epgTime">
+
+                    Updating...
+
+                </div>
+
+            </div>
+
+            <!-- CONTROLS -->
+
+            <div class="player-overlay">
+
+                <div class="controls">
+
+                    <button
+                        class="glass-btn"
+                        id="playBtn">
+                        ▶
+                    </button>
+
+                    <div
+                        class="progress-wrap"
+                        id="progressWrap">
+
+                        <div
+                            class="progress"
+                            id="progress">
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="time"
+                        id="time">
+
+                        LIVE
+
+                    </div>
+
+                    <button
+                        class="glass-btn"
+                        id="muteBtn">
+                        🔊
+                    </button>
+
+                    <button
+                        class="glass-btn"
+                        id="fullscreenBtn">
+                        ⛶
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CHANNEL CARD -->
+
+        <div class="channel-card">
+
+            <div class="channel-live">
+
+                <div class="live-dot"></div>
+
+                <span>LIVE CHANNEL</span>
+
+            </div>
+
+            <div
+                class="channel-main-name"
+                id="currentChannel">
+
+                Star Sports Select 1 HD
+
+            </div>
+
+            <div class="channel-sub">
+
+                Premium IPTV Broadcast
+
+            </div>
+
+        </div>
+
     </div>
 
-    <main class="main-content">
-        <div id="player-container">
-            <button id="exit-fs" onclick="exitFullscreen()">✕</button>
-            <video id="video" autoplay></video>
-            
-            <div class="controls-bar">
-                <button class="btn" onclick="togglePlay()" id="play-btn" title="Play/Pause">⏸</button>
-                <button class="btn" onclick="toggleMute()" id="mute-btn" title="Mute/Unmute">🔊</button>
-                <div style="width: 2px; height: 40px; background: rgba(255,255,255,0.15);"></div>
-                <button class="btn" onclick="enterFullscreen()" title="Fullscreen">⛶</button>
-            </div>
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="sidebar-title">
+            CHANNEL LIST
         </div>
 
-        <div class="status-bar">
-            <div class="active-ch-info">
-                <div class="live-tag"><div class="pulse"></div> LIVE</div>
-                <h2 id="current-name">Select a Channel</h2>
-            </div>
-            <div style="text-align: right;">
-                <div id="epg-title" style="font-size: 1.4rem; font-weight: 700; color: var(--accent);">Program Info Loading...</div>
-                <div id="epg-time" style="color: rgba(255,255,255,0.5); font-size: 1rem; margin-top: 5px;">--:-- - --:--</div>
-            </div>
+        <div
+            class="channel-list"
+            id="channelList">
         </div>
-    </main>
 
-    <aside class="sidebar">
-        <div style="font-size: 0.75rem; letter-spacing: 5px; opacity: 0.3; font-weight: 800; text-align: center; margin-bottom: 25px;">CHANNEL LIST</div>
-        <div class="channel-list" id="ui-list"></div>
-    </aside>
+    </div>
 
-    <script>
-        const EPG_URL = 'https://avkb.short.gy/tsepg.xml.gz'
-        
-        const channels = [
-            { id: 49, name: 'Star Sports Select 1 HD', xmlId: 'StarSportsSelect1.in', category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect1HD.m3u8' },
-            { id: 48, name: 'Star Sports Select 2 HD', xmlId: 'StarSportsSelect2.in', category: 'Sports', url: 'http://172.16.29.2:8090/hls/StarSportsSelect2HD.m3u8' },
-            { id: 33, name: 'TNT SPORTS 4', xmlId: 'TNTSports4.uk', category: 'Sports', url: 'http://172.16.29.3:8090/hls/tntsports4hd.m3u8' },
-            { id: 34, name: 'TEN SPORTS 5 HD', xmlId: 'SonyTen3.in', category: 'Sports', url: 'http://172.16.29.3:8090/hls/SonyTen3hd.m3u8' },
-            { id: 20, name: 'Will SPORTS HD', xmlId: 'Willow.us', category: 'Sports', url: 'https://playztv-apps.pages.dev/willow/index.m3u8' },
-            { id: 19, name: 'T SPORTS HD', xmlId: 'TSports.bd', category: 'Sports', url: 'https://playztv-apps.pages.dev/tsports/index.m3u8' },
-            { id: 22, name: 'PTV SPORTS HD', xmlId: 'PTVSports.pk', category: 'Sports', url: 'https://playztv-apps.pages.dev/ptvsports/index.m3u8' },
-            { id: 21, name: 'A SPORTS HD', xmlId: 'ASports.pk', category: 'Sports', url: 'https://playztv-apps.pages.dev/asports/index.m3u8' },
-            { id: 1, name: 'Channel 24 HD', xmlId: 'Channel24.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8' },
-            { id: 2, name: 'Independent tv', xmlId: 'IndependentTV.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8' },
-            { id: 3, name: 'Somoy Tv HD', xmlId: 'SomoyTV.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8' },
-            { id: 4, name: 'Ekattor TV HD', xmlId: 'EkattorTV.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8' },
-            { id: 5, name: 'ATN NEWS HD', xmlId: 'ATNNews.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8' },
-            { id: 6, name: 'News 24 HD', xmlId: 'News24.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8' },
-            { id: 7, name: 'Star News HD', xmlId: 'StarNews.in', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8' },
-            { id: 8, name: 'Deepto TV HD', xmlId: 'DeeptoTV.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8' },
-            { id: 9, name: 'Banglavision HD', xmlId: 'Banglavision.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8' },
-            { id: 10, name: 'NTV HD', xmlId: 'NTV.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8' },
-            { id: 11, name: 'BTV HD', xmlId: 'BTV.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8' },
-            { id: 12, name: 'Maasranga HD', xmlId: 'Maasranga.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8' },
-            { id: 13, name: 'Channel I HD', xmlId: 'ChannelI.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8' },
-            { id: 14, name: 'DBC NEWS HD', xmlId: 'DBCNews.bd', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8' },
-            { id: 15, name: 'Channel 9 HD', xmlId: 'Channel9.bd', category: 'Entertainment', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8' },
-            { id: 16, name: 'Islamic Tv HD', xmlId: 'IslamicTV.bd', category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8' },
-            { id: 17, name: 'Al Jazeera HD', xmlId: 'AlJazeera.qa', category: 'News', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8' },
-            { id: 18, name: 'Sunnah TV HD', xmlId: 'SunnahTV.sa', category: 'Religious', url: 'https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8' },
-            { id: 23, name: 'ATN BANGLA HD', xmlId: 'ATNBangla.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/atn-bangla/index.m3u8' },
-            { id: 24, name: 'RTV HD', xmlId: 'RTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/rtv/index.m3u8' },
-            { id: 25, name: 'DURANTO TV HD', xmlId: 'DurantoTV.bd', category: 'KIDS', url: 'https://playztv-apps.pages.dev/duronto-tv/index.m3u8' },
-            { id: 26, name: 'BOISHAKHI TV HD', xmlId: 'BoishakhiTV.bd', category: 'NEWS', url: 'https://playztv-apps.pages.dev/boishakhi-tv/index.m3u8' },
-            { id: 27, name: 'MY TV HD', xmlId: 'MyTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/my-tv/index.m3u8' },
-            { id: 28, name: 'ASIAN TV HD', xmlId: 'AsianTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/asian-tv/index.m3u8' },
-            { id: 29, name: 'DESH TV HD', xmlId: 'DeshTV.bd', category: 'NEWS', url: 'https://playztv-apps.pages.dev/desh-tv/index.m3u8' },
-            { id: 30, name: 'MOHONA TV HD', xmlId: 'MohonaTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/mohona-tv/index.m3u8' },
-            { id: 31, name: 'ANANDA TV HD', xmlId: 'AnandaTV.bd', category: 'MOVIE', url: 'https://playztv-apps.pages.dev/ananda-tv/index.m3u8' },
-            { id: 32, name: 'BIJOY TV HD', xmlId: 'BijoyTV.bd', category: 'Entertainment', url: 'https://playztv-apps.pages.dev/bijoy-tv/index.m3u8' },
-            { id: 35, name: 'Rajdhani TV HD', xmlId: 'RajdhaniTV.bd', category: 'NEWS', url: 'https://stream.shariarsuvo.com/hls6/rajdhaniweb.m3u8' },
-            { id: 36, name: 'NRB TV HD', xmlId: 'NRBTV.eu', category: 'Entertainment', url: 'https://app.ncare.live/live-orgin/nrb-eu.stream/playlist.m3u8' },
-            { id: 37, name: 'Channel S HD', xmlId: 'ChannelS.uk', category: 'Entertainment', url: 'https://app.ncare.live/live-orgin/channels.stream/playlist.m3u8' },
-            { id: 38, name: 'SRK TV HD', xmlId: 'SRKTV.in', category: 'Entertainment', url: 'https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/playlist.m3u8' },
-            { id: 39, name: 'GAZI TV', xmlId: 'GTV.bd', category: 'Movie', url: 'https://app.ncare.live/live-orgin/gazibdz.stream/playlist.m3u8' },
-            { id: 40, name: 'Mix Hollywood HD', xmlId: 'MixHollywood.us', category: 'Movies', url: 'https://ml-pull-hwc.myco.io/MixTV/hls/index.m3u8' },
-            { id: 41, name: 'Crimes HD', xmlId: 'Crimes.in', category: 'Movies', url: 'https://nomawnoijl.gpcdn.net/akash/crimes/chunks.m3u8' },
-            { id: 42, name: 'Goldmine', xmlId: 'Goldmine.in', category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1459/master.m3u8' },
-            { id: 43, name: 'Goldmine Movies', xmlId: 'GoldmineMovies.in', category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1461/master.m3u8' },
-            { id: 44, name: 'Goldmine Movies 2', xmlId: 'GoldmineMovies2.in', category: 'Movies', url: 'https://cdn-2.pishow.tv/live/1460/master.m3u8' },
-            { id: 45, name: 'Cinex', xmlId: 'Cinex.in', category: 'Movies', url: 'https://gcinemahls.wns.live/hls/stream.m3u8' },
-            { id: 46, name: 'Uniques HD', xmlId: 'Uniques.in', category: 'Movies', url: 'https://nomawnoijl.gpcdn.net/akash/uniques/chunks.m3u8' },
-            { id: 47, name: 'Zoom HD', xmlId: 'Zoom.in', category: 'Music', url: 'https://mumbai-edge.smartplaytv.in/Zoom/tracks-v1a1/mono.m3u8' }
-          
-        ];
+</div>
 
-        let hls = null;
-        let epgDoc = null;
-        const video = document.getElementById('video');
+<script>
 
-        async function fetchEPG() {
-            try {
-                const r = await fetch(EPG_URL);
-                const b = await r.arrayBuffer();
-                const d = pako.ungzip(new Uint8Array(b), { to: 'string' });
-                epgDoc = new DOMParser().parseFromString(d, "application/xml");
-                updateEPG();
-            } catch (e) { document.getElementById('epg-title').textContent = "Live Broadcast"; }
-        }
+/* IPTV CHANNELS */
 
-        function updateEPG() {
-            const active = channels.find(c => document.getElementById(`ch-${c.id}`).classList.contains('active'));
-            if (!active) return;
-            document.getElementById('current-name').textContent = active.name;
-            if (!epgDoc) return;
-            const now = new Date();
-            const progs = Array.from(epgDoc.querySelectorAll(`programme[channel="${active.xmlId}"]`));
-            const curr = progs.find(p => now >= pDate(p.getAttribute('start')) && now <= pDate(p.getAttribute('stop')));
-            if (curr) {
-                document.getElementById('epg-title').textContent = curr.querySelector('title').textContent;
-                document.getElementById('epg-time').textContent = `${fTime(curr.getAttribute('start'))} - ${fTime(curr.getAttribute('stop'))}`;
-            } else {
-                document.getElementById('epg-title').textContent = "Program Guide Unavailable";
-                document.getElementById('epg-time').textContent = "--:--";
+const channels = [
+
+    // SPORTS
+    {
+        id:49,
+        name:"Star Sports Select 1 HD",
+        category:"Sports",
+        url:"http://172.16.29.2:8090/hls/StarSportsSelect1HD.m3u8"
+    },
+
+    {
+        id:48,
+        name:"Star Sports Select 2 HD",
+        category:"Sports",
+        url:"http://172.16.29.2:8090/hls/StarSportsSelect2HD.m3u8"
+    },
+
+    {
+        id:33,
+        name:"TNT SPORTS 4",
+        category:"Sports",
+        url:"http://172.16.29.3:8090/hls/tntsports4hd.m3u8"
+    },
+
+    {
+        id:34,
+        name:"TEN SPORTS 5 HD",
+        category:"Sports",
+        url:"http://172.16.29.3:8090/hls/SonyTen3hd.m3u8"
+    },
+
+    {
+        id:20,
+        name:"Will SPORTS HD",
+        category:"Sports",
+        url:"https://playztv-apps.pages.dev/willow/index.m3u8"
+    },
+
+    {
+        id:19,
+        name:"T SPORTS HD",
+        category:"Sports",
+        url:"https://playztv-apps.pages.dev/tsports/index.m3u8"
+    },
+
+    {
+        id:22,
+        name:"PTV SPORTS HD",
+        category:"Sports",
+        url:"https://playztv-apps.pages.dev/ptvsports/index.m3u8"
+    },
+
+    {
+        id:21,
+        name:"A SPORTS HD",
+        category:"Sports",
+        url:"https://playztv-apps.pages.dev/asports/index.m3u8"
+    },
+
+    // NEWS
+    {
+        id:1,
+        name:"Channel 24 HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8"
+    },
+
+    {
+        id:2,
+        name:"Independent TV",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8"
+    },
+
+    {
+        id:3,
+        name:"Somoy TV HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8"
+    },
+
+    {
+        id:4,
+        name:"Ekattor TV HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8"
+    },
+
+    {
+        id:5,
+        name:"ATN NEWS HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8"
+    },
+
+    {
+        id:6,
+        name:"News 24 HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8"
+    },
+
+    {
+        id:7,
+        name:"Star News HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8"
+    },
+
+    {
+        id:14,
+        name:"DBC NEWS HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8"
+    },
+
+    {
+        id:17,
+        name:"Al Jazeera HD",
+        category:"News",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8"
+    },
+
+    // ENTERTAINMENT
+    {
+        id:8,
+        name:"Deepto TV HD",
+        category:"Entertainment",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8"
+    },
+
+    {
+        id:9,
+        name:"Banglavision HD",
+        category:"Entertainment",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8"
+    },
+
+    {
+        id:10,
+        name:"NTV HD",
+        category:"Entertainment",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8"
+    },
+
+    {
+        id:11,
+        name:"BTV HD",
+        category:"Entertainment",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8"
+    },
+
+    {
+        id:12,
+        name:"Maasranga HD",
+        category:"Entertainment",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8"
+    },
+
+    {
+        id:13,
+        name:"Channel I HD",
+        category:"Entertainment",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8"
+    },
+
+    {
+        id:15,
+        name:"Channel 9 HD",
+        category:"Entertainment",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8"
+    },
+
+    {
+        id:23,
+        name:"ATN BANGLA HD",
+        category:"Entertainment",
+        url:"https://playztv-apps.pages.dev/atn-bangla/index.m3u8"
+    },
+
+    {
+        id:24,
+        name:"RTV HD",
+        category:"Entertainment",
+        url:"https://playztv-apps.pages.dev/rtv/index.m3u8"
+    },
+
+    {
+        id:27,
+        name:"MY TV HD",
+        category:"Entertainment",
+        url:"https://playztv-apps.pages.dev/my-tv/index.m3u8"
+    },
+
+    {
+        id:28,
+        name:"ASIAN TV HD",
+        category:"Entertainment",
+        url:"https://playztv-apps.pages.dev/asian-tv/index.m3u8"
+    },
+
+    {
+        id:30,
+        name:"MOHONA TV HD",
+        category:"Entertainment",
+        url:"https://playztv-apps.pages.dev/mohona-tv/index.m3u8"
+    },
+
+    {
+        id:32,
+        name:"BIJOY TV HD",
+        category:"Entertainment",
+        url:"https://playztv-apps.pages.dev/bijoy-tv/index.m3u8"
+    },
+
+    // RELIGIOUS
+    {
+        id:16,
+        name:"Islamic TV HD",
+        category:"Religious",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8"
+    },
+
+    {
+        id:18,
+        name:"Sunnah TV HD",
+        category:"Religious",
+        url:"https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8"
+    },
+
+    // MOVIES
+    {
+        id:39,
+        name:"GAZI TV",
+        category:"Movie",
+        url:"https://app.ncare.live/live-orgin/gazibdz.stream/playlist.m3u8"
+    },
+
+    {
+        id:40,
+        name:"Mix Hollywood HD",
+        category:"Movies",
+        url:"https://ml-pull-hwc.myco.io/MixTV/hls/index.m3u8"
+    },
+
+    {
+        id:41,
+        name:"Crimes HD",
+        category:"Movies",
+        url:"https://nomawnoijl.gpcdn.net/akash/crimes/chunks.m3u8"
+    },
+
+    {
+        id:42,
+        name:"Goldmine",
+        category:"Movies",
+        url:"https://cdn-2.pishow.tv/live/1459/master.m3u8"
+    },
+
+    {
+        id:43,
+        name:"Goldmine Movies",
+        category:"Movies",
+        url:"https://cdn-2.pishow.tv/live/1461/master.m3u8"
+    },
+
+    {
+        id:44,
+        name:"Goldmine Movies 2",
+        category:"Movies",
+        url:"https://cdn-2.pishow.tv/live/1460/master.m3u8"
+    },
+
+    {
+        id:45,
+        name:"Cinex",
+        category:"Movies",
+        url:"https://gcinemahls.wns.live/hls/stream.m3u8"
+    },
+
+    {
+        id:46,
+        name:"Uniques HD",
+        category:"Movies",
+        url:"https://nomawnoijl.gpcdn.net/akash/uniques/chunks.m3u8"
+    },
+
+    // MUSIC
+    {
+        id:47,
+        name:"Zoom HD",
+        category:"Music",
+        url:"https://mumbai-edge.smartplaytv.in/Zoom/tracks-v1a1/mono.m3u8"
+    }
+
+];
+
+/* EPG DATA */
+
+const epgData = {
+
+    "Star Sports Select 1 HD":{
+        title:"Live Cricket Championship",
+        time:"08:00 PM - 11:00 PM"
+    },
+
+    "TNT SPORTS 4":{
+        title:"UEFA Champions League",
+        time:"09:00 PM - 11:30 PM"
+    },
+
+    "Somoy TV HD":{
+        title:"Breaking News Bulletin",
+        time:"LIVE"
+    },
+
+    "Banglavision HD":{
+        title:"Drama Serial Premiere",
+        time:"07:00 PM - 08:00 PM"
+    }
+};
+
+/* ELEMENTS */
+
+const video =
+document.getElementById("video");
+
+const channelList =
+document.getElementById("channelList");
+
+const progress =
+document.getElementById("progress");
+
+const progressWrap =
+document.getElementById("progressWrap");
+
+const playBtn =
+document.getElementById("playBtn");
+
+const muteBtn =
+document.getElementById("muteBtn");
+
+const fullscreenBtn =
+document.getElementById("fullscreenBtn");
+
+const epgTitle =
+document.getElementById("epgTitle");
+
+const epgTime =
+document.getElementById("epgTime");
+
+const currentChannel =
+document.getElementById("currentChannel");
+
+let hls;
+
+/* LOAD STREAM */
+
+function loadStream(url){
+
+    if(hls){
+        hls.destroy();
+    }
+
+    if(Hls.isSupported()){
+
+        hls = new Hls();
+
+        hls.loadSource(url);
+
+        hls.attachMedia(video);
+
+        hls.on(
+            Hls.Events.MANIFEST_PARSED,
+            function(){
+
+                video.play().catch(()=>{});
+
             }
+        );
+    }
+}
+
+/* UPDATE EPG */
+
+function updateEPG(channelName){
+
+    const epg = epgData[channelName];
+
+    if(epg){
+
+        epgTitle.innerText =
+        epg.title;
+
+        epgTime.innerText =
+        epg.time;
+    }
+
+    else{
+
+        epgTitle.innerText =
+        "No EPG Available";
+
+        epgTime.innerText =
+        "LIVE";
+    }
+}
+
+/* RENDER CHANNELS */
+
+function renderChannels(){
+
+    channels.forEach((channel,index)=>{
+
+        const div =
+        document.createElement("div");
+
+        div.classList.add("channel");
+
+        if(index === 0){
+            div.classList.add("active");
         }
 
-        function pDate(s) { return new Date(`${s.substr(0,4)}-${s.substr(4,2)}-${s.substr(6,2)}T${s.substr(8,2)}:${s.substr(10,2)}:00`); }
-        function fTime(s) { return `${s.substr(8,2)}:${s.substr(10,2)}`; }
+        div.innerHTML = `
 
-        function selectChannel(ch) {
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            const el = document.getElementById(`ch-${ch.id}`);
-            if(el) el.classList.add('active');
-            if (Hls.isSupported()) {
-                if (hls) hls.destroy();
-                hls = new Hls(); hls.loadSource(ch.url); hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-            }
-            updateEPG();
-        }
+            <div class="category">
+                ${channel.category}
+            </div>
 
-        function togglePlay() { video.paused ? (video.play(), document.getElementById('play-btn').textContent='⏸') : (video.pause(), document.getElementById('play-btn').textContent='▶'); }
-        function toggleMute() { video.muted = !video.muted; document.getElementById('mute-btn').textContent = video.muted ? '🔇' : '🔊'; }
-        function enterFullscreen() { const c = document.getElementById('player-container'); if (c.requestFullscreen) c.requestFullscreen(); else if (c.webkitRequestFullscreen) c.webkitRequestFullscreen(); }
-        function exitFullscreen() { if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); }
+            <div class="name">
+                ${channel.name}
+            </div>
 
-        const list = document.getElementById('ui-list');
-        channels.forEach(ch => {
-            const el = document.createElement('div');
-            el.className = 'card'; el.id = `ch-${ch.id}`;
-            el.innerHTML = `<div style="font-size:0.6rem; opacity:0.3; letter-spacing:1px;">${ch.category}</div><strong>${ch.name}</strong>`;
-            el.onclick = () => selectChannel(ch);
-            list.appendChild(el);
-        });
+        `;
 
-        fetchEPG();
-        selectChannel(channels[0]);
-        setInterval(updateEPG, 30000);
-    </script>
+        div.onclick = () => {
+
+            document
+            .querySelectorAll(".channel")
+            .forEach(el =>
+                el.classList.remove("active")
+            );
+
+            div.classList.add("active");
+
+            loadStream(channel.url);
+
+            updateEPG(channel.name);
+
+            currentChannel.innerText =
+            channel.name;
+        };
+
+        channelList.appendChild(div);
+    });
+}
+
+/* PLAY / PAUSE */
+
+playBtn.onclick = () => {
+
+    if(video.paused){
+
+        video.play();
+
+        playBtn.innerText = "❚❚";
+    }
+
+    else{
+
+        video.pause();
+
+        playBtn.innerText = "▶";
+    }
+};
+
+/* MUTE */
+
+muteBtn.onclick = () => {
+
+    video.muted = !video.muted;
+
+    muteBtn.innerText =
+    video.muted ? "🔇" : "🔊";
+};
+
+/* FULLSCREEN */
+
+fullscreenBtn.onclick = () => {
+
+    if(video.requestFullscreen){
+
+        video.requestFullscreen();
+    }
+};
+
+/* PROGRESS */
+
+video.addEventListener("timeupdate",()=>{
+
+    const percent =
+    (video.currentTime / video.duration) * 100;
+
+    progress.style.width =
+    percent + "%";
+});
+
+/* SEEK */
+
+progressWrap.onclick = (e)=>{
+
+    const width =
+    progressWrap.clientWidth;
+
+    const clickX =
+    e.offsetX;
+
+    video.currentTime =
+    (clickX / width) * video.duration;
+};
+
+/* INIT */
+
+renderChannels();
+
+loadStream(channels[0].url);
+
+updateEPG(channels[0].name);
+
+</script>
+
 </body>
 </html>
