@@ -128,7 +128,7 @@ body{
 video{
 
     width:100%;
-    height:120%;
+    height:100%;
 
     object-fit:cover;
 
@@ -375,7 +375,7 @@ video{
 
 .sidebar{
 
-    width:460px;
+    width:360px;
 
     overflow:hidden;
 
@@ -562,7 +562,8 @@ video{
             <video
                 id="video"
                 autoplay
-                playsinline>
+                playsinline
+                crossorigin="anonymous">
             </video>
 
             <!-- TOP LEFT EPG -->
@@ -1055,9 +1056,22 @@ function loadStream(url){
         hls.destroy();
     }
 
-    if(Hls.isSupported()){
+    /* HLS STREAM */
 
-        hls = new Hls();
+    if(
+        url.includes(".m3u8") &&
+        Hls.isSupported()
+    ){
+
+        hls = new Hls({
+
+            enableWorker:true,
+
+            lowLatencyMode:true,
+
+            backBufferLength:90
+
+        });
 
         hls.loadSource(url);
 
@@ -1071,6 +1085,46 @@ function loadStream(url){
 
             }
         );
+
+        hls.on(
+            Hls.Events.ERROR,
+            function(event,data){
+
+                console.log("HLS ERROR:",data);
+
+            }
+        );
+    }
+
+    /* NATIVE HLS */
+
+    else if(
+        video.canPlayType(
+            'application/vnd.apple.mpegurl'
+        )
+    ){
+
+        video.src = url;
+
+        video.addEventListener(
+            'loadedmetadata',
+            function(){
+
+                video.play().catch(()=>{});
+
+            }
+        );
+    }
+
+    /* HTTP / MP4 / LOCAL STREAM */
+
+    else{
+
+        video.src = url;
+
+        video.load();
+
+        video.play().catch(()=>{});
     }
 }
 
@@ -1191,25 +1245,31 @@ fullscreenBtn.onclick = () => {
 
 video.addEventListener("timeupdate",()=>{
 
-    const percent =
-    (video.currentTime / video.duration) * 100;
+    if(video.duration){
 
-    progress.style.width =
-    percent + "%";
+        const percent =
+        (video.currentTime / video.duration) * 100;
+
+        progress.style.width =
+        percent + "%";
+    }
 });
 
 /* SEEK */
 
 progressWrap.onclick = (e)=>{
 
-    const width =
-    progressWrap.clientWidth;
+    if(video.duration){
 
-    const clickX =
-    e.offsetX;
+        const width =
+        progressWrap.clientWidth;
 
-    video.currentTime =
-    (clickX / width) * video.duration;
+        const clickX =
+        e.offsetX;
+
+        video.currentTime =
+        (clickX / width) * video.duration;
+    }
 };
 
 /* INIT */
