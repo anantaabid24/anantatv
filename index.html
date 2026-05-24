@@ -345,6 +345,7 @@ video{
     margin-bottom: 12px;
     scrollbar-width: none; /* Hide scrollbar Firefox */
     -ms-overflow-style: none; /* Hide scrollbar IE/Edge */
+    -webkit-overflow-scrolling: touch; /* Fast smooth touch scrolling on iOS */
 }
 
 .category-slider::-webkit-scrollbar {
@@ -352,6 +353,7 @@ video{
 }
 
 .category-item {
+    display: inline-block;
     padding: 8px 16px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -363,6 +365,7 @@ video{
     cursor: pointer;
     transition: 0.25s;
     color: #aaa;
+    flex-shrink: 0;
 }
 
 .category-item:hover {
@@ -404,55 +407,63 @@ video{
     border-radius:20px;
 }
 
-/* CHANNEL */
+/* CHANNEL (ANIMATED REMIX) */
 
 .channel{
-
     padding:12px 14px;
-
     margin-bottom:9px;
-
     border-radius:16px;
-
     cursor:pointer;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.03);
+    
+    /* Smooth fluid layout transformations using custom cubic-bezier curves */
+    transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    left: 0;
+}
 
-    background:
-    linear-gradient(
-        135deg,
-        rgba(255,255,255,0.03),
-        rgba(255,255,255,0.01)
-    );
-
-    border:
-    1px solid rgba(255,255,255,0.03);
-
-    transition:.25s;
+/* Glowing Neon Vertical Border Ribbon Overlay */
+.channel::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scaleY(0.3);
+    width: 4px;
+    height: 60%;
+    background: linear-gradient(to bottom, #ff00cc, #7d2cff);
+    border-radius: 0 4px 4px 0;
+    opacity: 0;
+    transition: all 0.3s ease;
 }
 
 .channel:hover{
+    transform: translateX(6px) scale(1.01);
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
 
-    transform:translateX(6px);
-
-    background:
-    rgba(255,255,255,0.06);
+.channel:hover::before {
+    opacity: 0.5;
+    transform: translateY(-50%) scaleY(0.7);
 }
 
 .channel.active{
-
-    transform:translateX(6px);
-
-    background:
-    linear-gradient(
-        135deg,
-        rgba(180,0,255,0.22),
-        rgba(255,0,180,0.12)
-    );
-
-    border:
-    1px solid rgba(255,0,200,0.45);
+    transform: translateX(8px) scale(1.02);
+    background: linear-gradient(135deg, rgba(180,0,255,0.25), rgba(255,0,180,0.15));
+    border: 1px solid rgba(255,0,200,0.55);
+    box-shadow: 0 0 20px rgba(255,0,200,0.25), 0 8px 25px rgba(0,0,0,0.4);
 }
 
-.category{
+.channel.active::before {
+    opacity: 1;
+    transform: translateY(-50%) scaleY(1);
+    height: 70%;
+}
+
+.category {
 
     font-size:9px;
 
@@ -1149,7 +1160,7 @@ const channels = [
         id:51,
         name:"8XM",
         category:"Music",
-        url:"https://ml-pull-dvc-myco.io:2096/8XM_MUSIC/tracks-v1a1/mono.ts.m3u8"
+        url:"https://ml-pull-dvc-myco.io:2096/8XM_MUSIC/tracks-v1a1/mono.ts.m3ts.m3u8"
     },
 
     //Infotainment
@@ -1231,7 +1242,7 @@ const currentChannel =
 document.getElementById("currentChannel");
 
 let hls;
-let activeChannelUrl = ""; // Track currently playing source stream URL 
+let activeChannelUrl = ""; 
 
 /* LOAD IPTV / HLS STREAM */
 
@@ -1419,7 +1430,6 @@ function updateEPG(channelName){
 
 /* RENDER CATEGORY SLIDER */
 function renderCategories(){
-    // Extract unique categories dynamically from the data array
     const uniqueCategories = ["All", ...new Set(channels.map(c => c.category))];
     
     categorySlider.innerHTML = "";
@@ -1445,13 +1455,11 @@ function renderChannels(filterCategory = "All"){
     channelList.innerHTML = "";
 
     channels.forEach((channel)=>{
-        // Skip if a category filter is active and doesn't match
         if(filterCategory !== "All" && channel.category !== filterCategory) return;
 
         const div = document.createElement("div");
         div.classList.add("channel");
 
-        // Keep active selection visual glow even after filtering lists
         if(channel.url === activeChannelUrl){
             div.classList.add("active");
         }
@@ -1507,13 +1515,18 @@ muteBtn.onclick = () => {
     video.muted ? "🔇" : "🔊";
 };
 
-/* FULLSCREEN */
-
+/* FULLSCREEN (WITH MOBILE FALLBACK SUPPORT) */
 fullscreenBtn.onclick = () => {
-
-    if(video.requestFullscreen){
-
+    if (video.requestFullscreen) {
         video.requestFullscreen();
+    } else if (video.webkitEnterFullscreen) {
+        video.webkitEnterFullscreen();
+    } else if (video.webkitRequestFullscreen) {
+        video.webkitRequestFullscreen();
+    } else if (video.mozRequestFullScreen) {
+        video.mozRequestFullScreen();
+    } else if (video.msRequestFullscreen) {
+        video.msRequestFullscreen();
     }
 };
 
@@ -1548,9 +1561,14 @@ progressWrap.onclick = (e)=>{
     }
 };
 
+/* DESKTOP MOUSE WHEEL SCROLLING FOR CATEGORY BOX */
+categorySlider.addEventListener("wheel", (evt) => {
+    evt.preventDefault();
+    categorySlider.scrollLeft += evt.deltaY;
+});
+
 /* INIT */
 renderCategories();
-// Load the initial channel to track active source
 activeChannelUrl = channels[0].url;
 renderChannels();
 loadStream(channels[0].url);
