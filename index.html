@@ -117,9 +117,9 @@ body{
 video{
 
     width:100%;
-    height:110%;
+    height:100%;
 
-    object-fit:cover;
+    object-fit:contain;
 
     background:black;
 
@@ -316,6 +316,9 @@ video{
 
     border:
     1px solid rgba(255,255,255,0.05);
+
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar-title{
@@ -331,11 +334,54 @@ video{
     margin-bottom:14px;
 }
 
+/* CATEGORY SLIDER */
+
+.category-slider {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar IE/Edge */
+}
+
+.category-slider::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.category-item {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.25s;
+    color: #aaa;
+}
+
+.category-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.category-item.active {
+    background: linear-gradient(135deg, rgba(180,0,255,0.3), rgba(255,0,180,0.2));
+    border: 1px solid rgba(255,0,200,0.5);
+    color: #fff;
+    box-shadow: 0 0 12px rgba(255,0,200,0.2);
+}
+
 /* CHANNEL LIST */
 
 .channel-list{
 
-    max-height:calc(100vh - 70px);
+    flex: 1;
 
     overflow-y:auto;
 
@@ -441,6 +487,7 @@ video{
 
     .sidebar{
         width:100%;
+        height: 500px;
     }
 }
 
@@ -451,11 +498,7 @@ video{
 
 <div class="container">
 
-    <!-- LEFT -->
-
     <div class="left">
-
-        <!-- LOGO -->
 
         <div class="logo">
 
@@ -473,8 +516,6 @@ video{
 
         </div>
 
-        <!-- PLAYER -->
-
         <div class="player-box">
 
             <video
@@ -487,8 +528,6 @@ video{
             </video>
 
      
-            <!-- CONTROLS -->
-
             <div class="player-overlay">
 
                 <div class="controls">
@@ -536,8 +575,7 @@ video{
 
         </div>
 
-       <!-- CHANNEL CARD -->
-        <div class="channel-card">
+       <div class="channel-card">
             <div class="channel-live">
                 <div class="live-dot"></div>
                 <span>LIVE CHANNEL</span>
@@ -552,13 +590,14 @@ video{
 
     </div>
 
-    <!-- SIDEBAR -->
-
     <div class="sidebar">
 
         <div class="sidebar-title">
             CHANNEL LIST
         </div>
+
+        <div class="category-slider" id="categorySlider">
+            </div>
 
         <div
             class="channel-list"
@@ -1014,6 +1053,9 @@ document.getElementById("video");
 const channelList =
 document.getElementById("channelList");
 
+const categorySlider =
+document.getElementById("categorySlider");
+
 const progress =
 document.getElementById("progress");
 
@@ -1039,12 +1081,14 @@ const currentChannel =
 document.getElementById("currentChannel");
 
 let hls;
+let activeChannelUrl = ""; // Track currently playing source stream URL 
 
 /* LOAD IPTV / HLS STREAM */
 
 function loadStream(url){
 
     console.log("Loading:",url);
+    activeChannelUrl = url;
 
     /* DESTROY OLD PLAYER */
 
@@ -1210,66 +1254,74 @@ function updateEPG(channelName){
 
     if(epg){
 
-        epgTitle.innerText =
-        epg.title;
+        if(epgTitle) epgTitle.innerText = epg.title;
 
-        epgTime.innerText =
-        epg.time;
+        if(epgTime) epgTime.innerText = epg.time;
     }
 
     else{
 
-        epgTitle.innerText =
-        "No EPG Available";
+        if(epgTitle) epgTitle.innerText = "No EPG Available";
 
-        epgTime.innerText =
-        "LIVE";
+        if(epgTime) epgTime.innerText = "LIVE";
     }
 }
 
-/* RENDER CHANNELS */
+/* RENDER CATEGORY SLIDER */
+function renderCategories(){
+    // Extract unique categories dynamically from the data array
+    const uniqueCategories = ["All", ...new Set(channels.map(c => c.category))];
+    
+    categorySlider.innerHTML = "";
+    
+    uniqueCategories.forEach((cat, index) => {
+        const div = document.createElement("div");
+        div.classList.add("category-item");
+        if(index === 0) div.classList.add("active");
+        div.innerText = cat;
+        
+        div.onclick = () => {
+            document.querySelectorAll(".category-item").forEach(el => el.classList.remove("active"));
+            div.classList.add("active");
+            renderChannels(cat);
+        };
+        
+        categorySlider.appendChild(div);
+    });
+}
 
-function renderChannels(){
+/* RENDER CHANNELS WITH FILTER */
+function renderChannels(filterCategory = "All"){
+    channelList.innerHTML = "";
 
-    channels.forEach((channel,index)=>{
+    channels.forEach((channel)=>{
+        // Skip if a category filter is active and doesn't match
+        if(filterCategory !== "All" && channel.category !== filterCategory) return;
 
-        const div =
-        document.createElement("div");
-
+        const div = document.createElement("div");
         div.classList.add("channel");
 
-        if(index === 0){
+        // Keep active selection visual glow even after filtering lists
+        if(channel.url === activeChannelUrl){
             div.classList.add("active");
         }
 
         div.innerHTML = `
-
             <div class="category">
                 ${channel.category}
             </div>
-
             <div class="name">
                 ${channel.name}
             </div>
-
         `;
 
         div.onclick = () => {
-
-            document
-            .querySelectorAll(".channel")
-            .forEach(el =>
-                el.classList.remove("active")
-            );
-
+            document.querySelectorAll(".channel").forEach(el => el.classList.remove("active"));
             div.classList.add("active");
 
             loadStream(channel.url);
-
             updateEPG(channel.name);
-
-            currentChannel.innerText =
-            channel.name;
+            currentChannel.innerText = channel.name;
         };
 
         channelList.appendChild(div);
@@ -1347,11 +1399,11 @@ progressWrap.onclick = (e)=>{
 };
 
 /* INIT */
-
+renderCategories();
+// Load the initial channel to track active source
+activeChannelUrl = channels[0].url;
 renderChannels();
-
 loadStream(channels[0].url);
-
 updateEPG(channels[0].name);
 
 </script>
