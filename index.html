@@ -1,4 +1,322 @@
-[
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ANANTA STREAM IPTV</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+
+body {
+    height:100vh;
+    overflow:hidden;
+    color:white;
+    position:relative;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 30% 20%, #4f00ff 0%, #130022 40%, #05010d 80%);
+    animation: gradientShift 25s ease infinite;
+    z-index: -2;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(125, 0, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 0, 200, 0.12) 0%, transparent 50%);
+    animation: orbFloat 30s ease infinite;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+.bg-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 0, 200, 0.08);
+    filter: blur(40px);
+    z-index: -1;
+    animation: floatOrb linear infinite;
+}
+
+@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes orbFloat { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, -30px); } }
+@keyframes floatOrb { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-60px) scale(1.08); } }
+
+.container { display:flex; gap:20px; padding:20px; height:100vh; position:relative; z-index:1; }
+.left { flex:1; display:flex; flex-direction:column; }
+
+/* Logo */
+.logo {
+    display:flex; align-items:center; gap:14px; margin-bottom:20px;
+}
+.logo-icon {
+    width:48px; height:48px; border-radius:14px;
+    background: linear-gradient(135deg, #ff00cc, #7d2cff);
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:700; box-shadow: 0 0 20px rgba(255,0,200,0.4);
+}
+
+/* Player */
+.player-box {
+    position:relative;
+    flex:1;
+    border-radius:28px;
+    background:#000;
+    overflow:hidden;
+    box-shadow:0 10px 40px rgba(0,0,0,0.6);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.video-wrapper {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    background: #000;
+}
+
+video {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain !important;
+}
+
+/* Player Overlay */
+.player-overlay {
+    position:absolute;
+    top:0; left:0; right:0; bottom:0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.4), transparent 40%, rgba(0,0,0,0.85) 85%);
+    opacity:0;
+    transition:opacity 0.4s;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+}
+
+.player-box:hover .player-overlay { opacity:1; }
+
+/* Controls */
+.controls {
+    padding:0 30px 25px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.glass-btn {
+    width:52px; height:52px;
+    border:none; border-radius:16px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(20px);
+    color:white; font-size:20px;
+    cursor:pointer; transition:all 0.3s;
+}
+
+.glass-btn:hover {
+    background:rgba(255,255,255,0.2);
+    transform:scale(1.1);
+}
+
+/* Progress */
+.progress-wrap {
+    flex:1;
+    height:8px;
+    background:rgba(255,255,255,0.15);
+    border-radius:20px;
+    cursor:pointer;
+}
+
+.progress {
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, #ff00cc, #7d2cff);
+    border-radius:20px;
+}
+
+/* Channel Card */
+.channel-card {
+    margin-top:18px;
+    padding:24px;
+    border-radius:24px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.now-playing {
+    color:#ff4b73;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.live-dot {
+    width:8px;
+    height:8px;
+    background:#ff3355;
+    border-radius:50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255,51,85,0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(255,51,85,0); }
+    100% { box-shadow: 0 0 0 0 rgba(255,51,85,0); }
+}
+
+/* Sidebar */
+.sidebar {
+    width:480px;
+    border-radius:28px;
+    padding:20px;
+    background:rgba(8,8,15,0.8);
+    backdrop-filter:blur(24px);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar-title {
+    text-align:center;
+    font-size:12px;
+    letter-spacing:4px;
+    color:#888;
+    margin-bottom:16px;
+}
+
+/* Category Tabs */
+.category-tabs {
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:10px 0 15px;
+    scrollbar-width: none;
+}
+.category-tabs::-webkit-scrollbar { display: none; }
+
+.category-tab {
+    padding:8px 22px;
+    background:rgba(255,255,255,0.08);
+    border-radius:30px;
+    white-space:nowrap;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    transition:all 0.3s;
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+.category-tab.active {
+    background:linear-gradient(135deg, #7d2cff, #ff00cc);
+    border-color:transparent;
+    box-shadow:0 4px 15px rgba(125, 0, 255, 0.4);
+}
+
+/* Channel List */
+.channel-list {
+    max-height:calc(100vh - 240px);
+    overflow-y:auto;
+}
+
+.channel-list::-webkit-scrollbar { display: none; }
+
+.channel {
+    padding:16px 18px;
+    margin-bottom:12px;
+    border-radius:20px;
+    cursor:pointer;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    transition:all 0.3s ease;
+}
+
+.channel:hover, .channel.active {
+    background:linear-gradient(135deg, rgba(180,0,255,0.25), rgba(255,0,180,0.18));
+    border-color:rgba(255,0,200,0.4);
+    transform:translateX(8px);
+}
+
+.channel .category {
+    font-size:10px;
+    color:#aaa;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:4px;
+}
+
+.channel .name {
+    font-size:15.5px;
+    font-weight:600;
+}
+</style>
+</head>
+<body>
+
+<!-- Background Orbs -->
+<div class="bg-orb" style="width:320px;height:320px;top:15%;left:10%;animation-duration:28s;"></div>
+<div class="bg-orb" style="width:480px;height:480px;top:55%;right:12%;animation-duration:38s;background:rgba(125,0,255,0.07);"></div>
+
+<div class="container">
+    <div class="left">
+        <div class="logo">
+            <div class="logo-icon">A</div>
+            <div>
+                <h1 style="font-size:29px;">ANANTA STREAM</h1>
+                <p style="font-size:11px; color:#aaa; letter-spacing:2px;">PREMIUM IPTV</p>
+            </div>
+        </div>
+
+        <div class="player-box" id="playerBox">
+            <div class="video-wrapper">
+                <video id="video" autoplay playsinline crossorigin="anonymous"></video>
+            </div>
+            
+            <div class="player-overlay">
+                <div class="controls">
+                    <button class="glass-btn" id="playBtn">❚❚</button>
+                    <div class="progress-wrap" id="progressWrap">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                    <button class="glass-btn" id="muteBtn">🔊</button>
+                    <button class="glass-btn" id="fullscreenBtn">⛶</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="channel-card">
+            <div class="now-playing">
+                <div class="live-dot"></div>
+                LIVE
+            </div>
+            <div style="font-size:24px; font-weight:700;" id="currentChannel">Star Sports Select 1 HD</div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-title">CHANNEL LIST</div>
+        <div class="category-tabs" id="categoryTabs"></div>
+        <div class="channel-list" id="channelList"></div>
+    </div>
+</div>
+
+<script>
+// Channels
+const channels = [
 
     // SPORTS
     {
@@ -378,3 +696,101 @@
     
     
 ];
+
+let hls = null;
+const video = document.getElementById("video");
+const currentChannelEl = document.getElementById("currentChannel");
+const playerChannelName = document.getElementById("playerChannelName");
+const channelList = document.getElementById("channelList");
+const categoryTabs = document.getElementById("categoryTabs");
+const playerBox = document.getElementById("playerBox");
+
+let currentCategory = "All";
+
+// Render Category Tabs
+function renderCategoryTabs() {
+    const categories = ["All", "Sports", "News", "Entertainment"];
+    categoryTabs.innerHTML = "";
+    categories.forEach(cat => {
+        const tab = document.createElement("div");
+        tab.className = `category-tab ${cat === currentCategory ? 'active' : ''}`;
+        tab.textContent = cat;
+        tab.onclick = () => {
+            currentCategory = cat;
+            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            renderChannels();
+        };
+        categoryTabs.appendChild(tab);
+    });
+}
+
+// Render Channels
+function renderChannels() {
+    channelList.innerHTML = "";
+    const filtered = currentCategory === "All" 
+        ? channels 
+        : channels.filter(ch => ch.category === currentCategory);
+
+    filtered.forEach(ch => {
+        const div = document.createElement("div");
+        div.className = "channel";
+        div.innerHTML = `
+            <div class="category">${ch.category}</div>
+            <div class="name">${ch.name}</div>
+        `;
+        div.onclick = () => {
+            document.querySelectorAll('.channel').forEach(el => el.classList.remove('active'));
+            div.classList.add('active');
+            loadStream(ch.url, ch.name);
+        };
+        channelList.appendChild(div);
+    });
+}
+
+// Load Stream
+function loadStream(url, channelName) {
+    if (hls) { hls.destroy(); hls = null; }
+
+    if (url.includes(".m3u8") && Hls.isSupported()) {
+        hls = new Hls({ liveSyncDurationCount: 3 });
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}));
+    } else {
+        video.src = url;
+        video.play().catch(() => {});
+    }
+
+    currentChannelEl.textContent = channelName;
+    playerChannelName.textContent = channelName;
+}
+
+// Initialize
+renderCategoryTabs();
+renderChannels();
+loadStream(channels[0].url, channels[0].name);
+
+// Controls
+document.getElementById("playBtn").onclick = () => {
+    if (video.paused) {
+        video.play();
+        document.getElementById("playBtn").innerText = "❚❚";
+    } else {
+        video.pause();
+        document.getElementById("playBtn").innerText = "▶";
+    }
+};
+
+document.getElementById("muteBtn").onclick = () => {
+    video.muted = !video.muted;
+    document.getElementById("muteBtn").innerText = video.muted ? "🔇" : "🔊";
+};
+
+document.getElementById("fullscreenBtn").onclick = () => {
+    if (!document.fullscreenElement) playerBox.requestFullscreen();
+    else document.exitFullscreen();
+};
+</script>
+</body>
+</html>
