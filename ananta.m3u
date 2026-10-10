@@ -123,7 +123,8 @@ https://drk6xq0vhn.gpcdn.net/live/ekhon_tv_abr/index.m3u8
 https://drk6xq0vhn.gpcdn.net/live/nexus_tv_abr/index.m3u8
 
 #EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/f_png,w_300,q_85/0y_tDJsBNnOkwJLWNrdE/posters/2ff058e1-630f-4657-8dc6-b677e65642c5.png" group-title="Bangla Entertainment",Global TV
-http://livetv.akr4m.com:8080/bdtv/restrem/22.m3u8
+https://box.bbaria.net:8083/GlobalTV/tracks-v1a1/mono.m3u8
+
 
 
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/ry4QcVbh/20240822-231240.png" group-title="Bangla Entertainment",Green TV
@@ -234,7 +235,8 @@ https://drk6xq0vhn.gpcdn.net/live/max_2_abr/index.m3u8
 #EXTINF:-1 tvg-id="and_pictures_hd" tvg-name="And Pictures HD" tvg-logo="https://tinyurl.com/bd47hvew" group-title="Movies",And Pictures HD
 https://drk6xq0vhn.gpcdn.net/live/and_picture_hd_abr/index.m3u8
 
-#EXTINF:-1 tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsCineplexHD.png" group-title="Movies", COLORS CINEPLEX HD
+#EXTINF:-1 tvg-logo="https://shorturl.at/H7r7l" group-title="Movies",Zee Anmol Cinema
+https://box.bbaria.net:8083/Z_ANMOL_CINEMA/tracks-v1a1/mono.m3u8
 
 #EXTINF:-1 tvg-id="colorscineplexbollywood" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsCineplexBollywood.png" group-title="Movies",Colors Cineplex Bollywood
 
