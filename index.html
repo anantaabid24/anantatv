@@ -124,6 +124,7 @@
             background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
         }
 
+        /* Fire Sparks Canvas (lightweight) */
         #fireSparksCanvas {
             position: fixed;
             top: 0;
@@ -176,6 +177,7 @@
             position: relative;
         }
 
+        /* ---- Brand text stack ---- */
         .brand-text-wrap {
             display: flex;
             flex-direction: column;
@@ -260,6 +262,7 @@
             50% { box-shadow: 0 0 10px 1px rgba(168, 85, 247, 0.35); }
         }
 
+        /* ---- Icon container ---- */
         .brand-icon-box {
             width: 44px;
             height: 44px;
@@ -287,6 +290,7 @@
                 0 1px 0 rgba(255, 255, 255, 0.35) inset;
         }
 
+        /* Dual rotating rings */
         .brand-icon-box::before {
             content: '';
             position: absolute;
@@ -336,6 +340,7 @@
             pointer-events: none;
         }
 
+        /* Soft glow halo */
         .brand-icon-box::after {
             content: '';
             position: absolute;
@@ -353,6 +358,7 @@
             pointer-events: none;
         }
 
+        /* Inner glass + shimmer */
         .brand-icon-shine {
             position: absolute;
             inset: 0;
@@ -387,6 +393,7 @@
             transform: skewX(-22deg);
         }
 
+        /* Orbiting sparkles */
         .brand-orbit {
             position: absolute;
             inset: -12px;
@@ -402,10 +409,37 @@
             background: #fff;
         }
 
-        .brand-orbit span:nth-child(1) { top: 0; left: 50%; width: 5px; height: 5px; transform: translateX(-50%); background: #e879f9; box-shadow: 0 0 8px 2px rgba(232, 121, 249, 0.95), 0 0 16px rgba(168, 85, 247, 0.5); }
-        .brand-orbit span:nth-child(2) { top: 50%; right: 0; width: 4px; height: 4px; transform: translateY(-50%); background: #38bdf8; box-shadow: 0 0 7px 2px rgba(56, 189, 248, 0.9); animation: logo-particle-blink 1.5s ease-in-out infinite 0.2s; }
-        .brand-orbit span:nth-child(3) { bottom: 0; left: 50%; width: 3.5px; height: 3.5px; transform: translateX(-50%); background: #f472b6; box-shadow: 0 0 6px 2px rgba(244, 114, 182, 0.85); animation: logo-particle-blink 1.7s ease-in-out infinite 0.5s; }
-        .brand-orbit span:nth-child(4) { top: 50%; left: 0; width: 3px; height: 3px; transform: translateY(-50%); background: #a5b4fc; box-shadow: 0 0 6px 1px rgba(165, 180, 252, 0.9); animation: logo-particle-blink 1.9s ease-in-out infinite 0.9s; }
+        .brand-orbit span:nth-child(1) {
+            top: 0; left: 50%;
+            width: 5px; height: 5px;
+            transform: translateX(-50%);
+            background: #e879f9;
+            box-shadow: 0 0 8px 2px rgba(232, 121, 249, 0.95), 0 0 16px rgba(168, 85, 247, 0.5);
+        }
+        .brand-orbit span:nth-child(2) {
+            top: 50%; right: 0;
+            width: 4px; height: 4px;
+            transform: translateY(-50%);
+            background: #38bdf8;
+            box-shadow: 0 0 7px 2px rgba(56, 189, 248, 0.9);
+            animation: logo-particle-blink 1.5s ease-in-out infinite 0.2s;
+        }
+        .brand-orbit span:nth-child(3) {
+            bottom: 0; left: 50%;
+            width: 3.5px; height: 3.5px;
+            transform: translateX(-50%);
+            background: #f472b6;
+            box-shadow: 0 0 6px 2px rgba(244, 114, 182, 0.85);
+            animation: logo-particle-blink 1.7s ease-in-out infinite 0.5s;
+        }
+        .brand-orbit span:nth-child(4) {
+            top: 50%; left: 0;
+            width: 3px; height: 3px;
+            transform: translateY(-50%);
+            background: #a5b4fc;
+            box-shadow: 0 0 6px 1px rgba(165, 180, 252, 0.9);
+            animation: logo-particle-blink 1.9s ease-in-out infinite 0.9s;
+        }
 
         .brand-icon-box i {
             position: relative;
@@ -415,18 +449,41 @@
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
+        /* ---- Hover ---- */
         .brand-logo:hover .brand-icon-box {
             transform: scale(1.14) rotateY(-14deg) rotateX(8deg) translateZ(8px);
-            box-shadow: 0 10px 32px rgba(192, 38, 211, 0.55), 0 0 28px rgba(99, 102, 241, 0.4), 0 0 0 1.5px rgba(255, 255, 255, 0.3) inset;
+            box-shadow:
+                0 10px 32px rgba(192, 38, 211, 0.55),
+                0 0 28px rgba(99, 102, 241, 0.4),
+                0 0 0 1.5px rgba(255, 255, 255, 0.3) inset;
             animation-duration: 1.8s, 1.2s;
         }
 
-        .brand-logo:hover .brand-icon-box::before { animation-duration: 1.2s; filter: blur(0); }
-        .brand-logo:hover .brand-ring-2 { animation-duration: 2s; opacity: 1; }
-        .brand-logo:hover .brand-icon-box i { animation: logo-icon-spin 0.65s cubic-bezier(0.34, 1.56, 0.64, 1); filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1)); }
-        .brand-logo:hover .brand-orbit { animation-duration: 2.2s; }
-        .brand-logo:hover .brand-text { animation-duration: 1.5s; filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.55)); }
+        .brand-logo:hover .brand-icon-box::before {
+            animation-duration: 1.2s;
+            filter: blur(0);
+        }
 
+        .brand-logo:hover .brand-ring-2 {
+            animation-duration: 2s;
+            opacity: 1;
+        }
+
+        .brand-logo:hover .brand-icon-box i {
+            animation: logo-icon-spin 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 0 12px rgba(255, 255, 255, 1));
+        }
+
+        .brand-logo:hover .brand-orbit {
+            animation-duration: 2.2s;
+        }
+
+        .brand-logo:hover .brand-text {
+            animation-duration: 1.5s;
+            filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.55));
+        }
+
+        /* ---- Keyframes ---- */
         @keyframes logo-gradient-shift {
             0% { background-position: 0% 0%, 0% 50%; }
             50% { background-position: 0% 0%, 100% 50%; }
@@ -435,15 +492,30 @@
 
         @keyframes logo-breathe {
             0%, 100% {
-                box-shadow: 0 6px 18px rgba(168, 85, 247, 0.45), 0 0 0 1.5px rgba(255, 255, 255, 0.15) inset, 0 1px 0 rgba(255, 255, 255, 0.3) inset;
+                box-shadow:
+                    0 6px 18px rgba(168, 85, 247, 0.45),
+                    0 0 0 1.5px rgba(255, 255, 255, 0.15) inset,
+                    0 1px 0 rgba(255, 255, 255, 0.3) inset;
             }
             50% {
-                box-shadow: 0 8px 28px rgba(192, 38, 211, 0.65), 0 0 22px 3px rgba(99, 102, 241, 0.35), 0 0 0 1.5px rgba(255, 255, 255, 0.25) inset, 0 1px 0 rgba(255, 255, 255, 0.4) inset;
+                box-shadow:
+                    0 8px 28px rgba(192, 38, 211, 0.65),
+                    0 0 22px 3px rgba(99, 102, 241, 0.35),
+                    0 0 0 1.5px rgba(255, 255, 255, 0.25) inset,
+                    0 1px 0 rgba(255, 255, 255, 0.4) inset;
             }
         }
 
-        @keyframes logo-ring-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes logo-ring-spin-rev { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+        @keyframes logo-ring-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes logo-ring-spin-rev {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+
         @keyframes logo-halo-pulse {
             0%, 100% { opacity: 0.5; transform: scale(0.9); }
             50% { opacity: 1; transform: scale(1.12); }
@@ -456,7 +528,11 @@
             100% { left: 130%; opacity: 0; }
         }
 
-        @keyframes logo-orbit-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes logo-orbit-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         @keyframes logo-particle-blink {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.25; transform: scale(0.5); }
@@ -475,12 +551,20 @@
         }
 
         body.light-theme .brand-icon-box {
-            box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35), 0 0 0 1.5px rgba(255, 255, 255, 0.5) inset;
+            box-shadow:
+                0 6px 18px rgba(124, 58, 237, 0.35),
+                0 0 0 1.5px rgba(255, 255, 255, 0.5) inset;
         }
         body.light-theme .brand-icon-box::after {
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.4) 0%, rgba(37, 99, 235, 0.2) 40%, transparent 70%);
+            background: radial-gradient(
+                circle,
+                rgba(124, 58, 237, 0.4) 0%,
+                rgba(37, 99, 235, 0.2) 40%,
+                transparent 70%
+            );
         }
 
+        /* Premium Live badge */
         .live-badge-nav {
             display: inline-flex;
             align-items: center;
@@ -526,7 +610,11 @@
             100% { transform: scale(0.85); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
-        .nav-links { display: flex; align-items: center; gap: 8px; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
         .nav-btn {
             display: inline-flex;
@@ -544,8 +632,16 @@
             cursor: pointer;
         }
 
-        .nav-btn:hover { color: var(--text-main); background: rgba(128, 128, 128, 0.1); }
-        .nav-btn.active { color: var(--accent); background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.3); }
+        .nav-btn:hover {
+            color: var(--text-main);
+            background: rgba(128, 128, 128, 0.1);
+        }
+
+        .nav-btn.active {
+            color: var(--accent);
+            background: rgba(168, 85, 247, 0.15);
+            border-color: rgba(168, 85, 247, 0.3);
+        }
 
         body.light-theme .nav-btn.active {
             color: #7c3aed;
@@ -554,9 +650,17 @@
         }
 
         .theme-btn {
-            width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border-color);
-            background: var(--bg-card); color: var(--text-main); display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: var(--transition-smooth);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-smooth);
         }
 
         .sync-btn {
@@ -564,19 +668,40 @@
             background: rgba(16, 185, 129, 0.12) !important;
             color: #10b981 !important;
         }
-        .sync-btn:hover { background: rgba(16, 185, 129, 0.22) !important; color: #34d399 !important; border-color: rgba(16, 185, 129, 0.6) !important; }
-        .sync-btn.syncing i { animation: spin-sync 0.8s linear infinite; }
-        @keyframes spin-sync { 100% { transform: rotate(360deg); } }
+        .sync-btn:hover {
+            background: rgba(16, 185, 129, 0.22) !important;
+            color: #34d399 !important;
+            border-color: rgba(16, 185, 129, 0.6) !important;
+        }
+        .sync-btn.syncing i {
+            animation: spin-sync 0.8s linear infinite;
+        }
+        @keyframes spin-sync {
+            100% { transform: rotate(360deg); }
+        }
 
         .sync-status-badge {
-            display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: var(--radius-pill);
-            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.3px;
-            background: rgba(16, 185, 129, 0.12); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.25);
             transition: var(--transition-smooth);
         }
         .sync-dot {
-            width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block;
-            box-shadow: 0 0 6px #10b981; animation: pulse-sync 2s infinite;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            display: inline-block;
+            box-shadow: 0 0 6px #10b981;
+            animation: pulse-sync 2s infinite;
         }
         @keyframes pulse-sync {
             0%, 100% { opacity: 1; transform: scale(1); }
@@ -584,21 +709,40 @@
         }
 
         .toast-notice {
-            position: fixed; bottom: 24px; right: 24px; background: var(--bg-surface); color: var(--text-main);
-            border: 1px solid var(--border-color); border-left: 4px solid #10b981; padding: 12px 18px;
-            border-radius: var(--radius-sm); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); z-index: 9999;
-            font-size: 0.88rem; font-weight: 600; display: flex; align-items: center; gap: 10px;
-            opacity: 0; transform: translateY(15px); transition: opacity 0.3s ease, transform 0.3s ease;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--bg-surface);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid #10b981;
+            padding: 12px 18px;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            z-index: 9999;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
             pointer-events: none;
         }
-        .toast-notice.show { opacity: 1; transform: translateY(0); }
+        .toast-notice.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
+        /* App Container */
         .app-container {
             max-width: 1720px;
             margin: 0 auto;
             padding: 24px;
         }
 
+        /* Player Section */
         .player-card {
             background: var(--bg-surface);
             border-radius: var(--radius-lg);
@@ -653,10 +797,19 @@
         }
 
         .player-fav-btn {
-            background: none; border: none; font-size: 1.15rem; color: var(--text-dim);
-            cursor: pointer; padding: 4px; transition: var(--transition-smooth);
+            background: none;
+            border: none;
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            cursor: pointer;
+            padding: 4px;
+            transition: var(--transition-smooth);
         }
-        .player-fav-btn.active { color: #ef4444; transform: scale(1.15); }
+
+        .player-fav-btn.active {
+            color: #ef4444;
+            transform: scale(1.15);
+        }
 
         .player-tags {
             display: flex;
@@ -704,6 +857,13 @@
             background: #000;
         }
 
+        /* Keep toolbar + header fixed size so video fills remaining height */
+        .player-header,
+        .player-toolbar {
+            flex-shrink: 0;
+        }
+
+        /* ===== Advanced Modern Player Chrome ===== */
         .player-chrome {
             position: absolute;
             inset: 0;
@@ -748,7 +908,8 @@
             box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
         }
         .player-chrome-top .live-pill .dot {
-            width: 7px; height: 7px; border-radius: 50%;
+            width: 7px; height: 7px;
+            border-radius: 50%;
             background: #fff;
             animation: pulse-ring 1.5s infinite;
         }
@@ -771,11 +932,17 @@
             pointer-events: none;
         }
         .big-play-btn {
-            width: 72px; height: 72px; border-radius: 50%;
-            border: none; background: rgba(168, 85, 247, 0.85);
-            color: #fff; font-size: 1.6rem; display: none;
-            align-items: center; justify-content: center;
-            cursor: pointer; pointer-events: auto;
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(168, 85, 247, 0.85);
+            color: #fff;
+            font-size: 1.6rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
             box-shadow: 0 8px 32px rgba(168, 85, 247, 0.45);
             transition: transform 0.2s ease, background 0.2s;
             backdrop-filter: blur(6px);
@@ -789,6 +956,7 @@
             pointer-events: auto;
         }
 
+        /* Buffer / progress bar for live */
         .progress-track {
             height: 4px;
             background: rgba(255,255,255,0.18);
@@ -829,11 +997,18 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        .chrome-left, .chrome-right { display: flex; align-items: center; gap: 6px; }
+        .chrome-left, .chrome-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
         .chrome-btn {
-            height: 38px; min-width: 38px; padding: 0 10px;
-            border-radius: 10px; border: 1px solid rgba(255,255,255,0.12);
+            height: 38px;
+            min-width: 38px;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12);
             background: rgba(255,255,255,0.08);
             color: #f3f4f6;
             display: inline-flex;
@@ -864,7 +1039,10 @@
             font-size: 0.75rem;
             letter-spacing: 0.04em;
         }
-        .chrome-btn.go-live:hover { background: rgba(239, 68, 68, 0.45); color: #fff; }
+        .chrome-btn.go-live:hover {
+            background: rgba(239, 68, 68, 0.45);
+            color: #fff;
+        }
 
         .chrome-volume {
             display: flex;
@@ -872,15 +1050,26 @@
             gap: 6px;
         }
         .chrome-volume input[type="range"] {
-            width: 0; opacity: 0; transition: width 0.25s ease, opacity 0.25s;
-            height: 4px; -webkit-appearance: none; background: rgba(255,255,255,0.25);
-            border-radius: 4px; outline: none; cursor: pointer;
+            width: 0;
+            opacity: 0;
+            transition: width 0.25s ease, opacity 0.25s;
+            height: 4px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.25);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
         }
         .chrome-volume:hover input[type="range"],
-        .chrome-volume:focus-within input[type="range"] { width: 80px; opacity: 1; }
+        .chrome-volume:focus-within input[type="range"] {
+            width: 80px;
+            opacity: 1;
+        }
         .chrome-volume input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 12px; height: 12px;
-            border-radius: 50%; background: #fff;
+            -webkit-appearance: none;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: #fff;
             box-shadow: 0 0 6px rgba(168,85,247,0.6);
         }
 
@@ -893,6 +1082,7 @@
             text-align: center;
         }
 
+        /* Quality menu (floating) */
         .quality-menu {
             position: absolute;
             bottom: 58px;
@@ -910,7 +1100,6 @@
             backdrop-filter: blur(16px);
         }
         .quality-menu.show { display: flex; }
-
         .quality-item {
             padding: 8px 12px;
             border-radius: 8px;
@@ -933,7 +1122,10 @@
 
         .video-overlay {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: none;
             align-items: center;
             justify-content: center;
@@ -978,6 +1170,7 @@
         }
         .overlay-btn:hover { filter: brightness(1.1); }
 
+        /* Legacy bottom toolbar (kept as secondary / always visible on mobile) */
         .player-toolbar {
             padding: 10px 16px;
             display: flex;
@@ -994,7 +1187,8 @@
             gap: 6px;
         }
         .tool-btn {
-            height: 34px; padding: 0 10px;
+            height: 34px;
+            padding: 0 10px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
             background: var(--bg-card);
@@ -1008,8 +1202,12 @@
             transition: var(--transition-smooth);
             gap: 6px;
         }
-        .tool-btn:hover { color: var(--text-main); border-color: var(--accent); }
+        .tool-btn:hover {
+            color: var(--text-main);
+            border-color: var(--accent);
+        }
 
+        /* Quality Dropdown Menu */
         .quality-menu {
             position: absolute;
             bottom: 52px;
@@ -1025,6 +1223,7 @@
             gap: 4px;
             z-index: 100;
         }
+
         .quality-menu.show { display: flex; }
 
         .quality-item {
@@ -1042,23 +1241,39 @@
             justify-content: space-between;
             transition: var(--transition-smooth);
         }
+
         .quality-item:hover, .quality-item.active {
             background: var(--accent);
             color: #fff;
         }
 
-        .volume-control { display: flex; align-items: center; gap: 8px; }
-        .volume-slider {
-            width: 80px; height: 5px;
-            -webkit-appearance: none; background: rgba(128, 128, 128, 0.3);
-            border-radius: 4px; outline: none; cursor: pointer;
-        }
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 14px; height: 14px;
-            border-radius: 50%; background: var(--accent);
-            cursor: pointer; box-shadow: 0 0 6px var(--accent-glow);
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
+        .volume-slider {
+            width: 80px;
+            height: 5px;
+            -webkit-appearance: none;
+            background: rgba(128, 128, 128, 0.3);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            box-shadow: 0 0 6px var(--accent-glow);
+        }
+
+        /* Sidebar Channel List */
         .sidebar-card {
             background: var(--bg-surface);
             border-radius: var(--radius-lg);
@@ -1079,7 +1294,11 @@
             gap: 12px;
         }
 
-        .sidebar-title-row { display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
         .sidebar-title {
             font-size: 1.15rem;
@@ -1101,7 +1320,10 @@
             border: 1px solid var(--border-color);
         }
 
-        .search-box { position: relative; width: 100%; }
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
 
         .search-input {
             width: 100%;
@@ -1115,6 +1337,7 @@
             outline: none;
             transition: var(--transition-smooth);
         }
+
         .search-input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow);
@@ -1144,6 +1367,7 @@
             padding: 4px;
         }
 
+        /* Category Filter Chips - Drag to Slide */
         .category-scroll {
             display: flex;
             align-items: center;
@@ -1156,6 +1380,7 @@
             user-select: none;
             scroll-behavior: smooth;
         }
+
         .category-scroll::-webkit-scrollbar { display: none; }
 
         .category-scroll.is-dragging {
@@ -1177,14 +1402,22 @@
             flex-shrink: 0;
             pointer-events: auto;
         }
-        .cat-chip:hover { color: var(--text-main); background: var(--bg-card-hover); }
+
+        .cat-chip:hover {
+            color: var(--text-main);
+            background: var(--bg-card-hover);
+        }
+
         .cat-chip.active {
             background: var(--accent) !important;
             color: #ffffff !important;
             border-color: var(--accent) !important;
             box-shadow: 0 2px 8px var(--accent-glow);
         }
-        .category-scroll.is-dragging .cat-chip { pointer-events: none; }
+
+        .category-scroll.is-dragging .cat-chip {
+            pointer-events: none;
+        }
 
         .channels-scroll-area {
             flex: 1;
@@ -1194,10 +1427,12 @@
             flex-direction: column;
             gap: 8px;
         }
+
         .channels-scroll-area::-webkit-scrollbar { width: 6px; }
         .channels-scroll-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         .channels-scroll-area::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
+        /* Channel Card with D-Pad TV Focus */
         .channel-card {
             display: flex;
             align-items: center;
@@ -1316,7 +1551,10 @@
             padding: 2px 4px;
             transition: var(--transition-smooth);
         }
-        .card-fav-btn.active { color: #ef4444; }
+
+        .card-fav-btn.active {
+            color: #ef4444;
+        }
 
         .card-drm-badge {
             font-size: 0.62rem;
@@ -1328,6 +1566,7 @@
             border: 1px solid rgba(168, 85, 247, 0.4);
             text-transform: uppercase;
         }
+
         body.light-theme .card-drm-badge {
             background: #ede9fe;
             color: #6d28d9;
@@ -1342,7 +1581,10 @@
             margin-left: auto;
             flex-shrink: 0;
         }
-        .channel-card.active .card-playing-indicator { display: flex; }
+
+        .channel-card.active .card-playing-indicator {
+            display: flex;
+        }
 
         .eq-bar {
             width: 3px;
@@ -1350,6 +1592,7 @@
             border-radius: 1px;
             animation: eq-bounce 0.8s ease infinite alternate;
         }
+
         .eq-bar:nth-child(2) { animation-delay: 0.2s; height: 12px; }
         .eq-bar:nth-child(3) { animation-delay: 0.4s; height: 8px; }
         .eq-bar:nth-child(1) { height: 10px; }
@@ -1373,6 +1616,7 @@
             color: var(--text-dim);
             font-size: 0.85rem;
         }
+
         .app-footer a {
             color: var(--accent);
             text-decoration: none;
@@ -1401,31 +1645,56 @@
             font-size: 0.75rem;
         }
 
-        /* Mobile */
+        /* Mobile: player uses aspect ratio, not full viewport height */
         @media (max-width: 991.98px) {
-            .player-card { height: auto; min-height: 0; }
-            .video-stage { flex: none; padding-top: 56.25%; min-height: 0; cursor: default; }
-            .video-stage .player-chrome { opacity: 1; pointer-events: auto; }
+            .player-card {
+                height: auto;
+                min-height: 0;
+            }
+            .video-stage {
+                flex: none;
+                padding-top: 56.25%;
+                min-height: 0;
+                cursor: default;
+            }
+            .video-stage .player-chrome {
+                opacity: 1;
+                pointer-events: auto;
+            }
             .big-play-btn { width: 56px; height: 56px; font-size: 1.25rem; }
             .chrome-btn { height: 34px; min-width: 34px; font-size: 0.8rem; }
             .chrome-btn.go-live span, .time-display { display: none; }
             .chrome-volume input[type="range"] { width: 60px; opacity: 1; }
-            .sidebar-card { height: auto; min-height: 420px; max-height: 70vh; }
+            .sidebar-card {
+                height: auto;
+                min-height: 420px;
+                max-height: 70vh;
+            }
         }
 
+        /* Anti-select / protect media + hide download button */
         video, .video-wrapper, .player-card {
             -webkit-user-select: none;
             user-select: none;
             -webkit-touch-callout: none;
         }
-        video::-webkit-media-controls-enclosure { overflow: hidden; }
+        video::-webkit-media-controls-enclosure {
+            overflow: hidden;
+        }
         video::-webkit-media-controls-download-button,
-        video::-internal-media-controls-download-button { display: none !important; }
-        video::-webkit-media-controls { overflow: hidden !important; }
+        video::-internal-media-controls-download-button {
+            display: none !important;
+        }
+        video::-webkit-media-controls {
+            overflow: hidden !important;
+        }
     </style>
 </head>
-<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
-
+<body
+    oncontextmenu="return false;"
+    ondragstart="return false;"
+    onselectstart="return false;"
+>
     <div class="ambient-bg">
         <div class="ambient-blob ambient-blob-1"></div>
         <div class="ambient-blob ambient-blob-2"></div>
@@ -1479,8 +1748,8 @@
 
     <main class="app-container">
         <div class="row g-4">
-            <!-- Main Player - Increased weight (72%) -->
-            <div class="col-lg-7 col-xl-8">
+            <!-- Left: Video Player -->
+            <div class="col-lg-8 col-xl-9">
                 <div class="player-card">
                     <div class="player-header">
                         <div class="player-channel-info">
@@ -1503,6 +1772,7 @@
                             <video id="video-player" autoplay playsinline preload="auto" controlslist="nodownload noplaybackrate noremoteplayback" oncontextmenu="return false;" crossorigin="anonymous"></video>
                         </div>
 
+                        <!-- Advanced Modern Player Chrome -->
                         <div class="player-chrome" id="playerChrome">
                             <div class="player-chrome-top">
                                 <span class="live-pill" id="chromeLivePill" style="display:none" aria-hidden="true"><span class="dot"></span></span>
@@ -1561,7 +1831,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="quality-menu" id="qualityMenu">
                             <button class="quality-item active" data-level="-1">Auto (Best)</button>
                         </div>
@@ -1588,6 +1857,7 @@
                         </div>
                     </div>
 
+                    <!-- Compact secondary toolbar (always visible on small screens) -->
                     <div class="player-toolbar d-lg-none">
                         <div class="toolbar-group">
                             <button class="tool-btn" id="prevBtnMobile" title="Previous">
@@ -1623,8 +1893,8 @@
                 </div>
             </div>
 
-            <!-- Channel List - Reduced to 28% -->
-            <div class="col-lg-5 col-xl-4">
+            <!-- Right: Channel List Sidebar -->
+            <div class="col-lg-4 col-xl-3">
                 <div class="sidebar-card">
                     <div class="sidebar-header">
                         <div class="sidebar-title-row">
@@ -1632,7 +1902,7 @@
                                 <i class="fas fa-list-ul text-muted"></i>
                                 <span>Channels</span>
                             </h2>
-                            <div class="d-flex align-items: center gap-2">
+                            <div class="d-flex align-items-center gap-2">
                                 <span class="sync-status-badge" id="syncStatusBadge" title="Live Auto-Update: Connected to GitHub">
                                     <span class="sync-dot"></span>
                                     <span id="syncStatusText">Auto</span>
@@ -1671,12 +1941,144 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
     <script>
         // ============================================================
-        // Sandbox-safe playlist (embedded)
+        // Site Protection: hide streams, block IDM grabs, anti-inspect
+        // (Client-side deterrent only — determined users can still bypass)
         // ============================================================
+        (function protectSite() {
+            'use strict';
+
+            // 1) Block right-click / context menu everywhere
+            document.addEventListener('contextmenu', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                return false;
+            }, true);
+
+            // 2) Block common DevTools / view-source / save shortcuts
+            document.addEventListener('keydown', function (e) {
+                const key = e.key || '';
+                const ctrl = e.ctrlKey || e.metaKey;
+                const shift = e.shiftKey;
+                const alt = e.altKey;
+
+                // F12
+                if (key === 'F12') {
+                    e.preventDefault(); e.stopPropagation(); return false;
+                }
+                // Ctrl+Shift+I / J / C / K (Inspect / Console)
+                if (ctrl && shift && ['I', 'J', 'C', 'K', 'i', 'j', 'c', 'k'].indexOf(key) !== -1) {
+                    e.preventDefault(); e.stopPropagation(); return false;
+                }
+                // Ctrl+U (view source), Ctrl+S (save), Ctrl+P (print)
+                if (ctrl && !shift && ['u', 'U', 's', 'S', 'p', 'P'].indexOf(key) !== -1) {
+                    e.preventDefault(); e.stopPropagation(); return false;
+                }
+                // Ctrl+Shift+Del (clear data shortcut noise)
+                if (ctrl && shift && (key === 'Delete' || key === 'Backspace')) {
+                    e.preventDefault(); e.stopPropagation(); return false;
+                }
+                // Ctrl+Shift+P (command menu in some browsers)
+                if (ctrl && shift && (key === 'P' || key === 'p')) {
+                    e.preventDefault(); e.stopPropagation(); return false;
+                }
+            }, true);
+
+            // 3) Soft DevTools detection (window size heuristic)
+            let devtoolsOpen = false;
+            const threshold = 160;
+            function checkDevTools() {
+                const widthDiff = window.outerWidth - window.innerWidth > threshold;
+                const heightDiff = window.outerHeight - window.innerHeight > threshold;
+                const open = widthDiff || heightDiff;
+                if (open && !devtoolsOpen) {
+                    devtoolsOpen = true;
+                    // Pause video & clear direct src hints when tools open
+                    try {
+                        const v = document.getElementById('video-player');
+                        if (v) {
+                            v.pause();
+                            // Do not wipe HLS buffer completely — just pause
+                        }
+                    } catch (_) {}
+                } else if (!open) {
+                    devtoolsOpen = false;
+                }
+            }
+            setInterval(checkDevTools, 1200);
+
+            // 4) Disable drag of video / images (helps some download managers)
+            document.addEventListener('dragstart', function (e) {
+                if (e.target && (e.target.tagName === 'VIDEO' || e.target.tagName === 'IMG')) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, true);
+
+            // 5) Disable video downloading (controls + events)
+            function lockVideoDownload(v) {
+                if (!v) return;
+                v.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+                v.controlsList && v.controlsList.add && v.controlsList.add('nodownload');
+                v.removeAttribute('download');
+                v.setAttribute('oncontextmenu', 'return false;');
+                // Block save / open-as
+                ['contextmenu', 'dragstart', 'selectstart'].forEach(function (ev) {
+                    v.addEventListener(ev, function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        return false;
+                    }, true);
+                });
+            }
+            window.__lockVideoDownload = lockVideoDownload;
+
+            document.addEventListener('DOMContentLoaded', function () {
+                lockVideoDownload(document.getElementById('video-player'));
+            });
+
+            // 6) Never put stream URLs on data-* / visible DOM (already true for cards)
+            // 7) Discourage casual console dumping
+            try {
+                const blank = function () { return undefined; };
+                ['log', 'debug', 'info', 'table', 'dir'].forEach(function (m) {
+                    // soft: do not fully disable console (breaks legitimate debugging)
+                });
+            } catch (_) {}
+        })();
+
+        // --- Protected Encrypted Stream Vault ---
+        const _0xVaultKey = "LiveTvServer_SecureKey_2026@SohagRana";
+        const _0xVaultPayload = "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";
+
+        function _0xUnlock(encData, key) {
+            const raw = atob(encData);
+            const S = Array.from({length: 256}, (_, i) => i);
+            let j = 0;
+            const keyBytes = Array.from(key).map(c => c.charCodeAt(0));
+            for (let i = 0; i < 256; i++) {
+                j = (j + S[i] + keyBytes[i % keyBytes.length]) % 256;
+                [S[i], S[j]] = [S[j], S[i]];
+            }
+            let i = 0;
+            j = 0;
+            const out = new Uint8Array(raw.length);
+            for (let x = 0; x < raw.length; x++) {
+                i = (i + 1) % 256;
+                j = (j + S[i]) % 256;
+                [S[i], S[j]] = [S[j], S[i]];
+                const k = S[(S[i] + S[j]) % 256];
+                out[x] = raw.charCodeAt(x) ^ k;
+            }
+            return new TextDecoder().decode(out);
+        }
+
+        // Playlist Endpoints & Cache configuration
         const PLAYLIST_REMOTE_URL = 'https://raw.githubusercontent.com/anantaabid24/anantatv/refs/heads/main/ananta.m3u';
+        const PLAYLIST_LOCAL_URL = './';
+        const CACHE_PLAYLIST_KEY = 'livetv__cache';
+        const CACHE_PLAYLIST_TIME_KEY = 'livetv__time';
 
         let channels = [];
         let activeIndex = 0;
@@ -1699,7 +2101,9 @@
             toast.innerHTML = `<i class="fas ${isError ? 'fa-circle-exclamation text-danger' : 'fa-circle-check text-success'}"></i> <span>${message}</span>`;
             toast.classList.add('show');
             clearTimeout(window._toastTimeout);
-            window._toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+            window._toastTimeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3500);
         }
 
         function updateSyncBadge(isBusy, text) {
@@ -1721,6 +2125,7 @@
             const lines = data.split('\n');
             const result = [];
             let current = {};
+
             for (let rawLine of lines) {
                 const line = rawLine.trim();
                 if (!line) continue;
@@ -1732,12 +2137,16 @@
                 } else if (line.startsWith('#EXTINF:')) {
                     const idMatch = line.match(/tvg-id="([^"]+)"/);
                     current.id = idMatch ? idMatch[1] : String(result.length + 1);
+
                     const chnoMatch = line.match(/tvg-chno="([^"]+)"/);
                     current.chno = chnoMatch ? chnoMatch[1] : (result.length + 1);
+
                     const logoMatch = line.match(/tvg-logo="([^"]+)"/);
                     current.logo = logoMatch ? logoMatch[1] : '';
+
                     const groupMatch = line.match(/group-title="([^"]+)"/);
                     current.group = groupMatch ? groupMatch[1] : 'General';
+
                     const commaIdx = line.lastIndexOf(',');
                     current.name = commaIdx !== -1 ? line.substring(commaIdx + 1).trim() : 'Live Channel';
                 } else if (line.startsWith('http://') || line.startsWith('https://')) {
@@ -1755,11 +2164,62 @@
             return result;
         }
 
-        // STATIC EMBEDDED PLAYLIST (sandbox-safe)
-        const EMBEDDED_PLAYLIST = `<?php
-            // Copy the FULL content of https://raw.githubusercontent.com/anantaabid24/anantatv/refs/heads/main/ananta.m3u here
-            // and replace this comment block with the actual m3u content
-        ?>`;
+        async function fetchPlaylistText() {
+            // 1. Try Primary Remote Server (toffee.rootbd.xyz)
+            try {
+                const cacheBuster = `?_t=${Math.floor(Date.now() / 60000)}`;
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 6000);
+                const resp = await fetch(PLAYLIST_REMOTE_URL + cacheBuster, {
+                    cache: 'no-cache',
+                    signal: controller.signal
+                });
+                clearTimeout(timeoutId);
+                if (resp.ok) {
+                    const text = await resp.text();
+                    if (text.includes('#EXTINF')) {
+                        localStorage.setItem(CACHE_PLAYLIST_KEY, text);
+                        localStorage.setItem(CACHE_PLAYLIST_TIME_KEY, Date.now().toString());
+                        return { text, source: 'RootBD Live' };
+                    }
+                }
+            } catch (err) {
+                console.warn('Primary remote playlist fetch failed, trying local fallback:', err);
+            }
+
+            // 2. Try Local Fallback File
+            try {
+                const resp = await fetch(PLAYLIST_LOCAL_URL + `?_t=${Date.now()}`, { cache: 'no-cache' });
+                if (resp.ok) {
+                    const text = await resp.text();
+                    if (text.includes('#EXTINF')) {
+                        localStorage.setItem(CACHE_PLAYLIST_KEY, text);
+                        localStorage.setItem(CACHE_PLAYLIST_TIME_KEY, Date.now().toString());
+                        return { text, source: 'Local' };
+                    }
+                }
+            } catch (err) {
+                console.warn('Local playlist fetch failed, trying cache:', err);
+            }
+
+            // 3. Try LocalStorage Cache
+            const cached = localStorage.getItem(CACHE_PLAYLIST_KEY);
+            if (cached && cached.includes('#EXTINF')) {
+                return { text: cached, source: 'Cache' };
+            }
+
+            // 4. Try Built-in Vault Payload
+            try {
+                const vaultText = _0xUnlock(_0xVaultPayload, _0xVaultKey);
+                if (vaultText && vaultText.includes('#EXTINF')) {
+                    return { text: vaultText, source: 'Vault' };
+                }
+            } catch (err) {
+                console.error('Vault fallback failed:', err);
+            }
+
+            throw new Error('All playlist sources failed.');
+        }
 
         async function loadPlaylist(initialPlay = true) {
             if (isSyncing) return;
@@ -1770,9 +2230,7 @@
             if (syncBtn) syncBtn.classList.add('syncing');
 
             try {
-                const text = EMBEDDED_PLAYLIST;
-                if (!text || !text.includes('#EXTINF')) throw new Error('Playlist empty');
-
+                const { text, source } = await fetchPlaylistText();
                 const parsed = parseM3U(text);
                 if (parsed.length === 0) throw new Error('Parsed 0 channels from M3U');
 
@@ -1787,29 +2245,34 @@
                     if (channels.length > 0) playChannel(0);
                 } else if (prevCh) {
                     const matchIdx = channels.findIndex(c => c.id === prevCh.id || c.name.toLowerCase() === prevCh.name.toLowerCase());
-                    if (matchIdx !== -1) activeIndex = matchIdx;
+                    if (matchIdx !== -1) {
+                        activeIndex = matchIdx;
+                        channels[activeIndex].url = channels[matchIdx].url;
+                    }
                     renderChannelGrid();
                     updateFavUI();
                 }
 
                 updateSyncBadge(false, `${channels.length} Ch`);
-                showToast(`Auto-Update: ${channels.length} Live Channels loaded`);
+                showToast(`Auto-Update: ${channels.length} Live Channels loaded (${source})`);
             } catch (err) {
                 console.error('loadPlaylist error:', err);
                 updateSyncBadge(false, 'Offline');
-                showToast('Failed to load playlist (offline mode)', true);
+                showToast('Failed to auto-update playlist (offline mode)', true);
             } finally {
                 isSyncing = false;
                 if (syncBtn) syncBtn.classList.remove('syncing');
             }
         }
 
+        // Favorites & Recents state
         let favorites = JSON.parse(localStorage.getItem('livetv_favorites') || '[]');
         let recents = JSON.parse(localStorage.getItem('livetv_recents') || '[]');
 
         if (window.shaka) shaka.polyfill.installAll();
 
         const videoElement = document.getElementById('video-player');
+        // Isolate <video> in closed Shadow DOM so IDM / downloaders hard to hook "Download this video"
         (function isolateVideoFromDownloaders() {
             try {
                 const wrapper = document.querySelector('.video-wrapper');
@@ -1823,15 +2286,19 @@
                 ].join('');
                 const root = document.createElement('div');
                 root.className = 'vroot';
+                // Move video into closed shadow (extensions usually cannot inject UI into closed roots)
                 root.appendChild(videoElement);
                 shadow.appendChild(style);
                 shadow.appendChild(root);
                 videoElement.removeAttribute('controls');
                 videoElement.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+                videoElement.controls = false;
                 if (typeof window.__lockVideoDownload === 'function') {
                     window.__lockVideoDownload(videoElement);
                 }
-            } catch (err) { console.warn('Video isolation skipped:', err); }
+            } catch (err) {
+                console.warn('Video isolation skipped:', err);
+            }
         })();
 
         const channelGrid = document.getElementById('channelGrid');
@@ -1867,41 +2334,42 @@
         const qualityLabel = document.getElementById('qualityLabel');
         const qualityMenu = document.getElementById('qualityMenu');
 
+        // --- 1. Category Setup with Favorites & Recents ---
         function initCategories() {
             const groups = {};
-            channels.forEach(ch => { groups[ch.group] = (groups[ch.group] || 0) + 1; });
+            channels.forEach(ch => {
+                groups[ch.group] = (groups[ch.group] || 0) + 1;
+            });
 
             categoryContainer.innerHTML = '';
-
-            const allBtn = document.createElement('button');
-            allBtn.className = `cat-chip ${selectedCategory === 'ALL' ? 'active' : ''}`;
-            allBtn.dataset.category = 'ALL';
-            allBtn.textContent = `All (${channels.length})`;
-            allBtn.addEventListener('click', () => setCategory('ALL', allBtn));
+            
+            // All Chip
+            const allBtn = createCatChip('ALL', `All (${channels.length})`);
             categoryContainer.appendChild(allBtn);
 
-            const favBtn = document.createElement('button');
-            favBtn.className = `cat-chip ${selectedCategory === 'FAVORITES' ? 'active' : ''}`;
-            favBtn.dataset.category = 'FAVORITES';
-            favBtn.textContent = `❤️ Favorites (${favorites.length})`;
-            favBtn.addEventListener('click', () => setCategory('FAVORITES', favBtn));
+            // Favorites Chip
+            const favBtn = createCatChip('FAVORITES', `❤️ Favorites (${favorites.length})`);
             categoryContainer.appendChild(favBtn);
 
-            const recBtn = document.createElement('button');
-            recBtn.className = `cat-chip ${selectedCategory === 'RECENTS' ? 'active' : ''}`;
-            recBtn.dataset.category = 'RECENTS';
-            recBtn.textContent = `🕒 Recent (${recents.length})`;
-            recBtn.addEventListener('click', () => setCategory('RECENTS', recBtn));
+            // Recents Chip
+            const recBtn = createCatChip('RECENTS', `🕒 Recent (${recents.length})`);
             categoryContainer.appendChild(recBtn);
 
+            // Standard Group Chips
             Object.keys(groups).sort().forEach(group => {
-                const btn = document.createElement('button');
-                btn.className = `cat-chip ${selectedCategory === group ? 'active' : ''}`;
-                btn.dataset.category = group;
-                btn.textContent = `${group} (${groups[group]})`;
-                btn.addEventListener('click', () => setCategory(group, btn));
+                const btn = createCatChip(group, `${group} (${groups[group]})`);
                 categoryContainer.appendChild(btn);
             });
+        }
+
+        function createCatChip(catKey, label) {
+            const btn = document.createElement('button');
+            btn.className = `cat-chip ${selectedCategory === catKey ? 'active' : ''}`;
+            btn.dataset.category = catKey;
+            btn.textContent = label;
+            btn.tabIndex = 0;
+            btn.addEventListener('click', () => setCategory(catKey, btn));
+            return btn;
         }
 
         function setCategory(cat, btnElement) {
@@ -1911,11 +2379,15 @@
             renderChannelGrid();
         }
 
+        // --- 2. Favorites & Recents Handlers ---
         function toggleFavorite(chId, e) {
             if (e) e.stopPropagation();
             const idx = favorites.indexOf(String(chId));
-            if (idx === -1) favorites.push(String(chId));
-            else favorites.splice(idx, 1);
+            if (idx === -1) {
+                favorites.push(String(chId));
+            } else {
+                favorites.splice(idx, 1);
+            }
             localStorage.setItem('livetv_favorites', JSON.stringify(favorites));
             updateFavUI();
             initCategories();
@@ -1947,6 +2419,7 @@
             initCategories();
         }
 
+        // --- 3. Render Channel Grid ---
         function renderChannelGrid() {
             channelGrid.innerHTML = '';
 
@@ -1962,8 +2435,8 @@
             }
 
             if (searchQuery) {
-                filtered = filtered.filter(ch =>
-                    ch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                filtered = filtered.filter(ch => 
+                    ch.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                     ch.group.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     String(ch.chno).includes(searchQuery)
                 );
@@ -1985,7 +2458,7 @@
                 const card = document.createElement('div');
                 card.className = `channel-card ${ch.index === activeIndex ? 'active' : ''}`;
                 card.dataset.index = ch.index;
-                card.tabIndex = 0;
+                card.tabIndex = 0; // D-Pad focusable
 
                 const fallbackImg = `https://placehold.co/420x300/1e1e2f/ffffff?text=${encodeURIComponent(ch.name)}`;
                 const isDrm = ch.url.includes('.mpd') || !!ch.licenseKey;
@@ -2002,7 +2475,9 @@
                                 <div class="card-name" title="${ch.name}">${ch.name}</div>
                             </div>
                             <div class="card-playing-indicator">
-                                <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
+                                <div class="eq-bar"></div>
                             </div>
                         </div>
                         <div class="card-footer-line">
@@ -2023,9 +2498,12 @@
             });
 
             const activeCard = channelGrid.querySelector('.channel-card.active');
-            if (activeCard) activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (activeCard) {
+                activeCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
 
+        // --- 4. Video Quality Selector ---
         function setQualityLabel(text) {
             if (qualityLabel) qualityLabel.textContent = text;
             const qlMob = document.getElementById('qualityLabelMobile');
@@ -2037,8 +2515,14 @@
             }
         }
 
-        qualityBtn.addEventListener('click', (e) => { e.stopPropagation(); qualityMenu.classList.toggle('show'); });
-        document.getElementById('qualityBtnMobile')?.addEventListener('click', (e) => { e.stopPropagation(); qualityMenu.classList.toggle('show'); });
+        qualityBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            qualityMenu.classList.toggle('show');
+        });
+        document.getElementById('qualityBtnMobile')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            qualityMenu.classList.toggle('show');
+        });
         document.addEventListener('click', () => qualityMenu.classList.remove('show'));
 
         function populateHlsQualityMenu(levels) {
@@ -2103,11 +2587,12 @@
             });
         }
 
+        // Robust HLS.js config – supports live + VOD, AES-128, relative keys, tokenized m3u8, multi-variant
         function createHlsInstance() {
             return new Hls({
                 enableWorker: true,
-                lowLatencyMode: false,
-                enableSoftwareAES: true,
+                lowLatencyMode: false,                 // more stable for AES-128 live (Nimble / gpcdn)
+                enableSoftwareAES: true,               // required for METHOD=AES-128 streams
                 backBufferLength: 90,
                 maxBufferLength: 60,
                 maxMaxBufferLength: 120,
@@ -2128,6 +2613,7 @@
                 testBandwidth: true,
                 stretchShortVideoTrack: true,
                 forceKeyFrameOnDiscontinuity: true,
+                // Longer timeouts + more retries for session-based / tokenized / relative key streams
                 manifestLoadingTimeOut: 30000,
                 manifestLoadingMaxRetry: 12,
                 manifestLoadingRetryDelay: 1000,
@@ -2138,16 +2624,20 @@
                 fragLoadingMaxRetry: 12,
                 fragLoadingRetryDelay: 800,
                 fragLoadingMaxRetryTimeout: 64000,
+                // AES key loader retries (critical for encrypted m3u8)
                 keyLoadingTimeOut: 20000,
                 keyLoadingMaxRetry: 12,
                 keyLoadingRetryDelay: 800,
+                // Allow appending segments even with minor discontinuities
                 appendErrorMaxRetry: 5,
-                xhrSetup: function (xhr) {
+                xhrSetup: function (xhr /*, url */) {
                     xhr.withCredentials = false;
+                    // Do not set forbidden headers (Referer / Origin). CORS * is already present.
                 }
             });
         }
 
+        // --- 5. Play Channel Engine (Advanced – all m3u8 supported) ---
         async function playChannel(index) {
             if (index < 0 || index >= channels.length) return;
             activeIndex = index;
@@ -2176,8 +2666,14 @@
             const lm = document.getElementById('loadingMsg');
             if (lm) lm.textContent = `Loading ${ch.name}...`;
 
-            if (hlsInstance) { try { hlsInstance.destroy(); } catch (_) {} hlsInstance = null; }
-            if (shakaPlayer) { try { await shakaPlayer.destroy(); } catch (e) {} shakaPlayer = null; }
+            if (hlsInstance) {
+                try { hlsInstance.destroy(); } catch (_) {}
+                hlsInstance = null;
+            }
+            if (shakaPlayer) {
+                try { await shakaPlayer.destroy(); } catch (e) { console.warn('Shaka cleanup:', e); }
+                shakaPlayer = null;
+            }
 
             videoElement.removeAttribute('src');
             try { videoElement.load(); } catch (_) {}
@@ -2187,6 +2683,7 @@
             });
 
             try {
+                // DASH / DRM via Shaka
                 if (isMpd && window.shaka && shaka.Player.isBrowserSupported()) {
                     shakaPlayer = new shaka.Player(videoElement);
                     const cfg = {
@@ -2201,7 +2698,10 @@
                         cfg.drm = { servers: { 'com.widevine.alpha': ch.licenseKey } };
                     }
                     shakaPlayer.configure(cfg);
-                    shakaPlayer.addEventListener('error', (ev) => { console.warn('Shaka error', ev.detail); handleStreamError(ch); });
+                    shakaPlayer.addEventListener('error', (ev) => {
+                        console.warn('Shaka error', ev.detail);
+                        handleStreamError(ch);
+                    });
                     await shakaPlayer.load(url);
                     populateShakaQualityMenu();
                     loadingOverlay.classList.remove('active');
@@ -2209,6 +2709,7 @@
                     return;
                 }
 
+                // HLS.js – primary path for all m3u8
                 if (typeof Hls !== 'undefined' && Hls.isSupported() && (isHls || !isMpd)) {
                     hlsInstance = createHlsInstance();
                     hlsInstance.loadSource(url);
@@ -2217,6 +2718,11 @@
                     hlsInstance.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
                         populateHlsQualityMenu(data.levels || []);
                         loadingOverlay.classList.remove('active');
+                        try {
+                            if (videoElement.src && /^https?:/i.test(videoElement.src)) {
+                                videoElement.removeAttribute('src');
+                            }
+                        } catch (_) {}
                         videoElement.controls = false;
                         videoElement.play().catch(handleAutoplayBlock);
                     });
@@ -2226,6 +2732,7 @@
 
                     hlsInstance.on(Hls.Events.ERROR, function (event, data) {
                         if (!data.fatal) {
+                            // Non-fatal: try recover media / key
                             if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
                                 try { hlsInstance.recoverMediaError(); } catch (_) {}
                             } else if (data.details === 'keyLoadError' || data.details === 'fragLoadError') {
@@ -2233,15 +2740,25 @@
                             }
                             return;
                         }
-                        console.warn('HLS fatal', data.type, data.details);
+                        console.warn('HLS fatal', data.type, data.details, data.response);
+                        // Session / token expired (common on gpcdn / Nimble)
                         if (data.response && (data.response.code === 403 || data.response.code === 401 || data.response.code === 410)) {
                             handleTokenExpirationRetry(ch);
                             return;
                         }
                         switch (data.type) {
                             case Hls.ErrorTypes.NETWORK_ERROR:
+                                // Key / level / manifest failures on relative AES streams → retry then fallback
                                 if (['manifestLoadError', 'manifestParsingError', 'levelLoadError', 'keyLoadError', 'fragLoadError'].includes(data.details)) {
-                                    setTimeout(() => { if (hlsInstance) hlsInstance.startLoad(); }, 1000);
+                                    setTimeout(() => {
+                                        if (hlsInstance) {
+                                            try {
+                                                hlsInstance.startLoad();
+                                            } catch (_) {
+                                                tryNativeHls(url, ch);
+                                            }
+                                        }
+                                    }, 1000);
                                 } else {
                                     try { hlsInstance.startLoad(); } catch (_) { handleStreamError(ch); }
                                 }
@@ -2250,12 +2767,15 @@
                                 try {
                                     hlsInstance.recoverMediaError();
                                 } catch (_) {
+                                    // Last resort for decrypt / buffer issues
                                     try {
                                         hlsInstance.destroy();
                                         hlsInstance = createHlsInstance();
                                         hlsInstance.loadSource(url);
                                         hlsInstance.attachMedia(videoElement);
-                                    } catch (e2) { handleStreamError(ch); }
+                                    } catch (e2) {
+                                        handleStreamError(ch);
+                                    }
                                 }
                                 break;
                             default:
@@ -2266,6 +2786,7 @@
                     return;
                 }
 
+                // Native HLS (Safari / iOS) or direct
                 tryNativeHls(url, ch);
             } catch (err) {
                 console.error('Playback init error:', err);
@@ -2275,7 +2796,10 @@
 
         function tryNativeHls(url, ch) {
             try {
-                if (hlsInstance) { try { hlsInstance.destroy(); } catch (_) {} hlsInstance = null; }
+                if (hlsInstance) {
+                    try { hlsInstance.destroy(); } catch (_) {}
+                    hlsInstance = null;
+                }
                 videoElement.controls = false;
                 videoElement.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
                 videoElement.src = url;
@@ -2348,6 +2872,7 @@
             try {
                 await loadPlaylist(false);
                 if (channels[activeIndex]) {
+                    console.log('Stream token refreshed, resuming playback...');
                     await playChannel(activeIndex);
                 } else {
                     handleStreamError(ch);
@@ -2408,12 +2933,17 @@
         document.getElementById('prevBtnMobile')?.addEventListener('click', goPrev);
         document.getElementById('nextBtnMobile')?.addEventListener('click', goNext);
 
-        reloadBtn.addEventListener('click', () => { if (channels[activeIndex]) playChannel(activeIndex); });
-        retryBtn.addEventListener('click', () => { if (channels[activeIndex]) playChannel(activeIndex); });
+        reloadBtn.addEventListener('click', () => {
+            if (channels[activeIndex]) playChannel(activeIndex);
+        });
+        retryBtn.addEventListener('click', () => {
+            if (channels[activeIndex]) playChannel(activeIndex);
+        });
         nextChannelBtn.addEventListener('click', goNext);
 
         document.getElementById('goLiveBtn')?.addEventListener('click', jumpToLive);
 
+        // Auto-hide player chrome
         (function initChromeAutoHide() {
             const stage = document.getElementById('videoStage');
             if (!stage) return;
@@ -2451,6 +2981,7 @@
             syncPlaylistBtn.addEventListener('click', () => loadPlaylist(false));
         }
 
+        // Auto-refresh playlist in background every 15 minutes to guarantee fresh edge-cache tokens
         setInterval(() => {
             console.log('Auto-update interval: Fetching fresh playlist in background...');
             loadPlaylist(false);
@@ -2547,6 +3078,7 @@
             applyTheme(isLight ? 'dark' : 'light');
         });
 
+        // --- 6. D-Pad TV Remote & Keyboard Navigation ---
         document.addEventListener('keydown', (e) => {
             if (document.activeElement === searchInput) {
                 if (e.key === 'Escape') searchInput.blur();
@@ -2607,9 +3139,11 @@
             }
         });
 
+        // --- Category Chips: Drag to Slide (click-safe) ---
         (function initCategoryDragScroll() {
             const slider = document.getElementById('categoryContainer');
             if (!slider) return;
+
             let isDown = false;
             let didDrag = false;
             let startX = 0;
@@ -2663,6 +3197,7 @@
             slider.addEventListener('touchend', onPointerUp);
             slider.addEventListener('touchcancel', onPointerUp);
 
+            // Block click only after a real drag, not on simple tap
             slider.addEventListener('click', (e) => {
                 if (didDrag) {
                     e.preventDefault();
@@ -2671,6 +3206,7 @@
             }, true);
         })();
 
+        // --- Attractive Fire Sparks (fast, no shadowBlur) ---
         (function initFireSparks() {
             const canvas = document.getElementById('fireSparksCanvas');
             if (!canvas) return;
@@ -2688,9 +3224,91 @@
                 ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             }
             resize();
+            let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(resize, 150);
             });
 
-            function makeSpark
+            function makeSpark(initial) {
+                const big = Math.random() < 0.22;
+                return {
+                    x: Math.random() * W,
+                    y: initial ? Math.random() * H : H + 12 + Math.random() * 40,
+                    size: big ? Math.random() * 3.5 + 2 : Math.random() * 1.8 + 0.4,
+                    vy: -(Math.random() * (big ? 1.1 : 2.2) + (big ? 0.35 : 0.7)),
+                    vx: (Math.random() - 0.5) * (big ? 0.4 : 0.9),
+                    life: 1,
+                    decay: Math.random() * (big ? 0.006 : 0.012) + (big ? 0.002 : 0.004),
+                    hue: big ? 25 + Math.random() * 25 : 8 + Math.random() * 40,
+                    wob: Math.random() * Math.PI * 2,
+                    wobSp: (Math.random() - 0.5) * 0.05,
+                    bright: big ? 0.55 : 0.85
+                };
+            }
+
+            // More sparks but still cheap to draw
+            const COUNT = Math.min(58, Math.max(36, Math.floor((W * H) / 28000)));
+            for (let i = 0; i < COUNT; i++) sparks.push(makeSpark(true));
+
+            function animate() {
+                if (!running) return;
+                t += 0.016;
+                ctx.clearRect(0, 0, W, H);
+                for (let i = 0; i < sparks.length; i++) {
+                    const s = sparks[i];
+                    s.wob += s.wobSp;
+                    s.x += s.vx + Math.sin(s.wob) * 0.4;
+                    s.y += s.vy;
+                    s.life -= s.decay;
+                    if (s.life <= 0 || s.y < -20) {
+                        sparks[i] = makeSpark(false);
+                        continue;
+                    }
+                    const a = s.life * s.bright;
+                    // soft outer glow (extra circle, still no shadowBlur)
+                    if (s.size > 1.8) {
+                        ctx.beginPath();
+                        ctx.arc(s.x, s.y, s.size * 2.2, 0, 6.2832);
+                        ctx.fillStyle = 'hsla(' + s.hue + ',100%,50%,' + (a * 0.18) + ')';
+                        ctx.fill();
+                    }
+                    // main ember
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, 6.2832);
+                    ctx.fillStyle = 'hsla(' + s.hue + ',100%,60%,' + a + ')';
+                    ctx.fill();
+                    // hot core
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size * 0.35, 0, 6.2832);
+                    ctx.fillStyle = 'hsla(' + (s.hue + 25) + ',100%,88%,' + (a * 0.9) + ')';
+                    ctx.fill();
+                }
+                animId = requestAnimationFrame(animate);
+            }
+            animate();
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    running = false;
+                    cancelAnimationFrame(animId);
+                } else {
+                    running = true;
+                    animate();
+                }
+            });
+        })();
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const savedVol = localStorage.getItem('livetv_volume');
+            if (savedVol !== null) videoElement.volume = parseFloat(savedVol);
+            const savedMute = localStorage.getItem('livetv_muted');
+            if (savedMute !== null) videoElement.muted = savedMute === 'true';
+            updateVolumeUI();
+
+            // Auto-load live channels from GitHub with local & cache fallbacks
+            await loadPlaylist(true);
+        });
+    </script>
+</body>
+</html>
