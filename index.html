@@ -124,7 +124,7 @@
             background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
         }
 
-        /* Fire Sparks Canvas */
+        /* Fire Sparks Canvas (lightweight) */
         #fireSparksCanvas {
             position: fixed;
             top: 0;
@@ -133,11 +133,12 @@
             height: 100vh;
             pointer-events: none;
             z-index: -1;
-            opacity: 0.85;
+            opacity: 0.7;
+            will-change: contents;
         }
 
         body.light-theme #fireSparksCanvas {
-            opacity: 0.35;
+            opacity: 0.25;
         }
 
         /* Navbar */
@@ -1991,145 +1992,142 @@
             }
         });
 
-        // --- Category Chips: Drag to Slide ---
+        // --- Category Chips: Drag to Slide (click-safe) ---
         (function initCategoryDragScroll() {
             const slider = document.getElementById('categoryContainer');
             if (!slider) return;
 
             let isDown = false;
+            let didDrag = false;
             let startX = 0;
             let scrollLeft = 0;
-            let moved = false;
+            const DRAG_THRESHOLD = 8;
 
-            const startDrag = (pageX) => {
+            const onPointerDown = (pageX) => {
                 isDown = true;
-                moved = false;
-                slider.classList.add('is-dragging');
-                startX = pageX - slider.offsetLeft;
+                didDrag = false;
+                startX = pageX;
                 scrollLeft = slider.scrollLeft;
             };
 
-            const moveDrag = (pageX) => {
+            const onPointerMove = (pageX, e) => {
                 if (!isDown) return;
-                const x = pageX - slider.offsetLeft;
-                const walk = (x - startX) * 1.4;
-                if (Math.abs(walk) > 4) moved = true;
-                slider.scrollLeft = scrollLeft - walk;
+                const dx = pageX - startX;
+                if (!didDrag && Math.abs(dx) < DRAG_THRESHOLD) return;
+                if (!didDrag) {
+                    didDrag = true;
+                    slider.classList.add('is-dragging');
+                }
+                if (e && e.cancelable) e.preventDefault();
+                slider.scrollLeft = scrollLeft - dx;
             };
 
-            const endDrag = () => {
+            const onPointerUp = () => {
                 isDown = false;
                 slider.classList.remove('is-dragging');
+                if (didDrag) {
+                    setTimeout(() => { didDrag = false; }, 60);
+                }
             };
 
             slider.addEventListener('mousedown', (e) => {
                 if (e.button !== 0) return;
-                startDrag(e.pageX);
+                onPointerDown(e.pageX);
             });
-            slider.addEventListener('mousemove', (e) => {
+            window.addEventListener('mousemove', (e) => {
                 if (!isDown) return;
-                e.preventDefault();
-                moveDrag(e.pageX);
+                onPointerMove(e.pageX, e);
             });
-            slider.addEventListener('mouseup', endDrag);
-            slider.addEventListener('mouseleave', endDrag);
+            window.addEventListener('mouseup', onPointerUp);
 
-            // Touch support
             slider.addEventListener('touchstart', (e) => {
-                startDrag(e.touches[0].pageX);
+                onPointerDown(e.touches[0].pageX);
             }, { passive: true });
             slider.addEventListener('touchmove', (e) => {
                 if (!isDown) return;
-                moveDrag(e.touches[0].pageX);
-            }, { passive: true });
-            slider.addEventListener('touchend', endDrag);
-            slider.addEventListener('touchcancel', endDrag);
+                onPointerMove(e.touches[0].pageX, e);
+            }, { passive: false });
+            slider.addEventListener('touchend', onPointerUp);
+            slider.addEventListener('touchcancel', onPointerUp);
 
-            // Prevent accidental click after drag
+            // Block click only after a real drag, not on simple tap
             slider.addEventListener('click', (e) => {
-                if (moved) {
+                if (didDrag) {
                     e.preventDefault();
                     e.stopPropagation();
                 }
             }, true);
         })();
 
-        // --- Attractive Fire Sparks Background Animation ---
+        // --- Lightweight Fire Sparks (optimized for performance) ---
         (function initFireSparks() {
             const canvas = document.getElementById('fireSparksCanvas');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let W, H, sparks = [], animId;
+            const ctx = canvas.getContext('2d', { alpha: true });
+            let W = 0, H = 0, sparks = [], animId = 0, running = true;
 
             function resize() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
+                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+                W = window.innerWidth;
+                H = window.innerHeight;
+                canvas.width = Math.floor(W * dpr);
+                canvas.height = Math.floor(H * dpr);
+                canvas.style.width = W + 'px';
+                canvas.style.height = H + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
             }
             resize();
-            window.addEventListener('resize', resize);
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(resize, 150);
+            });
 
-            class Spark {
-                constructor() {
-                    this.reset(true);
-                }
-                reset(initial) {
-                    this.x = Math.random() * W;
-                    this.y = initial ? Math.random() * H : H + 10;
-                    this.size = Math.random() * 2.8 + 0.6;
-                    this.speedY = -(Math.random() * 1.8 + 0.6);
-                    this.speedX = (Math.random() - 0.5) * 0.9;
-                    this.life = 1;
-                    this.decay = Math.random() * 0.008 + 0.003;
-                    this.hue = Math.random() * 40 + 10; // orange-red range
-                    this.glow = Math.random() * 8 + 4;
-                    this.wobble = Math.random() * Math.PI * 2;
-                    this.wobbleSpeed = (Math.random() - 0.5) * 0.04;
-                }
-                update() {
-                    this.wobble += this.wobbleSpeed;
-                    this.x += this.speedX + Math.sin(this.wobble) * 0.35;
-                    this.y += this.speedY;
-                    this.life -= this.decay;
-                    this.speedY *= 0.998;
-                    if (this.life <= 0 || this.y < -20) this.reset(false);
-                }
-                draw() {
-                    const alpha = Math.max(0, this.life);
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${alpha})`;
-                    ctx.shadowBlur = this.glow;
-                    ctx.shadowColor = `hsla(${this.hue}, 100%, 55%, ${alpha * 0.9})`;
-                    ctx.fill();
-                    // small bright core
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size * 0.4, 0, Math.PI * 2);
-                    ctx.fillStyle = `hsla(${this.hue + 20}, 100%, 85%, ${alpha * 0.9})`;
-                    ctx.shadowBlur = 0;
-                    ctx.fill();
-                }
+            function makeSpark(initial) {
+                return {
+                    x: Math.random() * W,
+                    y: initial ? Math.random() * H : H + 8,
+                    size: Math.random() * 2.2 + 0.5,
+                    vy: -(Math.random() * 1.4 + 0.5),
+                    vx: (Math.random() - 0.5) * 0.6,
+                    life: 1,
+                    decay: Math.random() * 0.01 + 0.004,
+                    hue: 15 + Math.random() * 35
+                };
             }
 
-            const SPARK_COUNT = Math.min(90, Math.floor((W * H) / 18000) + 40);
-            for (let i = 0; i < SPARK_COUNT; i++) sparks.push(new Spark());
+            // Low particle count = much smoother
+            const COUNT = Math.min(32, Math.max(18, Math.floor((W * H) / 45000)));
+            for (let i = 0; i < COUNT; i++) sparks.push(makeSpark(true));
 
             function animate() {
+                if (!running) return;
                 ctx.clearRect(0, 0, W, H);
-                ctx.globalCompositeOperation = 'lighter';
-                for (const s of sparks) {
-                    s.update();
-                    s.draw();
+                for (let i = 0; i < sparks.length; i++) {
+                    const s = sparks[i];
+                    s.x += s.vx;
+                    s.y += s.vy;
+                    s.life -= s.decay;
+                    if (s.life <= 0 || s.y < -15) {
+                        sparks[i] = makeSpark(false);
+                        continue;
+                    }
+                    const a = s.life;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, 6.2832);
+                    ctx.fillStyle = 'hsla(' + s.hue + ',100%,62%,' + a + ')';
+                    ctx.fill();
                 }
-                ctx.globalCompositeOperation = 'source-over';
                 animId = requestAnimationFrame(animate);
             }
             animate();
 
-            // Pause when tab is hidden to save battery
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
+                    running = false;
                     cancelAnimationFrame(animId);
                 } else {
+                    running = true;
                     animate();
                 }
             });
