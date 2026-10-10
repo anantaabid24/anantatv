@@ -2591,35 +2591,45 @@
         function createHlsInstance() {
             return new Hls({
                 enableWorker: true,
-                lowLatencyMode: true,
+                lowLatencyMode: false,                 // more stable for AES-128 live (Nimble / gpcdn)
+                enableSoftwareAES: true,               // required for METHOD=AES-128 streams
                 backBufferLength: 30,
-                maxBufferLength: 45,
-                maxMaxBufferLength: 90,
+                maxBufferLength: 40,
+                maxMaxBufferLength: 80,
                 maxBufferSize: 60 * 1000 * 1000,
-                maxBufferHole: 0.5,
-                highBufferWatchdogPeriod: 2,
-                nudgeOffset: 0.1,
-                nudgeMaxRetry: 5,
-                maxFragLookUpTolerance: 0.25,
+                maxBufferHole: 0.8,
+                highBufferWatchdogPeriod: 3,
+                nudgeOffset: 0.15,
+                nudgeMaxRetry: 8,
+                maxFragLookUpTolerance: 0.35,
                 liveSyncDurationCount: 3,
-                liveMaxLatencyDurationCount: 10,
+                liveMaxLatencyDurationCount: 12,
                 liveDurationInfinity: true,
-                progressive: true,
+                progressive: false,
                 startLevel: -1,
-                abrEwmaDefaultEstimate: 500000,
-                abrBandWidthFactor: 0.95,
+                abrEwmaDefaultEstimate: 800000,
+                abrBandWidthFactor: 0.9,
                 abrBandWidthUpFactor: 0.7,
                 testBandwidth: true,
-                manifestLoadingTimeOut: 15000,
-                manifestLoadingMaxRetry: 6,
-                manifestLoadingRetryDelay: 1000,
-                levelLoadingTimeOut: 15000,
-                levelLoadingMaxRetry: 6,
-                levelLoadingRetryDelay: 1000,
-                fragLoadingTimeOut: 20000,
-                fragLoadingMaxRetry: 8,
+                // Longer timeouts + more retries help with session-based relative key/segments
+                manifestLoadingTimeOut: 20000,
+                manifestLoadingMaxRetry: 8,
+                manifestLoadingRetryDelay: 1200,
+                levelLoadingTimeOut: 20000,
+                levelLoadingMaxRetry: 8,
+                levelLoadingRetryDelay: 1200,
+                fragLoadingTimeOut: 25000,
+                fragLoadingMaxRetry: 10,
                 fragLoadingRetryDelay: 1000,
-                xhrSetup: function (xhr) { xhr.withCredentials = false; }
+                fragLoadingMaxRetryTimeout: 64000,
+                // AES key loader retries
+                keyLoadingTimeOut: 15000,
+                keyLoadingMaxRetry: 8,
+                keyLoadingRetryDelay: 1000,
+                xhrSetup: function (xhr /*, url */) {
+                    xhr.withCredentials = false;
+                    // Do not set forbidden headers (Referer / Origin). CORS * is already present.
+                }
             });
         }
 
@@ -2718,30 +2728,51 @@
 
                     hlsInstance.on(Hls.Events.ERROR, function (event, data) {
                         if (!data.fatal) {
+                            // Non-fatal: try recover media / key
                             if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
                                 try { hlsInstance.recoverMediaError(); } catch (_) {}
+                            } else if (data.details === 'keyLoadError' || data.details === 'fragLoadError') {
+                                try { hlsInstance.startLoad(); } catch (_) {}
                             }
                             return;
                         }
                         console.warn('HLS fatal', data.type, data.details, data.response);
-                        if (data.response && (data.response.code === 403 || data.response.code === 401)) {
+                        // Session / token expired (common on gpcdn / Nimble)
+                        if (data.response && (data.response.code === 403 || data.response.code === 401 || data.response.code === 410)) {
                             handleTokenExpirationRetry(ch);
                             return;
                         }
                         switch (data.type) {
                             case Hls.ErrorTypes.NETWORK_ERROR:
-                                if (['manifestLoadError', 'manifestParsingError', 'levelLoadError'].includes(data.details)) {
+                                // Key / level / manifest failures on relative AES streams → retry then fallback
+                                if (['manifestLoadError', 'manifestParsingError', 'levelLoadError', 'keyLoadError', 'fragLoadError'].includes(data.details)) {
                                     setTimeout(() => {
                                         if (hlsInstance) {
-                                            try { hlsInstance.startLoad(); } catch (_) { tryNativeHls(url, ch); }
+                                            try {
+                                                hlsInstance.startLoad();
+                                            } catch (_) {
+                                                tryNativeHls(url, ch);
+                                            }
                                         }
-                                    }, 800);
+                                    }, 1000);
                                 } else {
                                     try { hlsInstance.startLoad(); } catch (_) { handleStreamError(ch); }
                                 }
                                 break;
                             case Hls.ErrorTypes.MEDIA_ERROR:
-                                try { hlsInstance.recoverMediaError(); } catch (_) { handleStreamError(ch); }
+                                try {
+                                    hlsInstance.recoverMediaError();
+                                } catch (_) {
+                                    // Last resort for decrypt / buffer issues
+                                    try {
+                                        hlsInstance.destroy();
+                                        hlsInstance = createHlsInstance();
+                                        hlsInstance.loadSource(url);
+                                        hlsInstance.attachMedia(videoElement);
+                                    } catch (e2) {
+                                        handleStreamError(ch);
+                                    }
+                                }
                                 break;
                             default:
                                 tryNativeHls(url, ch);
