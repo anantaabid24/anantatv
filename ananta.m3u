@@ -9,6 +9,10 @@
 
 #EXTM3U
 
+
+#EXTINF:-1 tvg-logo="https://shorturl.at/oIxY6" group-title="Bangla Entertainment",BTV World
+https://playztv-apps.pages.dev/btv-world/index.m3u8
+
 #EXTINF:-1 tvg-logo="https://shorturl.at/oIxY6" group-title="Bangla Entertainment",BTV National
 https://tvsen6.aynaott.com/TjGR1GcxKetHNVcMVxbq/index.m3u8
 
@@ -34,7 +38,7 @@ https://box.bbaria.net:8083/EkattorTV/index.m3u8
 https://stream.ottplus.live/live/channel_24_abr/index.m3u8
 
 #EXTINF:-1 tvg-id="93000" tvg-name="ATN News" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1739962961772.png" group-title="Bangla Entertainment",ATN News
-https://tvsen5.aynaott.com/P3y2URgG7LDe/index.m3u8
+https://playztv-apps.pages.dev/atn-news/index.m3u8
 
 #EXTINF:-1 tvg-id="186000" tvg-name="News 24 HD" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1770186895850.png" group-title="Bangla Entertainment",News 24 HD
 https://box.bbaria.net:8083/NEWS24/index.m3u8
@@ -175,7 +179,13 @@ https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF9
 //Sports
 
 #EXTINF:-1 tvg-id="" tvg-logo="https://static.wikia.nocookie.net/etv-gspn-bangla/images/6/6e/T_Sports_HD_logo_2021.png" group-title="Sports",T SPORTS
-https://mycoffeetime.net/play/tSDRdsaoGGQ2qYgRPDEe9q-qMIzoahbJArH3W3vOiEaB97nXMpWmLb0Ts759Tjsp/m3u8
+https://playztv-apps.pages.dev/unite8-sports-2/index.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://shorturl.at/uhQvg" group-title="Sports",A SPORTS HD
+https://playztv-apps.pages.dev/a-sports/index.m3u8
+
+#EXTINF:-1 tvg-logo="https://tinyurl.com/2c4u8ub6" group-title="Sports",PTV Sports HD
+https://playztv-apps.pages.dev/ptv-sports/index.m3u8
 
 #EXTINF:-1 tvg-logo="https://shorturl.at/UjXbe" group-title="Sports",Ten Cricket
 https://drk6xq0vhn.gpcdn.net/live/ten_cricket_hd_abr/index.m3u8
@@ -189,17 +199,8 @@ https://playztv-apps.pages.dev/bein-sports-1/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="https://i.postimg.cc/yNQfGnnb/RLr-MBlm.png" group-title="Sports",Bein Sports xtra
 https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
 
-#EXTINF:-1 tvg-id="" tvg-logo="https://shorturl.at/uhQvg" group-title="Sports",A SPORTS HD
-https://playztv-apps.pages.dev/a-sports/index.m3u8
-
-#EXTINF:-1 tvg-logo="https://tinyurl.com/2c4u8ub6" group-title="Sports",PTV Sports HD
-https://s1.itcnbd.live/PTV-Sports/tracks-v1a1/mono.m3u8?nocache=1785582200018
-
 #EXTINF:-1 tvg-logo="https://i.imgur.com/ouAva7k.png" group-title="Sports",beIN sports Xtra HD
 https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8
-
-#EXTINF:-1 tvg-logo="https://i.imgur.com/ouAva7k.png" group-title="Sports",beIN sports Xtra
-https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8
 
 #EXTINF:-1 tvg-id="GOALTV" tvg-name="GOAL TV" tvg-logo="https://i.imgur.com/zsj6tLX.jpeg" group-title="Sports",GOAL TV
 https://streams2.sofast.tv/sofastplayout/WiseM3U8_1/master.m3u8
