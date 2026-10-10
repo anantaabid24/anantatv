@@ -834,7 +834,9 @@
             min-height: 280px;
             background: #000;
             overflow: hidden;
+            cursor: none;
         }
+        .video-stage.controls-visible { cursor: default; }
 
         .video-wrapper {
             position: absolute;
@@ -861,6 +863,263 @@
             flex-shrink: 0;
         }
 
+        /* ===== Advanced Modern Player Chrome ===== */
+        .player-chrome {
+            position: absolute;
+            inset: 0;
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+        }
+        .video-stage.controls-visible .player-chrome,
+        .video-stage:hover .player-chrome,
+        .video-stage.paused .player-chrome {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .player-chrome-top {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            padding: 14px 18px;
+            background: linear-gradient(180deg, rgba(0,0,0,0.72) 0%, transparent 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            pointer-events: none;
+        }
+        .player-chrome-top .live-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(239, 68, 68, 0.9);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            padding: 4px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
+        }
+        .player-chrome-top .live-pill .dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #fff;
+            animation: pulse-ring 1.5s infinite;
+        }
+        .player-chrome-top .stream-meta {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+            background: rgba(0,0,0,0.35);
+            padding: 4px 10px;
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+        }
+
+        .player-chrome-center {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .big-play-btn {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(168, 85, 247, 0.85);
+            color: #fff;
+            font-size: 1.6rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            box-shadow: 0 8px 32px rgba(168, 85, 247, 0.45);
+            transition: transform 0.2s ease, background 0.2s;
+            backdrop-filter: blur(6px);
+        }
+        .video-stage.paused .big-play-btn { display: flex; }
+        .big-play-btn:hover { transform: scale(1.08); background: var(--accent); }
+
+        .player-chrome-bottom {
+            background: linear-gradient(0deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.55) 60%, transparent 100%);
+            padding: 28px 16px 14px;
+            pointer-events: auto;
+        }
+
+        /* Buffer / progress bar for live */
+        .progress-track {
+            height: 4px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .progress-buffer {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            background: rgba(255,255,255,0.28);
+            width: 0%;
+            transition: width 0.3s linear;
+        }
+        .progress-played {
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            background: linear-gradient(90deg, var(--accent), #c084fc);
+            width: 0%;
+            border-radius: 4px;
+            box-shadow: 0 0 8px var(--accent-glow);
+        }
+        .progress-live-edge {
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: #ef4444;
+            border-radius: 2px;
+            opacity: 0.9;
+        }
+
+        .chrome-controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .chrome-left, .chrome-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chrome-btn {
+            height: 38px;
+            min-width: 38px;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.08);
+            color: #f3f4f6;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            gap: 6px;
+            backdrop-filter: blur(8px);
+        }
+        .chrome-btn:hover {
+            background: rgba(168, 85, 247, 0.35);
+            border-color: rgba(168, 85, 247, 0.5);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .chrome-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+        .chrome-btn.go-live {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.45);
+            color: #fca5a5;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+        }
+        .chrome-btn.go-live:hover {
+            background: rgba(239, 68, 68, 0.45);
+            color: #fff;
+        }
+
+        .chrome-volume {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chrome-volume input[type="range"] {
+            width: 0;
+            opacity: 0;
+            transition: width 0.25s ease, opacity 0.25s;
+            height: 4px;
+            -webkit-appearance: none;
+            background: rgba(255,255,255,0.25);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+        .chrome-volume:hover input[type="range"],
+        .chrome-volume:focus-within input[type="range"] {
+            width: 80px;
+            opacity: 1;
+        }
+        .chrome-volume input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(168,85,247,0.6);
+        }
+
+        .time-display {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.75);
+            font-variant-numeric: tabular-nums;
+            min-width: 48px;
+            text-align: center;
+        }
+
+        /* Quality menu (floating) */
+        .quality-menu {
+            position: absolute;
+            bottom: 58px;
+            right: 16px;
+            background: rgba(20, 22, 34, 0.96);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+            padding: 6px;
+            min-width: 160px;
+            display: none;
+            flex-direction: column;
+            gap: 2px;
+            z-index: 30;
+            backdrop-filter: blur(16px);
+        }
+        .quality-menu.show { display: flex; }
+        .quality-item {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            color: #e5e7eb;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.15s;
+        }
+        .quality-item:hover, .quality-item.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
         .video-overlay {
             position: absolute;
             top: 0;
@@ -871,12 +1130,11 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 20;
+            background: rgba(0, 0, 0, 0.88);
+            z-index: 25;
             padding: 24px;
             text-align: center;
         }
-
         .video-overlay.active { display: flex; }
 
         .spinner-custom {
@@ -888,7 +1146,6 @@
             animation: spin 0.9s linear infinite;
             margin-bottom: 16px;
         }
-
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .overlay-msg {
@@ -897,7 +1154,6 @@
             color: #fff;
             margin-bottom: 12px;
         }
-
         .overlay-btn {
             padding: 8px 18px;
             border-radius: var(--radius-sm);
@@ -912,27 +1168,26 @@
             gap: 8px;
             transition: var(--transition-smooth);
         }
+        .overlay-btn:hover { filter: brightness(1.1); }
 
-        /* Toolbar Controls */
+        /* Legacy bottom toolbar (kept as secondary / always visible on mobile) */
         .player-toolbar {
-            padding: 12px 18px;
+            padding: 10px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.05);
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.04);
             border-top: 1px solid var(--border-color);
             position: relative;
         }
-
         .toolbar-group {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
-
         .tool-btn {
-            height: 36px;
+            height: 34px;
             padding: 0 10px;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border-color);
@@ -941,13 +1196,12 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             font-weight: 700;
             cursor: pointer;
             transition: var(--transition-smooth);
             gap: 6px;
         }
-
         .tool-btn:hover {
             color: var(--text-main);
             border-color: var(--accent);
@@ -1401,7 +1655,16 @@
                 flex: none;
                 padding-top: 56.25%;
                 min-height: 0;
+                cursor: default;
             }
+            .video-stage .player-chrome {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .big-play-btn { width: 56px; height: 56px; font-size: 1.25rem; }
+            .chrome-btn { height: 34px; min-width: 34px; font-size: 0.8rem; }
+            .chrome-btn.go-live span, .time-display { display: none; }
+            .chrome-volume input[type="range"] { width: 60px; opacity: 1; }
             .sidebar-card {
                 height: auto;
                 min-height: 420px;
@@ -1504,9 +1767,72 @@
                         </div>
                     </div>
 
-                    <div class="video-stage">
+                    <div class="video-stage" id="videoStage">
                         <div class="video-wrapper">
-                            <video id="video-player" autoplay playsinline preload="metadata" controlslist="nodownload noplaybackrate noremoteplayback" oncontextmenu="return false;"></video>
+                            <video id="video-player" autoplay playsinline preload="auto" controlslist="nodownload noplaybackrate noremoteplayback" oncontextmenu="return false;" crossorigin="anonymous"></video>
+                        </div>
+
+                        <!-- Advanced Modern Player Chrome -->
+                        <div class="player-chrome" id="playerChrome">
+                            <div class="player-chrome-top">
+                                <span class="live-pill" id="chromeLivePill"><span class="dot"></span> LIVE</span>
+                                <span class="stream-meta" id="chromeStreamMeta">HLS · Auto</span>
+                            </div>
+
+                            <div class="player-chrome-center">
+                                <button class="big-play-btn" id="bigPlayBtn" title="Play">
+                                    <i class="fas fa-play" style="margin-left:3px"></i>
+                                </button>
+                            </div>
+
+                            <div class="player-chrome-bottom">
+                                <div class="progress-track" id="progressTrack" title="Live stream buffer">
+                                    <div class="progress-buffer" id="progressBuffer"></div>
+                                    <div class="progress-played" id="progressPlayed"></div>
+                                    <div class="progress-live-edge"></div>
+                                </div>
+                                <div class="chrome-controls-row">
+                                    <div class="chrome-left">
+                                        <button class="chrome-btn" id="prevBtn" title="Previous Channel">
+                                            <i class="fas fa-backward-step"></i>
+                                        </button>
+                                        <button class="chrome-btn" id="playPauseBtn" title="Play/Pause (Space)">
+                                            <i class="fas fa-pause" id="playPauseIcon"></i>
+                                        </button>
+                                        <button class="chrome-btn" id="nextBtn" title="Next Channel">
+                                            <i class="fas fa-forward-step"></i>
+                                        </button>
+                                        <button class="chrome-btn" id="reloadBtn" title="Reload Stream">
+                                            <i class="fas fa-rotate-right"></i>
+                                        </button>
+                                        <button class="chrome-btn go-live" id="goLiveBtn" title="Jump to live edge">
+                                            <i class="fas fa-broadcast-tower"></i> LIVE
+                                        </button>
+                                        <span class="time-display" id="timeDisplay">LIVE</span>
+                                    </div>
+                                    <div class="chrome-right">
+                                        <div class="chrome-volume">
+                                            <button class="chrome-btn" id="muteBtn" title="Mute (M)">
+                                                <i class="fas fa-volume-high" id="volumeIcon"></i>
+                                            </button>
+                                            <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="1" title="Volume">
+                                        </div>
+                                        <button class="chrome-btn" id="qualityBtn" title="Quality">
+                                            <i class="fas fa-hd"></i>
+                                            <span id="qualityLabel">Auto</span>
+                                        </button>
+                                        <button class="chrome-btn" id="pipBtn" title="Picture-in-Picture (P)">
+                                            <i class="fas fa-arrow-up-right-from-square"></i>
+                                        </button>
+                                        <button class="chrome-btn" id="fullscreenBtn" title="Fullscreen (F)">
+                                            <i class="fas fa-expand" id="fsIcon"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quality-menu" id="qualityMenu">
+                            <button class="quality-item active" data-level="-1">Auto (Best)</button>
                         </div>
 
                         <div class="video-overlay" id="loadingOverlay">
@@ -1517,7 +1843,7 @@
                         <div class="video-overlay" id="errorOverlay">
                             <i class="fas fa-triangle-exclamation text-warning fa-2x mb-3"></i>
                             <div class="overlay-msg" id="errorMsg">Unable to load stream directly.</div>
-                            <div class="d-flex gap-2">
+                            <div class="d-flex gap-2 flex-wrap justify-content-center">
                                 <button class="overlay-btn" id="retryBtn">
                                     <i class="fas fa-rotate-right"></i> Retry
                                 </button>
@@ -1531,42 +1857,24 @@
                         </div>
                     </div>
 
-                    <div class="player-toolbar">
+                    <!-- Compact secondary toolbar (always visible on small screens) -->
+                    <div class="player-toolbar d-lg-none">
                         <div class="toolbar-group">
-                            <button class="tool-btn" id="prevBtn" title="Previous Channel (Left Arrow)">
+                            <button class="tool-btn" id="prevBtnMobile" title="Previous">
                                 <i class="fas fa-backward-step"></i>
                             </button>
-                            <button class="tool-btn" id="playPauseBtn" title="Play/Pause (Space)">
-                                <i class="fas fa-pause" id="playPauseIcon"></i>
+                            <button class="tool-btn" id="playPauseBtnMobile" title="Play/Pause">
+                                <i class="fas fa-pause" id="playPauseIconMobile"></i>
                             </button>
-                            <button class="tool-btn" id="nextBtn" title="Next Channel (Right Arrow)">
+                            <button class="tool-btn" id="nextBtnMobile" title="Next">
                                 <i class="fas fa-forward-step"></i>
                             </button>
-                            <button class="tool-btn" id="reloadBtn" title="Reload Stream">
-                                <i class="fas fa-rotate-right"></i>
-                            </button>
                         </div>
-
                         <div class="toolbar-group">
-                            <!-- Quality Picker Button -->
-                            <button class="tool-btn" id="qualityBtn" title="Video Quality">
-                                <i class="fas fa-gear"></i>
-                                <span id="qualityLabel">Auto</span>
+                            <button class="tool-btn" id="qualityBtnMobile" title="Quality">
+                                <i class="fas fa-gear"></i> <span id="qualityLabelMobile">Auto</span>
                             </button>
-                            <div class="quality-menu" id="qualityMenu">
-                                <button class="quality-item active" data-level="-1">Auto (Best)</button>
-                            </div>
-
-                            <div class="volume-control">
-                                <button class="tool-btn" id="muteBtn" title="Mute/Unmute (M)">
-                                    <i class="fas fa-volume-high" id="volumeIcon"></i>
-                                </button>
-                                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="1" title="Volume">
-                            </div>
-                            <button class="tool-btn" id="pipBtn" title="Picture-in-Picture (P)">
-                                <i class="fas fa-arrow-up-right-from-square"></i>
-                            </button>
-                            <button class="tool-btn" id="fullscreenBtn" title="Fullscreen (F)">
+                            <button class="tool-btn" id="fullscreenBtnMobile" title="Fullscreen">
                                 <i class="fas fa-expand"></i>
                             </button>
                         </div>
@@ -1574,13 +1882,14 @@
                 </div>
 
                 <div class="keyboard-shortcuts-bar">
-                    <span><span class="kbd-key">↑</span> <span class="kbd-key">↓</span> / <span class="kbd-key">←</span> <span class="kbd-key">→</span> Navigate (D-Pad)</span>
-                    <span><span class="kbd-key">Enter / OK</span> Select</span>
+                    <span><span class="kbd-key">↑</span> <span class="kbd-key">↓</span> / <span class="kbd-key">←</span> <span class="kbd-key">→</span> Channels</span>
                     <span><span class="kbd-key">Space</span> Play/Pause</span>
+                    <span><span class="kbd-key">L</span> Go Live</span>
                     <span><span class="kbd-key">M</span> Mute</span>
                     <span><span class="kbd-key">F</span> Fullscreen</span>
                     <span><span class="kbd-key">P</span> PiP</span>
                     <span><span class="kbd-key">/</span> Search</span>
+                    <span>Double-click · Fullscreen</span>
                 </div>
             </div>
 
@@ -2195,23 +2504,35 @@
         }
 
         // --- 4. Video Quality Selector ---
+        function setQualityLabel(text) {
+            if (qualityLabel) qualityLabel.textContent = text;
+            const qlMob = document.getElementById('qualityLabelMobile');
+            if (qlMob) qlMob.textContent = text;
+            const meta = document.getElementById('chromeStreamMeta');
+            if (meta) {
+                const type = (playerStreamTypeTag && playerStreamTypeTag.textContent) || 'HLS';
+                meta.textContent = type + ' · ' + text;
+            }
+        }
+
         qualityBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             qualityMenu.classList.toggle('show');
         });
-
+        document.getElementById('qualityBtnMobile')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            qualityMenu.classList.toggle('show');
+        });
         document.addEventListener('click', () => qualityMenu.classList.remove('show'));
 
         function populateHlsQualityMenu(levels) {
             qualityMenu.innerHTML = '';
-            
-            // Auto Option
             const autoBtn = document.createElement('button');
             autoBtn.className = `quality-item ${hlsInstance.currentLevel === -1 ? 'active' : ''}`;
             autoBtn.textContent = 'Auto (Best)';
             autoBtn.onclick = () => {
                 hlsInstance.currentLevel = -1;
-                qualityLabel.textContent = 'Auto';
+                setQualityLabel('Auto');
                 document.querySelectorAll('.quality-item').forEach(el => el.classList.remove('active'));
                 autoBtn.classList.add('active');
             };
@@ -2220,10 +2541,11 @@
             levels.forEach((lvl, idx) => {
                 const btn = document.createElement('button');
                 btn.className = `quality-item ${hlsInstance.currentLevel === idx ? 'active' : ''}`;
-                btn.textContent = `${lvl.height}p (${Math.round(lvl.bitrate / 1000)} kbps)`;
+                const label = lvl.height ? `${lvl.height}p` : `${Math.round(lvl.bitrate / 1000)}k`;
+                btn.textContent = `${label} (${Math.round(lvl.bitrate / 1000)} kbps)`;
                 btn.onclick = () => {
                     hlsInstance.currentLevel = idx;
-                    qualityLabel.textContent = `${lvl.height}p`;
+                    setQualityLabel(label);
                     document.querySelectorAll('.quality-item').forEach(el => el.classList.remove('active'));
                     btn.classList.add('active');
                 };
@@ -2234,13 +2556,12 @@
         function populateShakaQualityMenu() {
             if (!shakaPlayer) return;
             qualityMenu.innerHTML = '';
-
             const autoBtn = document.createElement('button');
             autoBtn.className = 'quality-item active';
             autoBtn.textContent = 'Auto (Best)';
             autoBtn.onclick = () => {
                 shakaPlayer.configure({ abr: { enabled: true } });
-                qualityLabel.textContent = 'Auto';
+                setQualityLabel('Auto');
                 document.querySelectorAll('.quality-item').forEach(el => el.classList.remove('active'));
                 autoBtn.classList.add('active');
             };
@@ -2248,7 +2569,6 @@
 
             const tracks = shakaPlayer.getVariantTracks();
             const uniqueHeights = [...new Set(tracks.map(t => t.height).filter(Boolean))].sort((a, b) => b - a);
-
             uniqueHeights.forEach(h => {
                 const btn = document.createElement('button');
                 btn.className = 'quality-item';
@@ -2258,7 +2578,7 @@
                     if (track) {
                         shakaPlayer.configure({ abr: { enabled: false } });
                         shakaPlayer.selectVariantTrack(track, true);
-                        qualityLabel.textContent = `${h}p`;
+                        setQualityLabel(`${h}p`);
                         document.querySelectorAll('.quality-item').forEach(el => el.classList.remove('active'));
                         btn.classList.add('active');
                     }
@@ -2267,13 +2587,48 @@
             });
         }
 
-        // --- 5. Play Channel Engine ---
+        // Robust HLS.js config for maximum m3u8 compatibility (live + VOD)
+        function createHlsInstance() {
+            return new Hls({
+                enableWorker: true,
+                lowLatencyMode: true,
+                backBufferLength: 30,
+                maxBufferLength: 45,
+                maxMaxBufferLength: 90,
+                maxBufferSize: 60 * 1000 * 1000,
+                maxBufferHole: 0.5,
+                highBufferWatchdogPeriod: 2,
+                nudgeOffset: 0.1,
+                nudgeMaxRetry: 5,
+                maxFragLookUpTolerance: 0.25,
+                liveSyncDurationCount: 3,
+                liveMaxLatencyDurationCount: 10,
+                liveDurationInfinity: true,
+                progressive: true,
+                startLevel: -1,
+                abrEwmaDefaultEstimate: 500000,
+                abrBandWidthFactor: 0.95,
+                abrBandWidthUpFactor: 0.7,
+                testBandwidth: true,
+                manifestLoadingTimeOut: 15000,
+                manifestLoadingMaxRetry: 6,
+                manifestLoadingRetryDelay: 1000,
+                levelLoadingTimeOut: 15000,
+                levelLoadingMaxRetry: 6,
+                levelLoadingRetryDelay: 1000,
+                fragLoadingTimeOut: 20000,
+                fragLoadingMaxRetry: 8,
+                fragLoadingRetryDelay: 1000,
+                xhrSetup: function (xhr) { xhr.withCredentials = false; }
+            });
+        }
+
+        // --- 5. Play Channel Engine (Advanced – all m3u8 supported) ---
         async function playChannel(index) {
             if (index < 0 || index >= channels.length) return;
             activeIndex = index;
             const ch = channels[activeIndex];
 
-            // Re-apply no-download lock on every channel change
             if (typeof window.__lockVideoDownload === 'function') {
                 window.__lockVideoDownload(videoElement);
             } else {
@@ -2286,67 +2641,69 @@
             updateFavUI();
             recordRecent(ch.id);
 
-            const isMpd = ch.url.includes('.mpd') || ch.url.includes('format=.mpd');
-            playerStreamTypeTag.textContent = isMpd ? 'DASH / DRM' : 'HLS';
+            const url = (ch.url || '').trim();
+            const isMpd = /\.mpd(\?|$)/i.test(url) || url.includes('format=.mpd') || /\/dash\//i.test(url);
+            const isHls = /\.m3u8(\?|$)/i.test(url) || /m3u8/i.test(url) || (!isMpd && /^https?:\/\//i.test(url));
+            playerStreamTypeTag.textContent = isMpd ? 'DASH / DRM' : (isHls ? 'HLS' : 'Stream');
+            setQualityLabel('Auto');
 
             loadingOverlay.classList.add('active');
             errorOverlay.classList.remove('active');
-            qualityLabel.textContent = 'Auto';
+            const lm = document.getElementById('loadingMsg');
+            if (lm) lm.textContent = `Loading ${ch.name}...`;
 
             if (hlsInstance) {
-                hlsInstance.destroy();
+                try { hlsInstance.destroy(); } catch (_) {}
                 hlsInstance = null;
             }
             if (shakaPlayer) {
-                try {
-                    await shakaPlayer.destroy();
-                } catch (e) {
-                    console.warn('Shaka cleanup error:', e);
-                }
+                try { await shakaPlayer.destroy(); } catch (e) { console.warn('Shaka cleanup:', e); }
                 shakaPlayer = null;
             }
 
+            videoElement.removeAttribute('src');
+            try { videoElement.load(); } catch (_) {}
+
             document.querySelectorAll('.channel-card').forEach(c => {
-                const isActive = parseInt(c.dataset.index, 10) === activeIndex;
-                c.classList.toggle('active', isActive);
+                c.classList.toggle('active', parseInt(c.dataset.index, 10) === activeIndex);
             });
 
             try {
+                // DASH / DRM via Shaka
                 if (isMpd && window.shaka && shaka.Player.isBrowserSupported()) {
                     shakaPlayer = new shaka.Player(videoElement);
-
+                    const cfg = {
+                        streaming: {
+                            bufferingGoal: 30,
+                            rebufferingGoal: 2,
+                            bufferBehind: 30,
+                            retryParameters: { maxAttempts: 5, baseDelay: 1000, backoffFactor: 2, timeout: 20000 }
+                        }
+                    };
                     if (ch.licenseKey) {
-                        shakaPlayer.configure({
-                            drm: {
-                                servers: {
-                                    'com.widevine.alpha': ch.licenseKey
-                                }
-                            }
-                        });
+                        cfg.drm = { servers: { 'com.widevine.alpha': ch.licenseKey } };
                     }
-
-                    shakaPlayer.addEventListener('error', () => handleStreamError(ch));
-                    await shakaPlayer.load(ch.url);
+                    shakaPlayer.configure(cfg);
+                    shakaPlayer.addEventListener('error', (ev) => {
+                        console.warn('Shaka error', ev.detail);
+                        handleStreamError(ch);
+                    });
+                    await shakaPlayer.load(url);
                     populateShakaQualityMenu();
                     loadingOverlay.classList.remove('active');
                     videoElement.play().catch(handleAutoplayBlock);
-                } else if (Hls.isSupported() && !isMpd) {
-                    hlsInstance = new Hls({
-                        enableWorker: true,
-                        lowLatencyMode: true,
-                        manifestLoadingMaxRetry: 3
-                    });
+                    return;
+                }
 
-                    // MSE path — do NOT set video.src to http(s) (blocks many IDM hooks)
-                    videoElement.removeAttribute('src');
-                    videoElement.load();
-                    hlsInstance.loadSource(ch.url);
+                // HLS.js – primary path for all m3u8
+                if (typeof Hls !== 'undefined' && Hls.isSupported() && (isHls || !isMpd)) {
+                    hlsInstance = createHlsInstance();
+                    hlsInstance.loadSource(url);
                     hlsInstance.attachMedia(videoElement);
 
-                    hlsInstance.on(Hls.Events.MANIFEST_PARSED, function(event, data) {
+                    hlsInstance.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
                         populateHlsQualityMenu(data.levels || []);
                         loadingOverlay.classList.remove('active');
-                        // Keep only blob:/mse — strip accidental direct URLs
                         try {
                             if (videoElement.src && /^https?:/i.test(videoElement.src)) {
                                 videoElement.removeAttribute('src');
@@ -2356,41 +2713,112 @@
                         videoElement.play().catch(handleAutoplayBlock);
                     });
 
-                    hlsInstance.on(Hls.Events.ERROR, function(event, data) {
-                        if (data.fatal) {
-                            if (data.response && (data.response.code === 403 || data.response.code === 401)) {
-                                console.warn('HLS 403 Token Expired, attempting auto-refresh of playlist...');
-                                handleTokenExpirationRetry(ch);
-                                return;
+                    hlsInstance.on(Hls.Events.LEVEL_LOADED, () => updateLiveProgress());
+                    hlsInstance.on(Hls.Events.FRAG_BUFFERED, () => updateLiveProgress());
+
+                    hlsInstance.on(Hls.Events.ERROR, function (event, data) {
+                        if (!data.fatal) {
+                            if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+                                try { hlsInstance.recoverMediaError(); } catch (_) {}
                             }
-                            switch (data.type) {
-                                case Hls.ErrorTypes.NETWORK_ERROR:
-                                    if (data.details === 'manifestLoadError' || data.details === 'manifestParsingError') {
-                                        handleTokenExpirationRetry(ch);
-                                    } else {
-                                        hlsInstance.startLoad();
-                                    }
-                                    break;
-                                case Hls.ErrorTypes.MEDIA_ERROR:
-                                    hlsInstance.recoverMediaError();
-                                    break;
-                                default:
-                                    handleStreamError(ch);
-                                    break;
-                            }
+                            return;
+                        }
+                        console.warn('HLS fatal', data.type, data.details, data.response);
+                        if (data.response && (data.response.code === 403 || data.response.code === 401)) {
+                            handleTokenExpirationRetry(ch);
+                            return;
+                        }
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                if (['manifestLoadError', 'manifestParsingError', 'levelLoadError'].includes(data.details)) {
+                                    setTimeout(() => {
+                                        if (hlsInstance) {
+                                            try { hlsInstance.startLoad(); } catch (_) { tryNativeHls(url, ch); }
+                                        }
+                                    }, 800);
+                                } else {
+                                    try { hlsInstance.startLoad(); } catch (_) { handleStreamError(ch); }
+                                }
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                try { hlsInstance.recoverMediaError(); } catch (_) { handleStreamError(ch); }
+                                break;
+                            default:
+                                tryNativeHls(url, ch);
+                                break;
                         }
                     });
-                } else {
-                    // Native fallback (Safari old etc.) — still no download UI; IDM may still sniff
-                    videoElement.controls = false;
-                    videoElement.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
-                    videoElement.src = ch.url;
-                    loadingOverlay.classList.remove('active');
-                    videoElement.play().catch(handleAutoplayBlock);
+                    return;
                 }
+
+                // Native HLS (Safari / iOS) or direct
+                tryNativeHls(url, ch);
             } catch (err) {
-                console.error('Playback initialization error:', err);
+                console.error('Playback init error:', err);
                 handleStreamError(ch);
+            }
+        }
+
+        function tryNativeHls(url, ch) {
+            try {
+                if (hlsInstance) {
+                    try { hlsInstance.destroy(); } catch (_) {}
+                    hlsInstance = null;
+                }
+                videoElement.controls = false;
+                videoElement.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
+                videoElement.src = url;
+                const onMeta = () => {
+                    videoElement.removeEventListener('loadedmetadata', onMeta);
+                    loadingOverlay.classList.remove('active');
+                };
+                videoElement.addEventListener('loadedmetadata', onMeta, { once: true });
+                const onErr = () => {
+                    videoElement.removeEventListener('error', onErr);
+                    handleStreamError(ch);
+                };
+                videoElement.addEventListener('error', onErr, { once: true });
+                videoElement.play().catch(handleAutoplayBlock);
+                setTimeout(() => {
+                    if (videoElement.error) handleStreamError(ch);
+                    else if (videoElement.readyState >= 2) loadingOverlay.classList.remove('active');
+                }, 12000);
+            } catch (e) {
+                handleStreamError(ch);
+            }
+        }
+
+        function updateLiveProgress() {
+            const playedEl = document.getElementById('progressPlayed');
+            const bufferEl = document.getElementById('progressBuffer');
+            if (!playedEl || !bufferEl || !videoElement) return;
+            try {
+                if (videoElement.buffered.length) {
+                    const end = videoElement.buffered.end(videoElement.buffered.length - 1);
+                    const dur = videoElement.duration;
+                    if (dur && isFinite(dur) && dur > 0) {
+                        bufferEl.style.width = Math.min(100, (end / dur) * 100) + '%';
+                        playedEl.style.width = Math.min(100, (videoElement.currentTime / dur) * 100) + '%';
+                    } else {
+                        bufferEl.style.width = '92%';
+                        playedEl.style.width = '88%';
+                    }
+                }
+            } catch (_) {}
+        }
+
+        function jumpToLive() {
+            try {
+                if (hlsInstance && hlsInstance.liveSyncPosition != null) {
+                    videoElement.currentTime = hlsInstance.liveSyncPosition;
+                } else if (videoElement.seekable && videoElement.seekable.length) {
+                    const end = videoElement.seekable.end(videoElement.seekable.length - 1);
+                    videoElement.currentTime = Math.max(0, end - 1.5);
+                }
+                videoElement.play().catch(() => {});
+                showToast('Jumped to live edge');
+            } catch (e) {
+                console.warn('Go-live failed', e);
             }
         }
 
@@ -2429,28 +2857,46 @@
         }
 
         function updatePlayPauseIcon() {
-            playPauseIcon.className = videoElement.paused ? 'fas fa-play' : 'fas fa-pause';
+            const paused = videoElement.paused;
+            if (playPauseIcon) playPauseIcon.className = paused ? 'fas fa-play' : 'fas fa-pause';
+            const mob = document.getElementById('playPauseIconMobile');
+            if (mob) mob.className = paused ? 'fas fa-play' : 'fas fa-pause';
+            const stage = document.getElementById('videoStage');
+            if (stage) stage.classList.toggle('paused', paused);
         }
 
         videoElement.addEventListener('play', updatePlayPauseIcon);
         videoElement.addEventListener('pause', updatePlayPauseIcon);
-        videoElement.addEventListener('playing', () => loadingOverlay.classList.remove('active'));
-        videoElement.addEventListener('waiting', () => loadingOverlay.classList.add('active'));
-
-        playPauseBtn.addEventListener('click', () => {
-            if (videoElement.paused) videoElement.play();
-            else videoElement.pause();
+        videoElement.addEventListener('playing', () => {
+            loadingOverlay.classList.remove('active');
+            updateLiveProgress();
         });
+        videoElement.addEventListener('waiting', () => loadingOverlay.classList.add('active'));
+        videoElement.addEventListener('timeupdate', updateLiveProgress);
+        videoElement.addEventListener('progress', updateLiveProgress);
 
-        prevBtn.addEventListener('click', () => {
+        function togglePlayPause() {
+            if (videoElement.paused) videoElement.play().catch(handleAutoplayBlock);
+            else videoElement.pause();
+        }
+
+        playPauseBtn.addEventListener('click', togglePlayPause);
+        document.getElementById('bigPlayBtn')?.addEventListener('click', togglePlayPause);
+        document.getElementById('playPauseBtnMobile')?.addEventListener('click', togglePlayPause);
+
+        function goPrev() {
             if (!channels.length) return;
             playChannel((activeIndex - 1 + channels.length) % channels.length);
-        });
-
-        nextBtn.addEventListener('click', () => {
+        }
+        function goNext() {
             if (!channels.length) return;
             playChannel((activeIndex + 1) % channels.length);
-        });
+        }
+
+        prevBtn.addEventListener('click', goPrev);
+        nextBtn.addEventListener('click', goNext);
+        document.getElementById('prevBtnMobile')?.addEventListener('click', goPrev);
+        document.getElementById('nextBtnMobile')?.addEventListener('click', goNext);
 
         reloadBtn.addEventListener('click', () => {
             if (channels[activeIndex]) playChannel(activeIndex);
@@ -2458,10 +2904,35 @@
         retryBtn.addEventListener('click', () => {
             if (channels[activeIndex]) playChannel(activeIndex);
         });
-        nextChannelBtn.addEventListener('click', () => {
-            if (!channels.length) return;
-            playChannel((activeIndex + 1) % channels.length);
-        });
+        nextChannelBtn.addEventListener('click', goNext);
+
+        document.getElementById('goLiveBtn')?.addEventListener('click', jumpToLive);
+
+        // Auto-hide player chrome
+        (function initChromeAutoHide() {
+            const stage = document.getElementById('videoStage');
+            if (!stage) return;
+            let hideTimer = null;
+            const show = () => {
+                stage.classList.add('controls-visible');
+                clearTimeout(hideTimer);
+                hideTimer = setTimeout(() => {
+                    if (!videoElement.paused) stage.classList.remove('controls-visible');
+                }, 3200);
+            };
+            stage.addEventListener('mousemove', show);
+            stage.addEventListener('touchstart', show, { passive: true });
+            stage.addEventListener('click', (e) => {
+                if (e.target.closest('.chrome-btn, .big-play-btn, .quality-menu, .progress-track, input')) return;
+                if (videoElement.paused) togglePlayPause();
+                else show();
+            });
+            stage.addEventListener('dblclick', (e) => {
+                if (e.target.closest('.chrome-btn, .quality-menu')) return;
+                fullscreenBtn.click();
+            });
+            show();
+        })();
 
         const refreshSyncBtn = document.getElementById('refreshSyncBtn');
         if (refreshSyncBtn) {
@@ -2515,13 +2986,25 @@
             }
         });
 
-        fullscreenBtn.addEventListener('click', () => {
-            const stage = document.querySelector('.video-stage') || document.querySelector('.video-wrapper');
-            if (!document.fullscreenElement) {
-                (stage.requestFullscreen || stage.webkitRequestFullscreen || stage.msRequestFullscreen).call(stage);
+        function toggleFullscreen() {
+            const stage = document.getElementById('videoStage') || document.querySelector('.video-stage');
+            if (!stage) return;
+            const fsIcon = document.getElementById('fsIcon');
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                const req = stage.requestFullscreen || stage.webkitRequestFullscreen || stage.msRequestFullscreen;
+                if (req) req.call(stage);
+                if (fsIcon) fsIcon.className = 'fas fa-compress';
             } else {
-                (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document);
+                const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+                if (exit) exit.call(document);
+                if (fsIcon) fsIcon.className = 'fas fa-expand';
             }
+        }
+        fullscreenBtn.addEventListener('click', toggleFullscreen);
+        document.getElementById('fullscreenBtnMobile')?.addEventListener('click', toggleFullscreen);
+        document.addEventListener('fullscreenchange', () => {
+            const fsIcon = document.getElementById('fsIcon');
+            if (fsIcon) fsIcon.className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
         });
 
         searchInput.addEventListener('input', (e) => {
@@ -2595,18 +3078,29 @@
                 } else {
                     playChannel((activeIndex + 1) % channels.length);
                 }
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (!channels.length) return;
+                playChannel((activeIndex - 1 + channels.length) % channels.length);
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                if (!channels.length) return;
+                playChannel((activeIndex + 1) % channels.length);
             } else if (e.key === ' ' || e.code === 'Space') {
                 e.preventDefault();
-                playPauseBtn.click();
+                togglePlayPause();
             } else if (e.key === 'm' || e.key === 'M') {
                 e.preventDefault();
                 muteBtn.click();
             } else if (e.key === 'f' || e.key === 'F') {
                 e.preventDefault();
-                fullscreenBtn.click();
+                toggleFullscreen();
             } else if (e.key === 'p' || e.key === 'P') {
                 e.preventDefault();
                 pipBtn.click();
+            } else if (e.key === 'l' || e.key === 'L') {
+                e.preventDefault();
+                jumpToLive();
             }
         });
 
