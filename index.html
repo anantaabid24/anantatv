@@ -350,7 +350,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            border-bottom: 1px solid var(--border-color);
+            border-top: 1px solid var(--border-color);
             background: rgba(0, 0, 0, 0.04);
         }
 
@@ -685,20 +685,41 @@
             padding: 4px;
         }
 
-        /* Category Filter Chips */
+        /* Category Filter Chips - horizontally slideable */
         .category-scroll {
             display: flex;
             align-items: center;
             gap: 6px;
             overflow-x: auto;
-            padding-bottom: 4px;
-            scrollbar-width: none;
+            overflow-y: hidden;
+            padding-bottom: 6px;
+            margin: 0 -2px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent) transparent;
+            cursor: grab;
         }
 
-        .category-scroll::-webkit-scrollbar { display: none; }
+        .category-scroll:active {
+            cursor: grabbing;
+        }
+
+        .category-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+        .category-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .category-scroll::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+            opacity: 0.6;
+        }
 
         .cat-chip {
             white-space: nowrap;
+            flex-shrink: 0;
             padding: 5px 12px;
             border-radius: var(--radius-pill);
             font-size: 0.8rem;
@@ -708,6 +729,7 @@
             border: 1px solid var(--chip-border);
             cursor: pointer;
             transition: var(--transition-smooth);
+            user-select: none;
         }
 
         .cat-chip:hover {
@@ -994,22 +1016,6 @@
             <!-- Left: Video Player -->
             <div class="col-lg-8 col-xl-9">
                 <div class="player-card">
-                    <div class="player-header">
-                        <div class="player-channel-info">
-                            <span class="now-playing-badge" id="nowPlayingBadge">#1 LIVE</span>
-                            <div>
-                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
-                            </div>
-                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
-                                <i class="far fa-heart" id="playerFavIcon"></i>
-                            </button>
-                        </div>
-                        <div class="player-tags" id="playerTags">
-                            <span class="player-tag" id="playerGroupTag">News</span>
-                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
-                        </div>
-                    </div>
-
                     <div class="video-wrapper">
                         <video id="video-player" controls autoplay playsinline preload="auto"></video>
                         
@@ -1073,6 +1079,23 @@
                             <button class="tool-btn" id="fullscreenBtn" title="Fullscreen (F)">
                                 <i class="fas fa-expand"></i>
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- Channel info moved below controls -->
+                    <div class="player-header">
+                        <div class="player-channel-info">
+                            <span class="now-playing-badge" id="nowPlayingBadge">#1 LIVE</span>
+                            <div>
+                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
+                            </div>
+                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
+                                <i class="far fa-heart" id="playerFavIcon"></i>
+                            </button>
+                        </div>
+                        <div class="player-tags" id="playerTags">
+                            <span class="player-tag" id="playerGroupTag">News</span>
+                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
                         </div>
                     </div>
                 </div>
@@ -1958,6 +1981,37 @@
                 pipBtn.click();
             }
         });
+
+
+        // Drag-to-scroll for category chips (desktop + touch)
+        (function enableCategoryDragScroll() {
+            const el = document.getElementById('categoryContainer');
+            if (!el) return;
+            let isDown = false;
+            let startX, scrollLeft;
+
+            el.addEventListener('mousedown', (e) => {
+                isDown = true;
+                el.classList.add('dragging');
+                startX = e.pageX - el.offsetLeft;
+                scrollLeft = el.scrollLeft;
+            });
+            el.addEventListener('mouseleave', () => {
+                isDown = false;
+                el.classList.remove('dragging');
+            });
+            el.addEventListener('mouseup', () => {
+                isDown = false;
+                el.classList.remove('dragging');
+            });
+            el.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - el.offsetLeft;
+                const walk = (x - startX) * 1.4;
+                el.scrollLeft = scrollLeft - walk;
+            });
+        })();
 
         document.addEventListener('DOMContentLoaded', async () => {
             const savedVol = localStorage.getItem('livetv_volume');
