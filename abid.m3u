@@ -203,9 +203,17 @@ https://streams2.sofast.tv/sofastplayout/WiseM3U8_1/master.m3u8
 //Movies
 
 
+#EXTINF:-1,logo="https://tinyurl.com/59fsnx2u",group-title="SM All TV",Sony Pix
+https://drk6xq0vhn.gpcdn.net/live/pix_hd_abr/index.m3u8
 
-#EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/f_png,w_300,q_85/Ay52-JQBv9knK3AHFDWt/posters/00afb30b-3c19-4c4c-abd8-891db94e4767.webp" group-title="SM All TV",Sony Max
+#EXTINF:-1,logo="https://tinyurl.com/32r9sa3u",group-title="SM All TV",ZEE Cafe
+https://drk6xq0vhn.gpcdn.net/live/zee_cafe_hd_abr/index.m3u8
+
+#EXTINF:-1 tvg-logo="https://tinyurl.com/mwyrdmy6" group-title="SM All TV",Sony Max
 https://drk6xq0vhn.gpcdn.net/live/sony_max_sd_abr/index.m3u8
+
+#EXTINF:-1 tvg-logo="https://tinyurl.com/ybp45884" group-title="SM All TV",Sony Max 2
+https://drk6xq0vhn.gpcdn.net/live/max_2_abr/index.m3u8
 
 #EXTINF:-1 tvg-id="and_pictures_hd" tvg-name="And Pictures HD" tvg-logo="https://tinyurl.com/bd47hvew" group-title="SM All TV",And Pictures HD
 https://drk6xq0vhn.gpcdn.net/live/and_picture_hd_abr/index.m3u8
@@ -214,14 +222,11 @@ https://drk6xq0vhn.gpcdn.net/live/and_picture_hd_abr/index.m3u8
 
 #EXTINF:-1 tvg-id="colorscineplexbollywood" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsCineplexBollywood.png" group-title="SM All TV",Colors Cineplex Bollywood
 
-#EXTINF:-1 tvg-id="colors-https://box.bbaria.net:8083/COLOR_CINEPLEX/index.m3u8
-cineplex-superhit" tvg-name="Colors Cineplex Superhit" tvg-logo="https://tinyurl.com/ex2tbzwv" group-title="SM All TV",Colors Cineplex Superhit
+#EXTINF:-1 tvg-id="colors-cineplex-superhit" tvg-name="Colors Cineplex Superhit" tvg-logo="https://tinyurl.com/ex2tbzwv" group-title="SM All TV",Colors Cineplex Superhit
+https://box.bbaria.net:8083/COLOR_CINEPLEX/index.m3u8
 
-#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/KjjqnRH/Picsart-23-06-30-21-35-20-283.png" group-title="SM All TV",Sheemaroo Bollywood
-https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8
-
-#EXTINF:-1 tvg-id="" tvg-logo="https://bugsfreeweb.github.io/LiveTVCollector/BugsfreeLogo/default-logo.png" group-title="SM All TV",Hindi Movies 3
-https://vods2.aynaott.com/hindimovies/index.m3u8
+#EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/Pc3RD5YBtpl-Sbt7doxr/posters/d0f337ab-a7e6-4eed-bc7b-7d51fdc70a0f.png" group-title="SM All TV",Zee Action
+https://drk6xq0vhn.gpcdn.net/live/zee_action_abr/index.m3u8
 
 #EXTINF:-1 tvg-id="" tvg-logo="https://otapp.store/uploads/tv_image/sm/b4u-movies.png" group-title="SM All TV",B4U Movies
 https://drk6xq0vhn.gpcdn.net/live/b4u_movies_abr/index.m3u8
@@ -241,12 +246,6 @@ https://cdn.pishow.tv/ott/live/1459/master.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="https://otapp.store/uploads/tv_image/sm/goldmines-movies.png" group-title="SM All TV",Goldmines Movies 2
 https://cdn.pishow.tv/ott/live/1460/master.m3u8
 
-#EXTINF:-1,logo="",group-title="SM All TV",ZEE Cafe
-https://drk6xq0vhn.gpcdn.net/live/zee_cafe_hd_abr/index.m3u8
-
-#EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/Pc3RD5YBtpl-Sbt7doxr/posters/d0f337ab-a7e6-4eed-bc7b-7d51fdc70a0f.png" group-title="SM All TV",Zee Action
-https://drk6xq0vhn.gpcdn.net/live/zee_action_abr/index.m3u8
-
 #EXTINF:-1 tvg-id="" tvg-logo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSw1zW8RLLNCQm6UHcIIJZlscOB5vhs7BF2I7SfTthYGv3LtHeRSut2-Ag&s=10" group-title="SM All TV",Action Hollywood Movies
 https://amg01076-lightningintern-actionhollywood-samsungnz-82rry.amagi.tv/playlist/amg01076-lightningintern-actionhollywood-samsungnz/playlist.m3u8
 
@@ -258,6 +257,11 @@ https://box.bbaria.net:8083/Jalsha_Movie/index.m3u8
 #EXTINF:-1 tvg-logo="https://tinyurl.com/3bajm9cf" group-title="SM All TV",Zee Bangla Sonar
 https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8
 
+#EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/KjjqnRH/Picsart-23-06-30-21-35-20-283.png" group-title="SM All TV",Sheemaroo Bollywood
+https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://bugsfreeweb.github.io/LiveTVCollector/BugsfreeLogo/default-logo.png" group-title="SM All TV",Hindi Movies 3
+https://vods2.aynaott.com/hindimovies/index.m3u8
 
 
 
