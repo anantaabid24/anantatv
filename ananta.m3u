@@ -207,6 +207,16 @@ https://streams2.sofast.tv/sofastplayout/WiseM3U8_1/master.m3u8
 #EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/f_png,w_300,q_85/Ay52-JQBv9knK3AHFDWt/posters/00afb30b-3c19-4c4c-abd8-891db94e4767.webp" group-title="SM All TV",Sony Max
 https://drk6xq0vhn.gpcdn.net/live/sony_max_sd_abr/index.m3u8
 
+#EXTINF:-1 tvg-id="and_pictures_hd" tvg-name="And Pictures HD" tvg-logo="https://tinyurl.com/bd47hvew" group-title="SM All TV",And Pictures HD
+https://drk6xq0vhn.gpcdn.net/live/and_picture_hd_abr/index.m3u8
+
+#EXTINF:-1 tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsCineplexHD.png" group-title="SM All TV", COLORS CINEPLEX HD
+
+#EXTINF:-1 tvg-id="colorscineplexbollywood" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsCineplexBollywood.png" group-title="SM All TV",Colors Cineplex Bollywood
+
+#EXTINF:-1 tvg-id="colors-https://box.bbaria.net:8083/COLOR_CINEPLEX/index.m3u8
+cineplex-superhit" tvg-name="Colors Cineplex Superhit" tvg-logo="https://tinyurl.com/ex2tbzwv" group-title="SM All TV",Colors Cineplex Superhit
+
 #EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/KjjqnRH/Picsart-23-06-30-21-35-20-283.png" group-title="SM All TV",Sheemaroo Bollywood
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00864-shemarooenterta-shemabollywood-ono/playlist.m3u8
 
@@ -234,28 +244,16 @@ https://cdn.pishow.tv/ott/live/1460/master.m3u8
 #EXTINF:-1,logo="",group-title="SM All TV",ZEE Cafe
 https://drk6xq0vhn.gpcdn.net/live/zee_cafe_hd_abr/index.m3u8
 
-
 #EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/Pc3RD5YBtpl-Sbt7doxr/posters/d0f337ab-a7e6-4eed-bc7b-7d51fdc70a0f.png" group-title="SM All TV",Zee Action
 https://drk6xq0vhn.gpcdn.net/live/zee_action_abr/index.m3u8
 
 #EXTINF:-1 tvg-id="" tvg-logo="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSw1zW8RLLNCQm6UHcIIJZlscOB5vhs7BF2I7SfTthYGv3LtHeRSut2-Ag&s=10" group-title="SM All TV",Action Hollywood Movies
 https://amg01076-lightningintern-actionhollywood-samsungnz-82rry.amagi.tv/playlist/amg01076-lightningintern-actionhollywood-samsungnz/playlist.m3u8
 
-
 #EXTINF:-1 tvg-logo="https://static.wikia.nocookie.net/logopedia/images/0/04/Jalsha_Movies_HD.png" group-title="SM All TV",Jalsha Movies HD
+https://box.bbaria.net:8083/Jalsha_Movie/index.m3u8
 
 #EXTINF:-1 tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Colors_Bangla_Cinema.png" group-title="SM All TV",Colors Bangla Cinema
-
-
-#EXTINF:-1 tvg-id="and_pictures_hd" tvg-name="And Pictures HD" tvg-logo="https://tinyurl.com/bd47hvew" group-title="SM All TV",And Pictures HD
-
-
-#EXTINF:-1 tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsCineplexHD.png" group-title="SM All TV", COLORS CINEPLEX HD
-
-#EXTINF:-1 tvg-id="colorscineplexbollywood" tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/ColorsCineplexBollywood.png" group-title="SM All TV",Colors Cineplex Bollywood
-
-#EXTINF:-1 tvg-id="colors-cineplex-superhit" tvg-name="Colors Cineplex Superhit" tvg-logo="https://tinyurl.com/ex2tbzwv" group-title="SM All TV",Colors Cineplex Superhit
-
 
 #EXTINF:-1 tvg-logo="https://tinyurl.com/3bajm9cf" group-title="SM All TV",Zee Bangla Sonar
 https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8
