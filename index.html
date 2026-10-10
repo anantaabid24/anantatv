@@ -6,7 +6,7 @@
     <meta name="description" content="ANANTA Live TV Streaming - Watch 250+ HD Channels Online with Live Auto-Updating Playlist">
     <meta name="theme-color" content="#121212">
     <link rel="shortcut icon" href="https://placehold.co/16x16/e50914/ffffff?text=TV"/>
-    <title>Premium Live TV Streaming | 250+ HD Channels (Auto-Updating)</title>
+    <title>Ananta Live TV Streaming | 250+ HD Channels (Auto-Updating)</title>
 
     <!-- Google Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,7 +89,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Ambient Glow */
+        /* Ambient Glow - Animated Background */
         .ambient-bg {
             position: fixed;
             top: 0;
@@ -99,29 +99,102 @@
             pointer-events: none;
             z-index: -1;
             overflow: hidden;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(168, 85, 247, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 50% at 85% 80%, rgba(59, 130, 246, 0.10) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(236, 72, 153, 0.06) 0%, transparent 60%);
+        }
+
+        body.light-theme .ambient-bg {
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 50% at 85% 80%, rgba(59, 130, 246, 0.07) 0%, transparent 50%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(236, 72, 153, 0.04) 0%, transparent 60%);
         }
 
         .ambient-blob {
             position: absolute;
-            filter: blur(120px);
-            opacity: 0.15;
+            filter: blur(100px);
+            opacity: 0.22;
             border-radius: 50%;
+            will-change: transform;
         }
 
         .ambient-blob-1 {
-            top: -10%;
-            left: -10%;
-            width: 50vw;
-            height: 50vw;
+            top: -15%;
+            left: -12%;
+            width: 55vw;
+            height: 55vw;
             background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            animation: float-blob-1 22s ease-in-out infinite alternate;
         }
 
         .ambient-blob-2 {
-            bottom: -15%;
-            right: -10%;
-            width: 55vw;
-            height: 55vw;
+            bottom: -18%;
+            right: -12%;
+            width: 58vw;
+            height: 58vw;
             background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+            animation: float-blob-2 28s ease-in-out infinite alternate;
+        }
+
+        .ambient-blob-3 {
+            top: 40%;
+            left: 35%;
+            width: 40vw;
+            height: 40vw;
+            background: radial-gradient(circle, #ec4899 0%, transparent 70%);
+            opacity: 0.12;
+            animation: float-blob-3 18s ease-in-out infinite alternate;
+        }
+
+        .ambient-blob-4 {
+            top: 10%;
+            right: 15%;
+            width: 30vw;
+            height: 30vw;
+            background: radial-gradient(circle, #06b6d4 0%, transparent 70%);
+            opacity: 0.10;
+            animation: float-blob-4 25s ease-in-out infinite alternate;
+        }
+
+        /* Subtle grid overlay */
+        .ambient-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 20%, transparent 75%);
+        }
+
+        body.light-theme .ambient-grid {
+            background-image:
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+        }
+
+        @keyframes float-blob-1 {
+            0%   { transform: translate(0, 0) scale(1); }
+            50%  { transform: translate(8%, 12%) scale(1.08); }
+            100% { transform: translate(-5%, 6%) scale(0.95); }
+        }
+        @keyframes float-blob-2 {
+            0%   { transform: translate(0, 0) scale(1); }
+            50%  { transform: translate(-10%, -8%) scale(1.1); }
+            100% { transform: translate(6%, -4%) scale(0.92); }
+        }
+        @keyframes float-blob-3 {
+            0%   { transform: translate(0, 0) scale(1); }
+            50%  { transform: translate(12%, -10%) scale(1.15); }
+            100% { transform: translate(-8%, 8%) scale(0.9); }
+        }
+        @keyframes float-blob-4 {
+            0%   { transform: translate(0, 0) scale(1); }
+            50%  { transform: translate(-6%, 14%) scale(1.12); }
+            100% { transform: translate(10%, -6%) scale(0.94); }
         }
 
         /* Navbar */
@@ -685,19 +758,19 @@
             padding: 4px;
         }
 
-        /* Category Filter Chips - horizontally slideable */
+        /* Category Filter Chips - slideable, no scrollbar */
         .category-scroll {
             display: flex;
             align-items: center;
             gap: 6px;
             overflow-x: auto;
             overflow-y: hidden;
-            padding-bottom: 6px;
+            padding-bottom: 4px;
             margin: 0 -2px;
             -webkit-overflow-scrolling: touch;
             scroll-behavior: smooth;
-            scrollbar-width: thin;
-            scrollbar-color: var(--accent) transparent;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
             cursor: grab;
         }
 
@@ -706,15 +779,9 @@
         }
 
         .category-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
-        .category-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .category-scroll::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
-            opacity: 0.6;
+            display: none; /* Chrome, Safari, Opera */
+            height: 0;
+            width: 0;
         }
 
         .cat-chip {
@@ -747,10 +814,10 @@
         .channels-scroll-area {
             flex: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
 
         .channels-scroll-area::-webkit-scrollbar { width: 6px; }
@@ -761,9 +828,9 @@
         .channel-card {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            min-height: 62px;
+            gap: 14px;
+            padding: 12px 14px;
+            min-height: 76px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
@@ -793,10 +860,10 @@
         }
 
         .card-thumb-wrapper {
-            width: 52px;
-            min-width: 52px;
-            height: 42px;
-            border-radius: 8px;
+            width: 64px;
+            min-width: 64px;
+            height: 52px;
+            border-radius: 10px;
             background: #000;
             display: flex;
             align-items: center;
@@ -846,7 +913,7 @@
         }
 
         .card-name {
-            font-size: 0.88rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--text-main);
             white-space: nowrap;
@@ -975,6 +1042,9 @@
     <div class="ambient-bg">
         <div class="ambient-blob ambient-blob-1"></div>
         <div class="ambient-blob ambient-blob-2"></div>
+        <div class="ambient-blob ambient-blob-3"></div>
+        <div class="ambient-blob ambient-blob-4"></div>
+        <div class="ambient-grid"></div>
     </div>
 
     <header class="app-navbar">
