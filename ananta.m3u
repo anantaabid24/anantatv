@@ -51,6 +51,9 @@ https://byphdgllyk.gpcdn.net/hls/deeptotv/index.m3u8
 #EXTINF:-1 tvg-id="188000" tvg-name="Channel 9 HD" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1770188008067.png" group-title="Bangla Entertainment",Channel 9 HD
 https://box.bbaria.net:8083/Channel9/index.m3u8
 
+#EXTINF:-1 tvg-logo="https://shorturl.at/rd2Kl" group-title="Bangla Entertainment",Gazi TV
+https://app.ncare.live/live-orgin/gazibdz.stream/playlist.m3u8
+
 #EXTINF:-1 tvg-id="141000" tvg-name="SRK TV" tvg-logo="https://tstatic.akash-go.com/cms-ui/images/custom-content/1746005940155.png" group-title="Bangla Entertainment",SRK TV
 https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/playlist.m3u8
 
