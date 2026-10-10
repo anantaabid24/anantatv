@@ -89,7 +89,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* Ambient Glow + Fire Sparks */
+        /* Ambient Glow */
         .ambient-bg {
             position: fixed;
             top: 0;
@@ -126,13 +126,14 @@
 
         /* Fire Sparks Canvas */
         #fireSparksCanvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             pointer-events: none;
-            z-index: 1;
+            z-index: -1;
+            opacity: 0.85;
         }
 
         body.light-theme #fireSparksCanvas {
@@ -700,7 +701,7 @@
             padding: 4px;
         }
 
-        /* Category Filter Chips */
+        /* Category Filter Chips - Drag to Slide */
         .category-scroll {
             display: flex;
             align-items: center;
@@ -708,11 +709,10 @@
             overflow-x: auto;
             padding-bottom: 4px;
             scrollbar-width: none;
-            -ms-overflow-style: none;
             cursor: grab;
-            user-select: none;
-            -webkit-user-select: none;
             -webkit-overflow-scrolling: touch;
+            user-select: none;
+            scroll-behavior: smooth;
         }
 
         .category-scroll::-webkit-scrollbar { display: none; }
@@ -720,10 +720,6 @@
         .category-scroll.is-dragging {
             cursor: grabbing;
             scroll-behavior: auto;
-        }
-
-        .category-scroll.is-dragging .cat-chip {
-            pointer-events: none;
         }
 
         .cat-chip {
@@ -738,6 +734,7 @@
             cursor: pointer;
             transition: var(--transition-smooth);
             flex-shrink: 0;
+            pointer-events: auto;
         }
 
         .cat-chip:hover {
@@ -750,6 +747,10 @@
             color: #ffffff !important;
             border-color: var(--accent) !important;
             box-shadow: 0 2px 8px var(--accent-glow);
+        }
+
+        .category-scroll.is-dragging .cat-chip {
+            pointer-events: none;
         }
 
         .channels-scroll-area {
@@ -983,8 +984,8 @@
     <div class="ambient-bg">
         <div class="ambient-blob ambient-blob-1"></div>
         <div class="ambient-blob ambient-blob-2"></div>
-        <canvas id="fireSparksCanvas"></canvas>
     </div>
+    <canvas id="fireSparksCanvas"></canvas>
 
     <header class="app-navbar">
         <div class="nav-content">
@@ -1469,68 +1470,6 @@
             if (btnElement) btnElement.classList.add('active');
             renderChannelGrid();
         }
-
-        // --- Drag-to-slide for Category chips (no scrollbar) ---
-        (function enableCategoryDragScroll() {
-            const el = categoryContainer;
-            if (!el) return;
-
-            let isDown = false;
-            let startX = 0;
-            let scrollLeft = 0;
-            let moved = false;
-
-            el.addEventListener('mousedown', (e) => {
-                isDown = true;
-                moved = false;
-                el.classList.add('is-dragging');
-                startX = e.pageX - el.offsetLeft;
-                scrollLeft = el.scrollLeft;
-            });
-
-            el.addEventListener('mouseleave', () => {
-                isDown = false;
-                el.classList.remove('is-dragging');
-            });
-
-            el.addEventListener('mouseup', () => {
-                isDown = false;
-                el.classList.remove('is-dragging');
-            });
-
-            el.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - el.offsetLeft;
-                const walk = (x - startX) * 1.4;
-                if (Math.abs(walk) > 4) moved = true;
-                el.scrollLeft = scrollLeft - walk;
-            });
-
-            // Prevent click on chip if user was dragging
-            el.addEventListener('click', (e) => {
-                if (moved) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    moved = false;
-                }
-            }, true);
-
-            // Touch support
-            let touchStartX = 0;
-            let touchScrollLeft = 0;
-
-            el.addEventListener('touchstart', (e) => {
-                touchStartX = e.touches[0].pageX;
-                touchScrollLeft = el.scrollLeft;
-            }, { passive: true });
-
-            el.addEventListener('touchmove', (e) => {
-                const x = e.touches[0].pageX;
-                const walk = (x - touchStartX) * 1.4;
-                el.scrollLeft = touchScrollLeft - walk;
-            }, { passive: true });
-        })();
 
         // --- 2. Favorites & Recents Handlers ---
         function toggleFavorite(chId, e) {
@@ -2052,107 +1991,149 @@
             }
         });
 
-        // --- Fire Sparks (Aguner Fulki) Background Effect ---
-        function initFireSparks() {
+        // --- Category Chips: Drag to Slide ---
+        (function initCategoryDragScroll() {
+            const slider = document.getElementById('categoryContainer');
+            if (!slider) return;
+
+            let isDown = false;
+            let startX = 0;
+            let scrollLeft = 0;
+            let moved = false;
+
+            const startDrag = (pageX) => {
+                isDown = true;
+                moved = false;
+                slider.classList.add('is-dragging');
+                startX = pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            };
+
+            const moveDrag = (pageX) => {
+                if (!isDown) return;
+                const x = pageX - slider.offsetLeft;
+                const walk = (x - startX) * 1.4;
+                if (Math.abs(walk) > 4) moved = true;
+                slider.scrollLeft = scrollLeft - walk;
+            };
+
+            const endDrag = () => {
+                isDown = false;
+                slider.classList.remove('is-dragging');
+            };
+
+            slider.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return;
+                startDrag(e.pageX);
+            });
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                moveDrag(e.pageX);
+            });
+            slider.addEventListener('mouseup', endDrag);
+            slider.addEventListener('mouseleave', endDrag);
+
+            // Touch support
+            slider.addEventListener('touchstart', (e) => {
+                startDrag(e.touches[0].pageX);
+            }, { passive: true });
+            slider.addEventListener('touchmove', (e) => {
+                if (!isDown) return;
+                moveDrag(e.touches[0].pageX);
+            }, { passive: true });
+            slider.addEventListener('touchend', endDrag);
+            slider.addEventListener('touchcancel', endDrag);
+
+            // Prevent accidental click after drag
+            slider.addEventListener('click', (e) => {
+                if (moved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }, true);
+        })();
+
+        // --- Attractive Fire Sparks Background Animation ---
+        (function initFireSparks() {
             const canvas = document.getElementById('fireSparksCanvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            let sparks = [];
-            let animationId = null;
-            let w = 0, h = 0;
-
-            const COLORS = [
-                { r: 255, g: 80,  b: 20  },  // bright orange
-                { r: 255, g: 140, b: 30  },  // amber
-                { r: 255, g: 60,  b: 10  },  // deep red-orange
-                { r: 255, g: 200, b: 50  },  // golden
-                { r: 255, g: 100, b: 40  },  // flame
-                { r: 255, g: 40,  b: 0   }   // pure fire red
-            ];
+            let W, H, sparks = [], animId;
 
             function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
             }
-
-            function createSpark() {
-                const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-                return {
-                    x: Math.random() * w,
-                    y: h + Math.random() * 40,
-                    size: Math.random() * 2.2 + 0.6,
-                    speedY: -(Math.random() * 1.8 + 0.6),
-                    speedX: (Math.random() - 0.5) * 0.9,
-                    life: 1,
-                    decay: Math.random() * 0.008 + 0.003,
-                    color,
-                    flicker: Math.random() * 0.4 + 0.6,
-                    wobble: Math.random() * Math.PI * 2,
-                    wobbleSpeed: (Math.random() - 0.5) * 0.08
-                };
-            }
-
-            function initSparks() {
-                const count = Math.min(90, Math.floor((w * h) / 18000));
-                sparks = [];
-                for (let i = 0; i < count; i++) {
-                    const s = createSpark();
-                    s.y = Math.random() * h; // distribute initially
-                    s.life = Math.random();
-                    sparks.push(s);
-                }
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, w, h);
-
-                for (let i = sparks.length - 1; i >= 0; i--) {
-                    const s = sparks[i];
-
-                    s.wobble += s.wobbleSpeed;
-                    s.x += s.speedX + Math.sin(s.wobble) * 0.4;
-                    s.y += s.speedY;
-                    s.life -= s.decay;
-                    s.flicker = 0.55 + Math.random() * 0.45;
-
-                    if (s.life <= 0 || s.y < -20) {
-                        sparks[i] = createSpark();
-                        continue;
-                    }
-
-                    const alpha = s.life * s.flicker;
-                    const { r, g, b } = s.color;
-
-                    // Soft glow
-                    const gradient = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size * 4);
-                    gradient.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.9})`);
-                    gradient.addColorStop(0.4, `rgba(${r},${g},${b},${alpha * 0.35})`);
-                    gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
-
-                    ctx.beginPath();
-                    ctx.fillStyle = gradient;
-                    ctx.arc(s.x, s.y, s.size * 4, 0, Math.PI * 2);
-                    ctx.fill();
-
-                    // Bright core
-                    ctx.beginPath();
-                    ctx.fillStyle = `rgba(255, 240, 180, ${alpha * 0.85})`;
-                    ctx.arc(s.x, s.y, s.size * 0.7, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-
-                animationId = requestAnimationFrame(draw);
-            }
-
             resize();
-            initSparks();
-            draw();
+            window.addEventListener('resize', resize);
 
-            window.addEventListener('resize', () => {
-                resize();
-                initSparks();
+            class Spark {
+                constructor() {
+                    this.reset(true);
+                }
+                reset(initial) {
+                    this.x = Math.random() * W;
+                    this.y = initial ? Math.random() * H : H + 10;
+                    this.size = Math.random() * 2.8 + 0.6;
+                    this.speedY = -(Math.random() * 1.8 + 0.6);
+                    this.speedX = (Math.random() - 0.5) * 0.9;
+                    this.life = 1;
+                    this.decay = Math.random() * 0.008 + 0.003;
+                    this.hue = Math.random() * 40 + 10; // orange-red range
+                    this.glow = Math.random() * 8 + 4;
+                    this.wobble = Math.random() * Math.PI * 2;
+                    this.wobbleSpeed = (Math.random() - 0.5) * 0.04;
+                }
+                update() {
+                    this.wobble += this.wobbleSpeed;
+                    this.x += this.speedX + Math.sin(this.wobble) * 0.35;
+                    this.y += this.speedY;
+                    this.life -= this.decay;
+                    this.speedY *= 0.998;
+                    if (this.life <= 0 || this.y < -20) this.reset(false);
+                }
+                draw() {
+                    const alpha = Math.max(0, this.life);
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue}, 100%, 60%, ${alpha})`;
+                    ctx.shadowBlur = this.glow;
+                    ctx.shadowColor = `hsla(${this.hue}, 100%, 55%, ${alpha * 0.9})`;
+                    ctx.fill();
+                    // small bright core
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 0.4, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${this.hue + 20}, 100%, 85%, ${alpha * 0.9})`;
+                    ctx.shadowBlur = 0;
+                    ctx.fill();
+                }
+            }
+
+            const SPARK_COUNT = Math.min(90, Math.floor((W * H) / 18000) + 40);
+            for (let i = 0; i < SPARK_COUNT; i++) sparks.push(new Spark());
+
+            function animate() {
+                ctx.clearRect(0, 0, W, H);
+                ctx.globalCompositeOperation = 'lighter';
+                for (const s of sparks) {
+                    s.update();
+                    s.draw();
+                }
+                ctx.globalCompositeOperation = 'source-over';
+                animId = requestAnimationFrame(animate);
+            }
+            animate();
+
+            // Pause when tab is hidden to save battery
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    cancelAnimationFrame(animId);
+                } else {
+                    animate();
+                }
             });
-        }
+        })();
 
         document.addEventListener('DOMContentLoaded', async () => {
             const savedVol = localStorage.getItem('livetv_volume');
@@ -2160,9 +2141,6 @@
             const savedMute = localStorage.getItem('livetv_muted');
             if (savedMute !== null) videoElement.muted = savedMute === 'true';
             updateVolumeUI();
-
-            // Start fire sparks background animation
-            initFireSparks();
 
             // Auto-load live channels from GitHub with local & cache fallbacks
             await loadPlaylist(true);
