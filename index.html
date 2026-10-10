@@ -981,7 +981,15 @@
             border-radius: 4px;
             box-shadow: 0 0 8px var(--accent-glow);
         }
-    
+        .progress-live-edge {
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 3px;
+            background: #ef4444;
+            border-radius: 2px;
+            opacity: 0.9;
+        }
+
         .chrome-controls-row {
             display: flex;
             align-items: center;
@@ -1745,7 +1753,7 @@
                 <div class="player-card">
                     <div class="player-header">
                         <div class="player-channel-info">
-                            <span class="now-playing-badge" id="nowPlayingBadge">#1 LIVE</span>
+                            <span class="now-playing-badge" id="nowPlayingBadge">#1</span>
                             <div>
                                 <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
                             </div>
@@ -1767,7 +1775,7 @@
                         <!-- Advanced Modern Player Chrome -->
                         <div class="player-chrome" id="playerChrome">
                             <div class="player-chrome-top">
-                                <span class="live-pill" id="chromeLivePill"><span class="dot"></span> LIVE</span>
+                                <span class="live-pill" id="chromeLivePill" style="display:none" aria-hidden="true"><span class="dot"></span></span>
                                 <span class="stream-meta" id="chromeStreamMeta">HLS · Auto</span>
                             </div>
 
@@ -1798,9 +1806,9 @@
                                             <i class="fas fa-rotate-right"></i>
                                         </button>
                                         <button class="chrome-btn go-live" id="goLiveBtn" title="Jump to live edge">
-                                            <i class="fas fa-broadcast-tower"></i> LIVE
+                                            <i class="fas fa-broadcast-tower"></i>
                                         </button>
-                                        <span class="time-display" id="timeDisplay">LIVE</span>
+                                        <span class="time-display" id="timeDisplay" style="display:none"></span>
                                     </div>
                                     <div class="chrome-right">
                                         <div class="chrome-volume">
@@ -2579,45 +2587,49 @@
             });
         }
 
-        // Robust HLS.js config for maximum m3u8 compatibility (live + VOD)
+        // Robust HLS.js config – supports live + VOD, AES-128, relative keys, tokenized m3u8, multi-variant
         function createHlsInstance() {
             return new Hls({
                 enableWorker: true,
                 lowLatencyMode: false,                 // more stable for AES-128 live (Nimble / gpcdn)
                 enableSoftwareAES: true,               // required for METHOD=AES-128 streams
-                backBufferLength: 30,
-                maxBufferLength: 40,
-                maxMaxBufferLength: 80,
-                maxBufferSize: 60 * 1000 * 1000,
-                maxBufferHole: 0.8,
-                highBufferWatchdogPeriod: 3,
-                nudgeOffset: 0.15,
-                nudgeMaxRetry: 8,
-                maxFragLookUpTolerance: 0.35,
+                backBufferLength: 90,
+                maxBufferLength: 60,
+                maxMaxBufferLength: 120,
+                maxBufferSize: 100 * 1000 * 1000,
+                maxBufferHole: 1.5,
+                highBufferWatchdogPeriod: 2,
+                nudgeOffset: 0.2,
+                nudgeMaxRetry: 12,
+                maxFragLookUpTolerance: 0.5,
                 liveSyncDurationCount: 3,
-                liveMaxLatencyDurationCount: 12,
+                liveMaxLatencyDurationCount: 15,
                 liveDurationInfinity: true,
                 progressive: false,
                 startLevel: -1,
-                abrEwmaDefaultEstimate: 800000,
-                abrBandWidthFactor: 0.9,
+                abrEwmaDefaultEstimate: 500000,
+                abrBandWidthFactor: 0.95,
                 abrBandWidthUpFactor: 0.7,
                 testBandwidth: true,
-                // Longer timeouts + more retries help with session-based relative key/segments
-                manifestLoadingTimeOut: 20000,
-                manifestLoadingMaxRetry: 8,
-                manifestLoadingRetryDelay: 1200,
-                levelLoadingTimeOut: 20000,
-                levelLoadingMaxRetry: 8,
-                levelLoadingRetryDelay: 1200,
-                fragLoadingTimeOut: 25000,
-                fragLoadingMaxRetry: 10,
-                fragLoadingRetryDelay: 1000,
+                stretchShortVideoTrack: true,
+                forceKeyFrameOnDiscontinuity: true,
+                // Longer timeouts + more retries for session-based / tokenized / relative key streams
+                manifestLoadingTimeOut: 30000,
+                manifestLoadingMaxRetry: 12,
+                manifestLoadingRetryDelay: 1000,
+                levelLoadingTimeOut: 30000,
+                levelLoadingMaxRetry: 12,
+                levelLoadingRetryDelay: 1000,
+                fragLoadingTimeOut: 30000,
+                fragLoadingMaxRetry: 12,
+                fragLoadingRetryDelay: 800,
                 fragLoadingMaxRetryTimeout: 64000,
-                // AES key loader retries
-                keyLoadingTimeOut: 15000,
-                keyLoadingMaxRetry: 8,
-                keyLoadingRetryDelay: 1000,
+                // AES key loader retries (critical for encrypted m3u8)
+                keyLoadingTimeOut: 20000,
+                keyLoadingMaxRetry: 12,
+                keyLoadingRetryDelay: 800,
+                // Allow appending segments even with minor discontinuities
+                appendErrorMaxRetry: 5,
                 xhrSetup: function (xhr /*, url */) {
                     xhr.withCredentials = false;
                     // Do not set forbidden headers (Referer / Origin). CORS * is already present.
@@ -2637,7 +2649,7 @@
                 videoElement.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
             }
 
-            nowPlayingBadge.textContent = `#${ch.chno} LIVE`;
+            nowPlayingBadge.textContent = `#${ch.chno}`;
             playerChannelTitle.textContent = ch.name;
             playerGroupTag.textContent = ch.group;
             updateFavUI();
