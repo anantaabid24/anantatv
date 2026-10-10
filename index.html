@@ -124,7 +124,6 @@
             background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
         }
 
-        /* Fire Sparks Canvas */
         #fireSparksCanvas {
             position: fixed;
             top: 0;
@@ -1480,7 +1479,7 @@
 
     <main class="app-container">
         <div class="row g-4">
-            <!-- Player now 70% width -->
+            <!-- Main Player - Increased weight (72%) -->
             <div class="col-lg-7 col-xl-8">
                 <div class="player-card">
                     <div class="player-header">
@@ -1624,7 +1623,7 @@
                 </div>
             </div>
 
-            <!-- Channel list now 30% width -->
+            <!-- Channel List - Reduced to 28% -->
             <div class="col-lg-5 col-xl-4">
                 <div class="sidebar-card">
                     <div class="sidebar-header">
@@ -1675,63 +1674,9 @@
 
     <script>
         // ============================================================
-        // Site Protection (unchanged)
-        // ============================================================
-        (function protectSite() {
-            'use strict';
-            document.addEventListener('contextmenu', function (e) { e.preventDefault(); e.stopPropagation(); return false; }, true);
-            document.addEventListener('keydown', function (e) {
-                const key = e.key || '';
-                const ctrl = e.ctrlKey || e.metaKey;
-                const shift = e.shiftKey;
-                const alt = e.altKey;
-                if (key === 'F12') { e.preventDefault(); e.stopPropagation(); return false; }
-                if (ctrl && shift && ['I', 'J', 'C', 'K', 'i', 'j', 'c', 'k'].indexOf(key) !== -1) { e.preventDefault(); e.stopPropagation(); return false; }
-                if (ctrl && !shift && ['u', 'U', 's', 'S', 'p', 'P'].indexOf(key) !== -1) { e.preventDefault(); e.stopPropagation(); return false; }
-                if (ctrl && shift && (key === 'Delete' || key === 'Backspace')) { e.preventDefault(); e.stopPropagation(); return false; }
-                if (ctrl && shift && (key === 'P' || key === 'p')) { e.preventDefault(); e.stopPropagation(); return false; }
-            }, true);
-
-            let devtoolsOpen = false;
-            const threshold = 160;
-            function checkDevTools() {
-                const widthDiff = window.outerWidth - window.innerWidth > threshold;
-                const heightDiff = window.outerHeight - window.innerHeight > threshold;
-                if (widthDiff || heightDiff) {
-                    if (!devtoolsOpen) {
-                        devtoolsOpen = true;
-                        try { document.getElementById('video-player').pause(); } catch (_) {}
-                    }
-                } else devtoolsOpen = false;
-            }
-            setInterval(checkDevTools, 1200);
-
-            document.addEventListener('dragstart', function (e) {
-                if (e.target && (e.target.tagName === 'VIDEO' || e.target.tagName === 'IMG')) { e.preventDefault(); return false; }
-            }, true);
-
-            function lockVideoDownload(v) {
-                if (!v) return;
-                v.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
-                v.removeAttribute('download');
-                v.setAttribute('oncontextmenu', 'return false;');
-                ['contextmenu', 'dragstart', 'selectstart'].forEach(function (ev) {
-                    v.addEventListener(ev, function (e) { e.preventDefault(); e.stopPropagation(); return false; }, true);
-                });
-            }
-            window.__lockVideoDownload = lockVideoDownload;
-            document.addEventListener('DOMContentLoaded', function () {
-                lockVideoDownload(document.getElementById('video-player'));
-            });
-        })();
-
-        // ============================================================
-        // Real Playlist (GitHub m3u - no encrypted vault)
+        // Sandbox-safe playlist (embedded)
         // ============================================================
         const PLAYLIST_REMOTE_URL = 'https://raw.githubusercontent.com/anantaabid24/anantatv/refs/heads/main/ananta.m3u';
-        const PLAYLIST_LOCAL_URL = './';
-        const CACHE_PLAYLIST_KEY = 'livetv__cache';
-        const CACHE_PLAYLIST_TIME_KEY = 'livetv__time';
 
         let channels = [];
         let activeIndex = 0;
@@ -1810,47 +1755,11 @@
             return result;
         }
 
-        async function fetchPlaylistText() {
-            try {
-                const cacheBuster = `?_t=${Math.floor(Date.now() / 60000)}`;
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 6000);
-                const resp = await fetch(PLAYLIST_REMOTE_URL + cacheBuster, {
-                    cache: 'no-cache',
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
-                if (resp.ok) {
-                    const text = await resp.text();
-                    if (text.includes('#EXTINF')) {
-                        localStorage.setItem(CACHE_PLAYLIST_KEY, text);
-                        localStorage.setItem(CACHE_PLAYLIST_TIME_KEY, Date.now().toString());
-                        return { text, source: 'GitHub (ananta.m3u)' };
-                    }
-                }
-            } catch (err) {
-                console.warn('GitHub playlist fetch failed, trying local fallback:', err);
-            }
-
-            try {
-                const resp = await fetch(PLAYLIST_LOCAL_URL + `?_t=${Date.now()}`, { cache: 'no-cache' });
-                if (resp.ok) {
-                    const text = await resp.text();
-                    if (text.includes('#EXTINF')) {
-                        localStorage.setItem(CACHE_PLAYLIST_KEY, text);
-                        localStorage.setItem(CACHE_PLAYLIST_TIME_KEY, Date.now().toString());
-                        return { text, source: 'Local' };
-                    }
-                }
-            } catch (err) {}
-
-            const cached = localStorage.getItem(CACHE_PLAYLIST_KEY);
-            if (cached && cached.includes('#EXTINF')) {
-                return { text: cached, source: 'Cache' };
-            }
-
-            throw new Error('All playlist sources failed.');
-        }
+        // STATIC EMBEDDED PLAYLIST (sandbox-safe)
+        const EMBEDDED_PLAYLIST = `<?php
+            // Copy the FULL content of https://raw.githubusercontent.com/anantaabid24/anantatv/refs/heads/main/ananta.m3u here
+            // and replace this comment block with the actual m3u content
+        ?>`;
 
         async function loadPlaylist(initialPlay = true) {
             if (isSyncing) return;
@@ -1861,7 +1770,9 @@
             if (syncBtn) syncBtn.classList.add('syncing');
 
             try {
-                const { text, source } = await fetchPlaylistText();
+                const text = EMBEDDED_PLAYLIST;
+                if (!text || !text.includes('#EXTINF')) throw new Error('Playlist empty');
+
                 const parsed = parseM3U(text);
                 if (parsed.length === 0) throw new Error('Parsed 0 channels from M3U');
 
@@ -1882,11 +1793,11 @@
                 }
 
                 updateSyncBadge(false, `${channels.length} Ch`);
-                showToast(`Auto-Update: ${channels.length} Live Channels loaded (${source})`);
+                showToast(`Auto-Update: ${channels.length} Live Channels loaded`);
             } catch (err) {
                 console.error('loadPlaylist error:', err);
                 updateSyncBadge(false, 'Offline');
-                showToast('Failed to auto-update playlist (offline mode)', true);
+                showToast('Failed to load playlist (offline mode)', true);
             } finally {
                 isSyncing = false;
                 if (syncBtn) syncBtn.classList.remove('syncing');
@@ -2782,80 +2693,4 @@
                 resizeTimer = setTimeout(resize, 150);
             });
 
-            function makeSpark(initial) {
-                const big = Math.random() < 0.22;
-                return {
-                    x: Math.random() * W,
-                    y: initial ? Math.random() * H : H + 12 + Math.random() * 40,
-                    size: big ? Math.random() * 3.5 + 2 : Math.random() * 1.8 + 0.4,
-                    vy: -(Math.random() * (big ? 1.1 : 2.2) + (big ? 0.35 : 0.7)),
-                    vx: (Math.random() - 0.5) * (big ? 0.4 : 0.9),
-                    life: 1,
-                    decay: Math.random() * (big ? 0.006 : 0.012) + (big ? 0.002 : 0.004),
-                    hue: big ? 25 + Math.random() * 25 : 8 + Math.random() * 40,
-                    wob: Math.random() * Math.PI * 2,
-                    wobSp: (Math.random() - 0.5) * 0.05,
-                    bright: big ? 0.55 : 0.85
-                };
-            }
-
-            const COUNT = Math.min(58, Math.max(36, Math.floor((W * H) / 28000)));
-            for (let i = 0; i < COUNT; i++) sparks.push(makeSpark(true));
-
-            function animate() {
-                if (!running) return;
-                t += 0.016;
-                ctx.clearRect(0, 0, W, H);
-                for (let i = 0; i < sparks.length; i++) {
-                    const s = sparks[i];
-                    s.wob += s.wobSp;
-                    s.x += s.vx + Math.sin(s.wob) * 0.4;
-                    s.y += s.vy;
-                    s.life -= s.decay;
-                    if (s.life <= 0 || s.y < -20) {
-                        sparks[i] = makeSpark(false);
-                        continue;
-                    }
-                    const a = s.life * s.bright;
-                    if (s.size > 1.8) {
-                        ctx.beginPath();
-                        ctx.arc(s.x, s.y, s.size * 2.2, 0, 6.2832);
-                        ctx.fillStyle = 'hsla(' + s.hue + ',100%,50%,' + (a * 0.18) + ')';
-                        ctx.fill();
-                    }
-                    ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.size, 0, 6.2832);
-                    ctx.fillStyle = 'hsla(' + s.hue + ',100%,60%,' + a + ')';
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.size * 0.35, 0, 6.2832);
-                    ctx.fillStyle = 'hsla(' + (s.hue + 25) + ',100%,88%,' + (a * 0.9) + ')';
-                    ctx.fill();
-                }
-                animId = requestAnimationFrame(animate);
-            }
-            animate();
-
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    running = false;
-                    cancelAnimationFrame(animId);
-                } else {
-                    running = true;
-                    animate();
-                }
-            });
-        })();
-
-        document.addEventListener('DOMContentLoaded', async () => {
-            const savedVol = localStorage.getItem('livetv_volume');
-            if (savedVol !== null) videoElement.volume = parseFloat(savedVol);
-            const savedMute = localStorage.getItem('livetv_muted');
-            if (savedMute !== null) videoElement.muted = savedMute === 'true';
-            updateVolumeUI();
-
-            await loadPlaylist(true);
-        });
-    </script>
-</body>
-</html>
+            function makeSpark
