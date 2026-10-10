@@ -564,177 +564,7 @@
             );
         }
 
-        /* Premium Live badge */
-        .live-badge-nav {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.12));
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.4);
-            font-size: 0.68rem;
-            font-weight: 800;
-            padding: 3px 9px;
-            border-radius: var(--radius-pill);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.2);
-            animation: live-badge-pulse 2s ease-in-out infinite;
-            margin-left: 2px;
-        }
-
-        body.light-theme .live-badge-nav {
-            background: linear-gradient(135deg, #fef2f2, #fee2e2);
-            color: #dc2626;
-            border-color: #fca5a5;
-            box-shadow: 0 1px 4px rgba(220, 38, 38, 0.15);
-        }
-
-        @keyframes live-badge-pulse {
-            0%, 100% { box-shadow: 0 0 8px rgba(239, 68, 68, 0.15); }
-            50% { box-shadow: 0 0 16px rgba(239, 68, 68, 0.4); }
-        }
-
-        .pulse-dot {
-            width: 7px;
-            height: 7px;
-            background-color: #ef4444;
-            border-radius: 50%;
-            animation: pulse-ring 1.6s infinite;
-            box-shadow: 0 0 6px #ef4444;
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.85); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.75); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 7px rgba(239, 68, 68, 0); }
-            100% { transform: scale(0.85); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 7px 14px;
-            border-radius: var(--radius-sm);
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-decoration: none;
-            color: var(--text-muted);
-            border: 1px solid transparent;
-            background: transparent;
-            transition: var(--transition-smooth);
-            cursor: pointer;
-        }
-
-        .nav-btn:hover {
-            color: var(--text-main);
-            background: rgba(128, 128, 128, 0.1);
-        }
-
-        .nav-btn.active {
-            color: var(--accent);
-            background: rgba(168, 85, 247, 0.15);
-            border-color: rgba(168, 85, 247, 0.3);
-        }
-
-        body.light-theme .nav-btn.active {
-            color: #7c3aed;
-            background: #ede9fe;
-            border-color: #ddd6fe;
-        }
-
-        .theme-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-card);
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition-smooth);
-        }
-
-        .sync-btn {
-            border: 1px solid rgba(16, 185, 129, 0.35) !important;
-            background: rgba(16, 185, 129, 0.12) !important;
-            color: #10b981 !important;
-        }
-        .sync-btn:hover {
-            background: rgba(16, 185, 129, 0.22) !important;
-            color: #34d399 !important;
-            border-color: rgba(16, 185, 129, 0.6) !important;
-        }
-        .sync-btn.syncing i {
-            animation: spin-sync 0.8s linear infinite;
-        }
-        @keyframes spin-sync {
-            100% { transform: rotate(360deg); }
-        }
-
-        .sync-status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 3px 10px;
-            border-radius: var(--radius-pill);
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            background: rgba(16, 185, 129, 0.12);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.25);
-            transition: var(--transition-smooth);
-        }
-        .sync-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #10b981;
-            display: inline-block;
-            box-shadow: 0 0 6px #10b981;
-            animation: pulse-sync 2s infinite;
-        }
-        @keyframes pulse-sync {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.85); }
-        }
-
-        .toast-notice {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--bg-surface);
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
-            border-left: 4px solid #10b981;
-            padding: 12px 18px;
-            border-radius: var(--radius-sm);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-            z-index: 9999;
-            font-size: 0.88rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0;
-            transform: translateY(15px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            pointer-events: none;
-        }
-        .toast-notice.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+       
         /* App Container */
         .app-container {
             max-width: 1720px;
@@ -764,6 +594,18 @@
             gap: 12px;
             border-bottom: 1px solid var(--border-color);
             background: rgba(0, 0, 0, 0.04);
+        }
+
+        /* Channel info bar at bottom of player */
+        .player-footer-info {
+            border-bottom: none;
+            border-top: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .player-live-badge {
+            margin-left: 0;
+            flex-shrink: 0;
         }
 
         .player-channel-info {
@@ -1394,13 +1236,13 @@
         .channels-scroll-area::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         .channels-scroll-area::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
-        /* Channel Card with D-Pad TV Focus */
+        /* Channel Card with D-Pad TV Focus (slightly larger) */
         .channel-card {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            min-height: 62px;
+            gap: 14px;
+            padding: 12px 14px;
+            min-height: 76px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
@@ -1430,15 +1272,15 @@
         }
 
         .card-thumb-wrapper {
-            width: 52px;
-            min-width: 52px;
-            height: 42px;
-            border-radius: 8px;
+            width: 64px;
+            min-width: 64px;
+            height: 50px;
+            border-radius: 10px;
             background: #000;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4px;
+            padding: 5px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
         }
@@ -1483,7 +1325,7 @@
         }
 
         .card-name {
-            font-size: 0.88rem;
+            font-size: 0.95rem;
             font-weight: 700;
             color: var(--text-main);
             white-space: nowrap;
@@ -1785,25 +1627,9 @@
 
     <main class="app-container">
         <div class="row g-3 g-lg-4">
-            <!-- Left: Video Player -->
-            <div class="col-lg-7 col-xl-8">
+            <!-- Left: Video Player (wider) -->
+            <div class="col-lg-8 col-xl-9">
                 <div class="player-card">
-                    <div class="player-header">
-                        <div class="player-channel-info">
-                            <span class="now-playing-badge" id="nowPlayingBadge">#1</span>
-                            <div>
-                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
-                            </div>
-                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
-                                <i class="far fa-heart" id="playerFavIcon"></i>
-                            </button>
-                        </div>
-                        <div class="player-tags" id="playerTags">
-                            <span class="player-tag" id="playerGroupTag">News</span>
-                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
-                        </div>
-                    </div>
-
                     <div class="video-stage" id="videoStage">
                         <div class="video-wrapper">
                             <video id="video-player" autoplay playsinline preload="auto" controlslist="nodownload noplaybackrate noremoteplayback" oncontextmenu="return false;" crossorigin="anonymous"></video>
@@ -1894,7 +1720,24 @@
                         </div>
                     </div>
 
-                    <!-- Secondary under-player toolbar removed: controls stay inside player chrome on all devices -->
+                    <!-- Channel info moved to bottom of player -->
+                    <div class="player-header player-footer-info">
+                        <div class="player-channel-info">
+                            <span class="live-badge-nav player-live-badge" id="nowPlayingBadge" title="Live">
+                                <span class="pulse-dot"></span>Live
+                            </span>
+                            <div>
+                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
+                            </div>
+                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
+                                <i class="far fa-heart" id="playerFavIcon"></i>
+                            </button>
+                        </div>
+                        <div class="player-tags" id="playerTags">
+                            <span class="player-tag" id="playerGroupTag">News</span>
+                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="keyboard-shortcuts-bar">
@@ -1909,8 +1752,8 @@
                 </div>
             </div>
 
-            <!-- Right: Channel List Sidebar (slightly wider) -->
-            <div class="col-lg-5 col-xl-4">
+            <!-- Right: Channel List Sidebar -->
+            <div class="col-lg-4 col-xl-3">
                 <div class="sidebar-card">
                     <div class="sidebar-header">
                         <div class="sidebar-title-row">
@@ -2665,7 +2508,11 @@
                 videoElement.setAttribute('controlsList', 'nodownload noplaybackrate noremoteplayback');
             }
 
-            nowPlayingBadge.textContent = `#${ch.chno}`;
+            // Live badge stays fixed (pulse + Live); channel number removed from player info
+            if (nowPlayingBadge) {
+                nowPlayingBadge.innerHTML = '<span class="pulse-dot"></span>Live';
+                nowPlayingBadge.title = 'Live · #' + (ch.chno || '');
+            }
             playerChannelTitle.textContent = ch.name;
             playerGroupTag.textContent = ch.group;
             updateFavUI();
@@ -2699,7 +2546,7 @@
             });
 
             try {
-                // DASH / DRM via Shaka
+                // DASH / DRM via Shaka (Widevine / PlayReady / ClearKey + plain MPD)
                 if (isMpd && window.shaka && shaka.Player.isBrowserSupported()) {
                     shakaPlayer = new shaka.Player(videoElement);
                     const cfg = {
@@ -2707,15 +2554,74 @@
                             bufferingGoal: 30,
                             rebufferingGoal: 2,
                             bufferBehind: 30,
-                            retryParameters: { maxAttempts: 5, baseDelay: 1000, backoffFactor: 2, timeout: 20000 }
+                            retryParameters: { maxAttempts: 6, baseDelay: 800, backoffFactor: 2, timeout: 25000 },
+                            failureCallback: function () { try { shakaPlayer.retryStreaming(); } catch (_) {} }
+                        },
+                        abr: { enabled: true },
+                        manifest: {
+                            retryParameters: { maxAttempts: 6, baseDelay: 800, backoffFactor: 2, timeout: 25000 },
+                            dash: { clockSyncUri: '', ignoreMinBufferTime: true, autoCorrectDrift: true }
                         }
                     };
+
+                    // Build DRM config from KODIPROP license_key / license_type
                     if (ch.licenseKey) {
-                        cfg.drm = { servers: { 'com.widevine.alpha': ch.licenseKey } };
+                        const licenseType = (ch.licenseType || 'com.widevine.alpha').toLowerCase();
+                        const servers = {};
+                        if (licenseType.includes('widevine') || licenseType === 'org.w3.clearkey' || licenseType.includes('clearkey')) {
+                            // ClearKey often embeds keys as JSON in license_key
+                            if (licenseType.includes('clearkey') || licenseType === 'org.w3.clearkey') {
+                                try {
+                                    const keyObj = typeof ch.licenseKey === 'string' && ch.licenseKey.trim().startsWith('{')
+                                        ? JSON.parse(ch.licenseKey)
+                                        : null;
+                                    if (keyObj && keyObj.keys) {
+                                        cfg.drm = {
+                                            clearKeys: {}
+                                        };
+                                        // Map ClearKey kids → keys if provided as array
+                                        (keyObj.keys || []).forEach(function (k) {
+                                            if (k.kid && k.k) cfg.drm.clearKeys[k.kid] = k.k;
+                                        });
+                                    } else {
+                                        // Fallback: treat as license server URL for Widevine
+                                        servers['com.widevine.alpha'] = ch.licenseKey;
+                                        cfg.drm = { servers: servers };
+                                    }
+                                } catch (_) {
+                                    servers['com.widevine.alpha'] = ch.licenseKey;
+                                    cfg.drm = { servers: servers };
+                                }
+                            } else {
+                                servers['com.widevine.alpha'] = ch.licenseKey;
+                                if (licenseType.includes('playready')) {
+                                    servers['com.microsoft.playready'] = ch.licenseKey;
+                                }
+                                cfg.drm = {
+                                    servers: servers,
+                                    advanced: {
+                                        'com.widevine.alpha': { videoRobustness: 'SW_SECURE_CRYPTO', audioRobustness: 'SW_SECURE_CRYPTO' }
+                                    }
+                                };
+                            }
+                        } else if (licenseType.includes('playready')) {
+                            servers['com.microsoft.playready'] = ch.licenseKey;
+                            cfg.drm = { servers: servers };
+                        } else {
+                            // Default Widevine
+                            servers['com.widevine.alpha'] = ch.licenseKey;
+                            cfg.drm = { servers: servers };
+                        }
                     }
+
                     shakaPlayer.configure(cfg);
                     shakaPlayer.addEventListener('error', (ev) => {
                         console.warn('Shaka error', ev.detail);
+                        // Retry once on recoverable DRM / network errors
+                        const code = ev.detail && ev.detail.code;
+                        if (code === 6001 || code === 6007 || code === 1001 || code === 1002) {
+                            try { shakaPlayer.retryStreaming(); return; } catch (_) {}
+                        }
                         handleStreamError(ch);
                     });
                     await shakaPlayer.load(url);
