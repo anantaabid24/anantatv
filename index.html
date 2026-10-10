@@ -992,6 +992,23 @@
     <main class="app-container">
         <div class="row g-4">
             <!-- Left: Video Player -->
+            <div class="col-lg-8 col-xl-9">
+                <div class="player-card">
+                    <div class="player-header">
+                        <div class="player-channel-info">
+                            <span class="now-playing-badge" id="nowPlayingBadge">#1 LIVE</span>
+                            <div>
+                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
+                            </div>
+                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
+                                <i class="far fa-heart" id="playerFavIcon"></i>
+                            </button>
+                        </div>
+                        <div class="player-tags" id="playerTags">
+                            <span class="player-tag" id="playerGroupTag">News</span>
+                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
+                        </div>
+                    </div>
 
                     <div class="video-wrapper">
                         <video id="video-player" controls autoplay playsinline preload="auto"></video>
@@ -1017,22 +1034,7 @@
                             </div>
                         </div>
                     </div>
-<div class="col-lg-8 col-xl-9">
-                <div class="player-card">
-                    <div class="player-header">
-                        <div class="player-channel-info">
-                            <span class="now-playing-badge" id="nowPlayingBadge">#1 LIVE</span>
-                            <div>
-                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
-                            </div>
-                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
-                                <i class="far fa-heart" id="playerFavIcon"></i>
-                            </button>
-                        </div>
-                        <div class="player-tags" id="playerTags">
-                            <span class="player-tag" id="playerGroupTag">News</span>
-                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
-                        </div>
+
                     <div class="player-toolbar">
                         <div class="toolbar-group">
                             <button class="tool-btn" id="prevBtn" title="Previous Channel (Left Arrow)">
@@ -1048,7 +1050,7 @@
                                 <i class="fas fa-rotate-right"></i>
                             </button>
                         </div>
-                     
+
                         <div class="toolbar-group">
                             <!-- Quality Picker Button -->
                             <button class="tool-btn" id="qualityBtn" title="Video Quality">
