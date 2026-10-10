@@ -1207,45 +1207,7 @@
             border-color: var(--accent);
         }
 
-        /* Quality Dropdown Menu */
-        .quality-menu {
-            position: absolute;
-            bottom: 52px;
-            right: 120px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-            padding: 6px;
-            min-width: 150px;
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-            z-index: 100;
-        }
-
-        .quality-menu.show { display: flex; }
-
-        .quality-item {
-            padding: 7px 12px;
-            border-radius: 6px;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-size: 0.82rem;
-            font-weight: 600;
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: var(--transition-smooth);
-        }
-
-        .quality-item:hover, .quality-item.active {
-            background: var(--accent);
-            color: #fff;
-        }
+        /* Quality menu is defined once above (inside player chrome). No secondary toolbar override. */
 
         .volume-control {
             display: flex;
@@ -1645,8 +1607,11 @@
             font-size: 0.75rem;
         }
 
-        /* Mobile: player uses aspect ratio, not full viewport height */
+        /* Tablet & below: player uses aspect ratio; controls stay inside player only */
         @media (max-width: 991.98px) {
+            .app-container {
+                padding: 12px;
+            }
             .player-card {
                 height: auto;
                 min-height: 0;
@@ -1669,6 +1634,78 @@
                 height: auto;
                 min-height: 420px;
                 max-height: 70vh;
+            }
+            .keyboard-shortcuts-bar {
+                display: none;
+            }
+            .player-header {
+                padding: 10px 14px;
+            }
+            .player-title {
+                font-size: 1rem;
+            }
+            /* Hide legacy secondary toolbar if present */
+            .player-toolbar {
+                display: none !important;
+            }
+        }
+
+        /* Phones */
+        @media (max-width: 575.98px) {
+            .app-container {
+                padding: 8px;
+            }
+            .nav-content {
+                gap: 8px;
+            }
+            .nav-btn span {
+                display: none;
+            }
+            .nav-btn {
+                padding: 7px 10px;
+            }
+            .brand-text {
+                font-size: 1.05rem;
+            }
+            .brand-text-sub {
+                font-size: 0.55rem;
+            }
+            .brand-icon-box {
+                width: 38px;
+                height: 38px;
+                font-size: 1rem;
+            }
+            .live-badge-nav {
+                display: none;
+            }
+            .player-chrome-bottom {
+                padding: 20px 10px 10px;
+            }
+            .chrome-controls-row {
+                gap: 6px;
+            }
+            .chrome-left, .chrome-right {
+                gap: 4px;
+            }
+            .chrome-btn {
+                height: 32px;
+                min-width: 32px;
+                padding: 0 8px;
+                font-size: 0.75rem;
+            }
+            .chrome-btn.go-live {
+                padding: 0 8px;
+            }
+            .sidebar-card {
+                min-height: 360px;
+                max-height: 65vh;
+            }
+            .sidebar-header {
+                padding: 12px 14px 10px;
+            }
+            .search-input {
+                padding: 9px 32px;
+                font-size: 0.85rem;
             }
         }
 
@@ -1747,9 +1784,9 @@
     </header>
 
     <main class="app-container">
-        <div class="row g-4">
+        <div class="row g-3 g-lg-4">
             <!-- Left: Video Player -->
-            <div class="col-lg-8 col-xl-9">
+            <div class="col-lg-7 col-xl-8">
                 <div class="player-card">
                     <div class="player-header">
                         <div class="player-channel-info">
@@ -1857,28 +1894,7 @@
                         </div>
                     </div>
 
-                    <!-- Compact secondary toolbar (always visible on small screens) -->
-                    <div class="player-toolbar d-lg-none">
-                        <div class="toolbar-group">
-                            <button class="tool-btn" id="prevBtnMobile" title="Previous">
-                                <i class="fas fa-backward-step"></i>
-                            </button>
-                            <button class="tool-btn" id="playPauseBtnMobile" title="Play/Pause">
-                                <i class="fas fa-pause" id="playPauseIconMobile"></i>
-                            </button>
-                            <button class="tool-btn" id="nextBtnMobile" title="Next">
-                                <i class="fas fa-forward-step"></i>
-                            </button>
-                        </div>
-                        <div class="toolbar-group">
-                            <button class="tool-btn" id="qualityBtnMobile" title="Quality">
-                                <i class="fas fa-gear"></i> <span id="qualityLabelMobile">Auto</span>
-                            </button>
-                            <button class="tool-btn" id="fullscreenBtnMobile" title="Fullscreen">
-                                <i class="fas fa-expand"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <!-- Secondary under-player toolbar removed: controls stay inside player chrome on all devices -->
                 </div>
 
                 <div class="keyboard-shortcuts-bar">
@@ -1893,8 +1909,8 @@
                 </div>
             </div>
 
-            <!-- Right: Channel List Sidebar -->
-            <div class="col-lg-4 col-xl-3">
+            <!-- Right: Channel List Sidebar (slightly wider) -->
+            <div class="col-lg-5 col-xl-4">
                 <div class="sidebar-card">
                     <div class="sidebar-header">
                         <div class="sidebar-title-row">
