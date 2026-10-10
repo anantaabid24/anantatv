@@ -89,7 +89,7 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* ===== Full-site Animated Attractive Background ===== */
+        /* Ambient Glow + Fire Sparks */
         .ambient-bg {
             position: fixed;
             top: 0;
@@ -99,223 +99,44 @@
             pointer-events: none;
             z-index: -1;
             overflow: hidden;
-            background:
-                radial-gradient(ellipse 90% 70% at 10% 0%, rgba(168, 85, 247, 0.18) 0%, transparent 55%),
-                radial-gradient(ellipse 80% 60% at 95% 90%, rgba(59, 130, 246, 0.15) 0%, transparent 55%),
-                radial-gradient(ellipse 60% 50% at 50% 40%, rgba(236, 72, 153, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 35% at 70% 15%, rgba(6, 182, 212, 0.10) 0%, transparent 50%),
-                linear-gradient(160deg, #0a0b12 0%, #0f1120 40%, #0c0d18 100%);
-        }
-
-        body.light-theme .ambient-bg {
-            background:
-                radial-gradient(ellipse 90% 70% at 10% 0%, rgba(124, 58, 237, 0.12) 0%, transparent 55%),
-                radial-gradient(ellipse 80% 60% at 95% 90%, rgba(59, 130, 246, 0.10) 0%, transparent 55%),
-                radial-gradient(ellipse 60% 50% at 50% 40%, rgba(236, 72, 153, 0.06) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 35% at 70% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-                linear-gradient(160deg, #f1f5f9 0%, #e8eef8 40%, #f0f4fc 100%);
         }
 
         .ambient-blob {
             position: absolute;
-            filter: blur(90px);
+            filter: blur(120px);
+            opacity: 0.15;
             border-radius: 50%;
-            will-change: transform, opacity;
-            mix-blend-mode: screen;
-        }
-
-        body.light-theme .ambient-blob {
-            mix-blend-mode: multiply;
-            filter: blur(100px);
         }
 
         .ambient-blob-1 {
-            top: -20%;
-            left: -15%;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(168, 85, 247, 0.55) 0%, transparent 70%);
-            opacity: 0.35;
-            animation: float-blob-1 18s ease-in-out infinite;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
         }
 
         .ambient-blob-2 {
-            bottom: -22%;
-            right: -15%;
-            width: 65vw;
-            height: 65vw;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%);
-            opacity: 0.32;
-            animation: float-blob-2 24s ease-in-out infinite;
+            bottom: -15%;
+            right: -10%;
+            width: 55vw;
+            height: 55vw;
+            background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
         }
 
-        .ambient-blob-3 {
-            top: 35%;
-            left: 30%;
-            width: 45vw;
-            height: 45vw;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.45) 0%, transparent 70%);
-            opacity: 0.22;
-            animation: float-blob-3 16s ease-in-out infinite;
-        }
-
-        .ambient-blob-4 {
-            top: 5%;
-            right: 10%;
-            width: 35vw;
-            height: 35vw;
-            background: radial-gradient(circle, rgba(6, 182, 212, 0.5) 0%, transparent 70%);
-            opacity: 0.20;
-            animation: float-blob-4 20s ease-in-out infinite;
-        }
-
-        .ambient-blob-5 {
-            bottom: 20%;
-            left: 5%;
-            width: 28vw;
-            height: 28vw;
-            background: radial-gradient(circle, rgba(250, 204, 21, 0.35) 0%, transparent 70%);
-            opacity: 0.15;
-            animation: float-blob-5 14s ease-in-out infinite;
-        }
-
-        /* Aurora wave bands */
-        .ambient-aurora {
+        /* Fire Sparks Canvas */
+        #fireSparksCanvas {
             position: absolute;
-            inset: -20%;
-            background:
-                linear-gradient(115deg,
-                    transparent 0%,
-                    rgba(168, 85, 247, 0.07) 25%,
-                    transparent 40%,
-                    rgba(59, 130, 246, 0.06) 55%,
-                    transparent 70%,
-                    rgba(236, 72, 153, 0.05) 85%,
-                    transparent 100%);
-            background-size: 200% 200%;
-            animation: aurora-shift 20s ease-in-out infinite;
-            opacity: 0.9;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        body.light-theme .ambient-aurora {
-            opacity: 0.5;
-            background:
-                linear-gradient(115deg,
-                    transparent 0%,
-                    rgba(124, 58, 237, 0.06) 25%,
-                    transparent 40%,
-                    rgba(59, 130, 246, 0.05) 55%,
-                    transparent 70%,
-                    rgba(236, 72, 153, 0.04) 85%,
-                    transparent 100%);
-            background-size: 200% 200%;
-        }
-
-        /* Floating particles */
-        .ambient-particles {
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,0.35), transparent),
-                radial-gradient(1.5px 1.5px at 30% 65%, rgba(168,85,247,0.4), transparent),
-                radial-gradient(1px 1px at 50% 30%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1.5px 1.5px at 70% 80%, rgba(59,130,246,0.35), transparent),
-                radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.25), transparent),
-                radial-gradient(1.5px 1.5px at 15% 85%, rgba(236,72,153,0.35), transparent),
-                radial-gradient(1px 1px at 55% 55%, rgba(6,182,212,0.3), transparent),
-                radial-gradient(1.5px 1.5px at 90% 45%, rgba(255,255,255,0.2), transparent),
-                radial-gradient(1px 1px at 40% 10%, rgba(168,85,247,0.3), transparent),
-                radial-gradient(1.5px 1.5px at 25% 45%, rgba(255,255,255,0.25), transparent),
-                radial-gradient(1px 1px at 75% 70%, rgba(250,204,21,0.25), transparent),
-                radial-gradient(1.5px 1.5px at 60% 90%, rgba(59,130,246,0.3), transparent);
-            background-size: 100% 100%;
-            animation: particles-drift 40s linear infinite;
-            opacity: 0.7;
-        }
-
-        body.light-theme .ambient-particles {
-            opacity: 0.4;
-            background-image:
-                radial-gradient(1.5px 1.5px at 10% 20%, rgba(124,58,237,0.35), transparent),
-                radial-gradient(1.5px 1.5px at 30% 65%, rgba(124,58,237,0.3), transparent),
-                radial-gradient(1px 1px at 50% 30%, rgba(59,130,246,0.25), transparent),
-                radial-gradient(1.5px 1.5px at 70% 80%, rgba(59,130,246,0.3), transparent),
-                radial-gradient(1px 1px at 85% 15%, rgba(124,58,237,0.2), transparent),
-                radial-gradient(1.5px 1.5px at 15% 85%, rgba(236,72,153,0.25), transparent),
-                radial-gradient(1px 1px at 55% 55%, rgba(6,182,212,0.25), transparent),
-                radial-gradient(1.5px 1.5px at 90% 45%, rgba(59,130,246,0.2), transparent),
-                radial-gradient(1px 1px at 40% 10%, rgba(124,58,237,0.25), transparent),
-                radial-gradient(1.5px 1.5px at 25% 45%, rgba(59,130,246,0.2), transparent),
-                radial-gradient(1px 1px at 75% 70%, rgba(234,179,8,0.2), transparent),
-                radial-gradient(1.5px 1.5px at 60% 90%, rgba(59,130,246,0.25), transparent);
-        }
-
-        /* Soft grid overlay */
-        .ambient-grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 72px 72px;
-            mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 15%, transparent 80%);
-            -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 15%, transparent 80%);
-            animation: grid-pulse 12s ease-in-out infinite;
-        }
-
-        body.light-theme .ambient-grid {
-            background-image:
-                linear-gradient(rgba(0,0,0,0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.035) 1px, transparent 1px);
-        }
-
-        /* Vignette for depth */
-        .ambient-vignette {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse 75% 65% at 50% 45%, transparent 40%, rgba(0,0,0,0.35) 100%);
-        }
-
-        body.light-theme .ambient-vignette {
-            background: radial-gradient(ellipse 75% 65% at 50% 45%, transparent 50%, rgba(15,23,42,0.08) 100%);
-        }
-
-        @keyframes float-blob-1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33%  { transform: translate(12%, 15%) scale(1.12); }
-            66%  { transform: translate(-8%, 8%) scale(0.92); }
-        }
-        @keyframes float-blob-2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33%  { transform: translate(-14%, -10%) scale(1.15); }
-            66%  { transform: translate(8%, -6%) scale(0.9); }
-        }
-        @keyframes float-blob-3 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33%  { transform: translate(15%, -12%) scale(1.18); }
-            66%  { transform: translate(-10%, 10%) scale(0.88); }
-        }
-        @keyframes float-blob-4 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33%  { transform: translate(-8%, 16%) scale(1.14); }
-            66%  { transform: translate(12%, -8%) scale(0.92); }
-        }
-        @keyframes float-blob-5 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50%  { transform: translate(18%, -14%) scale(1.2); }
-        }
-        @keyframes aurora-shift {
-            0%   { background-position: 0% 50%; }
-            50%  { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes particles-drift {
-            0%   { transform: translateY(0); }
-            100% { transform: translateY(-30px); }
-        }
-        @keyframes grid-pulse {
-            0%, 100% { opacity: 0.5; }
-            50%  { opacity: 0.85; }
+        body.light-theme #fireSparksCanvas {
+            opacity: 0.35;
         }
 
         /* Navbar */
@@ -544,7 +365,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
             background: rgba(0, 0, 0, 0.04);
         }
 
@@ -794,7 +615,7 @@
             display: flex;
             flex-direction: column;
             height: calc(100vh - 120px);
-            min-height: 500px;
+            min-height: 600px;
             overflow: hidden;
         }
 
@@ -879,35 +700,34 @@
             padding: 4px;
         }
 
-        /* Category Filter Chips - slideable, no scrollbar */
+        /* Category Filter Chips */
         .category-scroll {
             display: flex;
             align-items: center;
             gap: 6px;
             overflow-x: auto;
-            overflow-y: hidden;
             padding-bottom: 4px;
-            margin: 0 -2px;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             cursor: grab;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-overflow-scrolling: touch;
         }
 
-        .category-scroll:active {
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .category-scroll.is-dragging {
             cursor: grabbing;
+            scroll-behavior: auto;
         }
 
-        .category-scroll::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, Opera */
-            height: 0;
-            width: 0;
+        .category-scroll.is-dragging .cat-chip {
+            pointer-events: none;
         }
 
         .cat-chip {
             white-space: nowrap;
-            flex-shrink: 0;
             padding: 5px 12px;
             border-radius: var(--radius-pill);
             font-size: 0.8rem;
@@ -917,7 +737,7 @@
             border: 1px solid var(--chip-border);
             cursor: pointer;
             transition: var(--transition-smooth);
-            user-select: none;
+            flex-shrink: 0;
         }
 
         .cat-chip:hover {
@@ -935,10 +755,10 @@
         .channels-scroll-area {
             flex: 1;
             overflow-y: auto;
-            padding: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
         }
 
         .channels-scroll-area::-webkit-scrollbar { width: 6px; }
@@ -949,9 +769,9 @@
         .channel-card {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 12px 14px;
-            min-height: 76px;
+            gap: 12px;
+            padding: 8px 12px;
+            min-height: 62px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--radius-md);
@@ -981,10 +801,10 @@
         }
 
         .card-thumb-wrapper {
-            width: 64px;
-            min-width: 64px;
-            height: 52px;
-            border-radius: 10px;
+            width: 52px;
+            min-width: 52px;
+            height: 42px;
+            border-radius: 8px;
             background: #000;
             display: flex;
             align-items: center;
@@ -1034,7 +854,7 @@
         }
 
         .card-name {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             font-weight: 700;
             color: var(--text-main);
             white-space: nowrap;
@@ -1163,13 +983,7 @@
     <div class="ambient-bg">
         <div class="ambient-blob ambient-blob-1"></div>
         <div class="ambient-blob ambient-blob-2"></div>
-        <div class="ambient-blob ambient-blob-3"></div>
-        <div class="ambient-blob ambient-blob-4"></div>
-        <div class="ambient-blob ambient-blob-5"></div>
-        <div class="ambient-aurora"></div>
-        <div class="ambient-particles"></div>
-        <div class="ambient-grid"></div>
-        <div class="ambient-vignette"></div>
+        <canvas id="fireSparksCanvas"></canvas>
     </div>
 
     <header class="app-navbar">
@@ -1209,8 +1023,24 @@
     <main class="app-container">
         <div class="row g-4">
             <!-- Left: Video Player -->
-            <div class="col-lg-7 col-xl-8">
+            <div class="col-lg-8 col-xl-9">
                 <div class="player-card">
+                    <div class="player-header">
+                        <div class="player-channel-info">
+                            <span class="now-playing-badge" id="nowPlayingBadge">#1 LIVE</span>
+                            <div>
+                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
+                            </div>
+                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
+                                <i class="far fa-heart" id="playerFavIcon"></i>
+                            </button>
+                        </div>
+                        <div class="player-tags" id="playerTags">
+                            <span class="player-tag" id="playerGroupTag">News</span>
+                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
+                        </div>
+                    </div>
+
                     <div class="video-wrapper">
                         <video id="video-player" controls autoplay playsinline preload="auto"></video>
                         
@@ -1276,23 +1106,6 @@
                             </button>
                         </div>
                     </div>
-
-                    <!-- Channel info moved below controls -->
-                    <div class="player-header">
-                        <div class="player-channel-info">
-                            <span class="now-playing-badge" id="nowPlayingBadge">#1 LIVE</span>
-                            <div>
-                                <h1 class="player-title" id="playerChannelTitle">Somoy tv</h1>
-                            </div>
-                            <button class="player-fav-btn" id="playerFavBtn" title="Toggle Favorite">
-                                <i class="far fa-heart" id="playerFavIcon"></i>
-                            </button>
-                        </div>
-                        <div class="player-tags" id="playerTags">
-                            <span class="player-tag" id="playerGroupTag">News</span>
-                            <span class="player-tag" id="playerStreamTypeTag">HLS</span>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="keyboard-shortcuts-bar">
@@ -1307,7 +1120,7 @@
             </div>
 
             <!-- Right: Channel List Sidebar -->
-            <div class="col-lg-5 col-xl-4">
+            <div class="col-lg-4 col-xl-3">
                 <div class="sidebar-card">
                     <div class="sidebar-header">
                         <div class="sidebar-title-row">
@@ -1656,6 +1469,68 @@
             if (btnElement) btnElement.classList.add('active');
             renderChannelGrid();
         }
+
+        // --- Drag-to-slide for Category chips (no scrollbar) ---
+        (function enableCategoryDragScroll() {
+            const el = categoryContainer;
+            if (!el) return;
+
+            let isDown = false;
+            let startX = 0;
+            let scrollLeft = 0;
+            let moved = false;
+
+            el.addEventListener('mousedown', (e) => {
+                isDown = true;
+                moved = false;
+                el.classList.add('is-dragging');
+                startX = e.pageX - el.offsetLeft;
+                scrollLeft = el.scrollLeft;
+            });
+
+            el.addEventListener('mouseleave', () => {
+                isDown = false;
+                el.classList.remove('is-dragging');
+            });
+
+            el.addEventListener('mouseup', () => {
+                isDown = false;
+                el.classList.remove('is-dragging');
+            });
+
+            el.addEventListener('mousemove', (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - el.offsetLeft;
+                const walk = (x - startX) * 1.4;
+                if (Math.abs(walk) > 4) moved = true;
+                el.scrollLeft = scrollLeft - walk;
+            });
+
+            // Prevent click on chip if user was dragging
+            el.addEventListener('click', (e) => {
+                if (moved) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    moved = false;
+                }
+            }, true);
+
+            // Touch support
+            let touchStartX = 0;
+            let touchScrollLeft = 0;
+
+            el.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].pageX;
+                touchScrollLeft = el.scrollLeft;
+            }, { passive: true });
+
+            el.addEventListener('touchmove', (e) => {
+                const x = e.touches[0].pageX;
+                const walk = (x - touchStartX) * 1.4;
+                el.scrollLeft = touchScrollLeft - walk;
+            }, { passive: true });
+        })();
 
         // --- 2. Favorites & Recents Handlers ---
         function toggleFavorite(chId, e) {
@@ -2177,36 +2052,107 @@
             }
         });
 
+        // --- Fire Sparks (Aguner Fulki) Background Effect ---
+        function initFireSparks() {
+            const canvas = document.getElementById('fireSparksCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let sparks = [];
+            let animationId = null;
+            let w = 0, h = 0;
 
-        // Drag-to-scroll for category chips (desktop + touch)
-        (function enableCategoryDragScroll() {
-            const el = document.getElementById('categoryContainer');
-            if (!el) return;
-            let isDown = false;
-            let startX, scrollLeft;
+            const COLORS = [
+                { r: 255, g: 80,  b: 20  },  // bright orange
+                { r: 255, g: 140, b: 30  },  // amber
+                { r: 255, g: 60,  b: 10  },  // deep red-orange
+                { r: 255, g: 200, b: 50  },  // golden
+                { r: 255, g: 100, b: 40  },  // flame
+                { r: 255, g: 40,  b: 0   }   // pure fire red
+            ];
 
-            el.addEventListener('mousedown', (e) => {
-                isDown = true;
-                el.classList.add('dragging');
-                startX = e.pageX - el.offsetLeft;
-                scrollLeft = el.scrollLeft;
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+
+            function createSpark() {
+                const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                return {
+                    x: Math.random() * w,
+                    y: h + Math.random() * 40,
+                    size: Math.random() * 2.2 + 0.6,
+                    speedY: -(Math.random() * 1.8 + 0.6),
+                    speedX: (Math.random() - 0.5) * 0.9,
+                    life: 1,
+                    decay: Math.random() * 0.008 + 0.003,
+                    color,
+                    flicker: Math.random() * 0.4 + 0.6,
+                    wobble: Math.random() * Math.PI * 2,
+                    wobbleSpeed: (Math.random() - 0.5) * 0.08
+                };
+            }
+
+            function initSparks() {
+                const count = Math.min(90, Math.floor((w * h) / 18000));
+                sparks = [];
+                for (let i = 0; i < count; i++) {
+                    const s = createSpark();
+                    s.y = Math.random() * h; // distribute initially
+                    s.life = Math.random();
+                    sparks.push(s);
+                }
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+
+                for (let i = sparks.length - 1; i >= 0; i--) {
+                    const s = sparks[i];
+
+                    s.wobble += s.wobbleSpeed;
+                    s.x += s.speedX + Math.sin(s.wobble) * 0.4;
+                    s.y += s.speedY;
+                    s.life -= s.decay;
+                    s.flicker = 0.55 + Math.random() * 0.45;
+
+                    if (s.life <= 0 || s.y < -20) {
+                        sparks[i] = createSpark();
+                        continue;
+                    }
+
+                    const alpha = s.life * s.flicker;
+                    const { r, g, b } = s.color;
+
+                    // Soft glow
+                    const gradient = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.size * 4);
+                    gradient.addColorStop(0, `rgba(${r},${g},${b},${alpha * 0.9})`);
+                    gradient.addColorStop(0.4, `rgba(${r},${g},${b},${alpha * 0.35})`);
+                    gradient.addColorStop(1, `rgba(${r},${g},${b},0)`);
+
+                    ctx.beginPath();
+                    ctx.fillStyle = gradient;
+                    ctx.arc(s.x, s.y, s.size * 4, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Bright core
+                    ctx.beginPath();
+                    ctx.fillStyle = `rgba(255, 240, 180, ${alpha * 0.85})`;
+                    ctx.arc(s.x, s.y, s.size * 0.7, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                animationId = requestAnimationFrame(draw);
+            }
+
+            resize();
+            initSparks();
+            draw();
+
+            window.addEventListener('resize', () => {
+                resize();
+                initSparks();
             });
-            el.addEventListener('mouseleave', () => {
-                isDown = false;
-                el.classList.remove('dragging');
-            });
-            el.addEventListener('mouseup', () => {
-                isDown = false;
-                el.classList.remove('dragging');
-            });
-            el.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - el.offsetLeft;
-                const walk = (x - startX) * 1.4;
-                el.scrollLeft = scrollLeft - walk;
-            });
-        })();
+        }
 
         document.addEventListener('DOMContentLoaded', async () => {
             const savedVol = localStorage.getItem('livetv_volume');
@@ -2214,6 +2160,9 @@
             const savedMute = localStorage.getItem('livetv_muted');
             if (savedMute !== null) videoElement.muted = savedMute === 'true';
             updateVolumeUI();
+
+            // Start fire sparks background animation
+            initFireSparks();
 
             // Auto-load live channels from GitHub with local & cache fallbacks
             await loadPlaylist(true);
