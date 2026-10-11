@@ -2487,10 +2487,11 @@
     const playerFavIcon = document.getElementById('playerFavIcon');
 
 
-    // --- XMLTV EPG: match programme data to the currently selected channel by name ---
+    // --- XMLTV EPG: load compressed XMLTV, map channel names/IDs, show Now + Next ---
     const EPG_URL = 'https://avkb.short.gy/tsepg.xml.gz';
     let epgPrograms = [];
     let epgReady = false;
+    let epgLastLoad = 0;
     const epgEls = {
         now: document.getElementById('epgNowTitle'), nowTime: document.getElementById('epgNowTime'),
         next: document.getElementById('epgNextTitle'), nextTime: document.getElementById('epgNextTime'),
@@ -2498,8 +2499,9 @@
     };
     function epgNormalize(value) {
         return String(value || '').toLowerCase().normalize('NFKD')
-            .replace(/\.[a-z]{2,4}$/i, '').replace(/\b(hd|fhd|uhd|4k|sd|live)\b/g, ' ')
-            .replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');
+            .replace(/[\u0300-\u036f]/g, '').replace(/\.[a-z]{2,4}$/i, '')
+            .replace(/\b(hd|fhd|uhd|4k|sd|live)\b/g, ' ')
+            .replace(/[^\p{L}\p{N}]+/gu, ' ').trim().replace(/\s+/g, ' ');
     }
     function epgParseXmltvDate(value) {
         const m = String(value || '').trim().match(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})?\s*([+-]\d{4}|Z)?/);
@@ -2514,49 +2516,78 @@
     function epgTime(ms) {
         return new Intl.DateTimeFormat(undefined, {hour:'numeric', minute:'2-digit'}).format(new Date(ms));
     }
-    async function loadEPG() {
-        try {
-            const response = await fetch(EPG_URL, {cache:'no-store'});
-            if (!response.ok) throw new Error('EPG HTTP ' + response.status);
-            let buffer = await response.arrayBuffer();
-            let bytes = new Uint8Array(buffer);
-            // Some hosts return a raw .gz file instead of HTTP content-encoding gzip.
-            if (bytes[0] === 0x1f && bytes[1] === 0x8b) {
-                if (!('DecompressionStream' in window)) throw new Error('Browser cannot decompress gzip EPG');
-                const stream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'));
-                buffer = await new Response(stream).arrayBuffer();
-            }
-            const xml = new TextDecoder('utf-8').decode(buffer);
-            const doc = new DOMParser().parseFromString(xml, 'application/xml');
-            if (doc.querySelector('parsererror')) throw new Error('Invalid XMLTV document');
-            epgPrograms = Array.from(doc.querySelectorAll('programme')).map(node => {
-                const titleNode = node.querySelector('title');
-                const channelId = node.getAttribute('channel') || '';
-                const channelNode = doc.querySelector('channel[id="' + CSS.escape(channelId) + '"]');
-                const names = channelNode ? Array.from(channelNode.querySelectorAll('display-name')).map(n => n.textContent.trim()).filter(Boolean) : [];
-                const title = titleNode ? titleNode.textContent.trim() : '';
-                return { channelId, names, title, start:epgParseXmltvDate(node.getAttribute('start')), stop:epgParseXmltvDate(node.getAttribute('stop')), desc:(node.querySelector('desc') || {}).textContent || '' };
-            }).filter(p => p.title && Number.isFinite(p.start) && Number.isFinite(p.stop) && p.stop > p.start);
-            epgReady = true;
-            epgEls.status.textContent = 'EPG LIVE';
-            updateEPG();
-        } catch (error) {
-            console.warn('EPG could not be loaded:', error);
-            epgEls.now.textContent = 'Programme guide unavailable';
-            epgEls.next.textContent = 'Check EPG URL / CORS access';
-            epgEls.status.textContent = 'OFFLINE';
+    async function epgFetchText(url) {
+        const response = await fetch(url, {cache:'no-store', redirect:'follow'});
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        let buffer = await response.arrayBuffer();
+        let bytes = new Uint8Array(buffer);
+        // Browsers auto-decompress HTTP Content-Encoding:gzip. Only decompress when
+        // the response body itself still has the gzip magic bytes (1F 8B).
+        if (bytes.length >= 2 && bytes[0] === 0x1f && bytes[1] === 0x8b) {
+            if (!('DecompressionStream' in window)) throw new Error('This browser cannot decompress the .gz EPG file');
+            buffer = await new Response(new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
         }
+        const text = new TextDecoder('utf-8').decode(buffer).replace(/^\uFEFF/, '');
+        if (!/<tv[\s>]/i.test(text.slice(0, 20000))) throw new Error('The EPG URL did not return XMLTV data');
+        return text;
+    }
+    async function loadEPG() {
+        if (epgEls.status) epgEls.status.textContent = 'LOADING';
+        let xml = '', lastError = null;
+        // Try the source directly first. If its host blocks browser CORS, try public
+        // read-only relays as a fallback. For production, hosting a same-origin proxy is best.
+        const urls = [
+            EPG_URL,
+            'https://corsproxy.io/?url=' + encodeURIComponent(EPG_URL),
+            'https://api.allorigins.win/raw?url=' + encodeURIComponent(EPG_URL)
+        ];
+        for (const url of urls) {
+            try { xml = await epgFetchText(url); if (xml) break; }
+            catch (error) { lastError = error; console.warn('EPG source attempt failed:', url, error); }
+        }
+        if (!xml) throw (lastError || new Error('Could not fetch EPG source'));
+        const doc = new DOMParser().parseFromString(xml, 'application/xml');
+        if (doc.querySelector('parsererror')) throw new Error('EPG XML is invalid');
+
+        // Build the channel-name index once instead of querying the XML document for
+        // every programme (important for large XMLTV files).
+        const channelNames = new Map();
+        for (const node of doc.querySelectorAll('channel')) {
+            const id = node.getAttribute('id') || '';
+            const names = Array.from(node.querySelectorAll('display-name')).map(n => (n.textContent || '').trim()).filter(Boolean);
+            if (id) channelNames.set(id, names);
+        }
+        const parsed = [];
+        for (const node of doc.querySelectorAll('programme')) {
+            const titleNode = node.querySelector('title');
+            const channelId = node.getAttribute('channel') || '';
+            const title = titleNode ? titleNode.textContent.trim() : '';
+            const start = epgParseXmltvDate(node.getAttribute('start'));
+            const stop = epgParseXmltvDate(node.getAttribute('stop'));
+            if (title && Number.isFinite(start) && Number.isFinite(stop) && stop > start) {
+                parsed.push({channelId, names:channelNames.get(channelId) || [], title, start, stop,
+                    desc:((node.querySelector('desc') || {}).textContent || '').trim()});
+            }
+        }
+        if (!parsed.length) throw new Error('XMLTV loaded but contains no valid programme entries');
+        epgPrograms = parsed;
+        epgReady = true;
+        epgLastLoad = Date.now();
+        if (epgEls.status) epgEls.status.textContent = 'EPG LIVE';
+        updateEPG();
     }
     function epgScore(program, channel) {
-        const wanted = epgNormalize(channel && channel.name);
-        if (!wanted) return 0;
+        const wantedName = epgNormalize(channel && channel.name);
+        const wantedId = epgNormalize(channel && channel.id);
         const candidates = [program.channelId, ...(program.names || [])].map(epgNormalize).filter(Boolean);
         let best = 0;
         for (const candidate of candidates) {
-            if (candidate === wanted) best = Math.max(best, 100);
-            else if (candidate.includes(wanted) || wanted.includes(candidate)) best = Math.max(best, Math.min(candidate.length, wanted.length) / Math.max(candidate.length, wanted.length) * 80);
-            else {
-                const a = new Set(wanted.split(' ')), b = new Set(candidate.split(' '));
+            if (wantedId && candidate === wantedId) best = Math.max(best, 120);
+            if (wantedName && candidate === wantedName) best = Math.max(best, 100);
+            else if (wantedName && (candidate.includes(wantedName) || wantedName.includes(candidate))) {
+                best = Math.max(best, Math.min(candidate.length, wantedName.length) / Math.max(candidate.length, wantedName.length) * 80);
+            } else if (wantedName) {
+                const a = new Set(wantedName.split(' ')), b = new Set(candidate.split(' '));
                 const overlap = [...a].filter(x => b.has(x)).length;
                 if (overlap) best = Math.max(best, 60 * overlap / Math.max(a.size, b.size));
             }
@@ -2564,21 +2595,25 @@
         return best;
     }
     function updateEPG() {
-        if (!epgReady || !epgPrograms.length) return;
+        if (!epgReady || !epgPrograms.length || !epgEls.now) return;
         const channel = (typeof channels !== 'undefined' && channels[activeIndex]) || {name:playerChannelTitle.textContent};
         const now = Date.now();
-        // Rank channels by name, then use the closest matching channel's current/future schedule.
+        // Score each EPG channel once, then choose its programme schedule.
         const scores = new Map();
-        for (const p of epgPrograms) scores.set(p.channelId, Math.max(scores.get(p.channelId) || 0, epgScore(p, channel)));
+        for (const p of epgPrograms) {
+            if (!scores.has(p.channelId)) scores.set(p.channelId, epgScore(p, channel));
+        }
         const bestId = [...scores.entries()].sort((a,b) => b[1]-a[1])[0];
         if (!bestId || bestId[1] < 35) {
             epgEls.now.textContent = 'No EPG match for ' + (channel.name || 'this channel');
-            epgEls.nowTime.textContent = ''; epgEls.next.textContent = 'Programme data not mapped'; epgEls.nextTime.textContent = ''; epgEls.progress.style.width = '0%';
+            epgEls.nowTime.textContent = ''; epgEls.next.textContent = 'Channel names may differ in the guide';
+            epgEls.nextTime.textContent = ''; epgEls.progress.style.width = '0%';
+            if (epgEls.status) epgEls.status.textContent = 'NO MATCH';
             return;
         }
         const schedule = epgPrograms.filter(p => p.channelId === bestId[0]).sort((a,b) => a.start-b.start);
         const current = schedule.find(p => p.start <= now && p.stop > now);
-        const next = schedule.find(p => p.start > now) || (current && schedule.find(p => p.start >= current.stop));
+        const next = current ? schedule.find(p => p.start >= current.stop) : schedule.find(p => p.start > now);
         if (current) {
             epgEls.now.textContent = current.title;
             epgEls.nowTime.textContent = epgTime(current.start) + ' – ' + epgTime(current.stop);
@@ -2588,10 +2623,20 @@
             epgEls.progress.style.width = '0%';
         }
         epgEls.next.textContent = next ? next.title : 'No upcoming programme listed';
-        epgEls.nextTime.textContent = next ? epgTime(next.start) : '';
+        epgEls.nextTime.textContent = next ? epgTime(next.start) + ' – ' + epgTime(next.stop) : '';
+        if (epgEls.status) epgEls.status.textContent = 'EPG LIVE';
     }
-    loadEPG();
-    setInterval(updateEPG, 30000);
+    loadEPG().catch(error => {
+        console.error('EPG load failed:', error);
+        if (epgEls.now) epgEls.now.textContent = 'Programme guide could not load';
+        if (epgEls.next) epgEls.next.textContent = error && error.message ? error.message : 'Check source access / CORS';
+        if (epgEls.status) epgEls.status.textContent = 'OFFLINE';
+    });
+    setInterval(() => {
+        updateEPG();
+        // Refresh the source every 6 hours so updated schedules are picked up.
+        if (Date.now() - epgLastLoad > 6 * 60 * 60 * 1000) loadEPG().catch(console.warn);
+    }, 30000);
 
     const loadingOverlay = document.getElementById('loadingOverlay');
     const errorOverlay = document.getElementById('errorOverlay');
