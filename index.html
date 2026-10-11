@@ -2488,7 +2488,7 @@
 
 
     // --- XMLTV EPG: load compressed XMLTV, map channel names/IDs, show Now + Next ---
-    const EPG_URL = 'https://avkb.short.gy/tsepg.xml.gz';
+    const EPG_URL = 'https://avkb.short.gy/jioepg.xml.gz';
     let epgPrograms = [];
     let epgReady = false;
     let epgLastLoad = 0;
@@ -2528,7 +2528,10 @@
             buffer = await new Response(new Blob([buffer]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
         }
         const text = new TextDecoder('utf-8').decode(buffer).replace(/^\uFEFF/, '');
-        if (!/<tv[\s>]/i.test(text.slice(0, 20000))) throw new Error('The EPG URL did not return XMLTV data');
+        if (!/<tv(?:\s|>)/i.test(text.slice(0, 100000))) {
+            const preview = text.slice(0, 100).replace(/\s+/g, ' ');
+            throw new Error('Response is not XMLTV (possible CORS/proxy/redirect error): ' + (preview || 'empty response'));
+        }
         return text;
     }
     async function loadEPG() {
@@ -2539,13 +2542,14 @@
         const urls = [
             EPG_URL,
             'https://corsproxy.io/?url=' + encodeURIComponent(EPG_URL),
-            'https://api.allorigins.win/raw?url=' + encodeURIComponent(EPG_URL)
+            'https://api.allorigins.win/raw?url=' + encodeURIComponent(EPG_URL),
+            'https://cors.isomorphic-git.org/' + EPG_URL
         ];
         for (const url of urls) {
             try { xml = await epgFetchText(url); if (xml) break; }
             catch (error) { lastError = error; console.warn('EPG source attempt failed:', url, error); }
         }
-        if (!xml) throw (lastError || new Error('Could not fetch EPG source'));
+        if (!xml) throw new Error('Could not load EPG from direct source or fallback proxies. Last error: ' + (lastError && lastError.message ? lastError.message : 'network/CORS blocked') + '. If hosted on a website, use a same-origin server-side proxy because browsers cannot bypass CORS.');
         const doc = new DOMParser().parseFromString(xml, 'application/xml');
         if (doc.querySelector('parsererror')) throw new Error('EPG XML is invalid');
 
