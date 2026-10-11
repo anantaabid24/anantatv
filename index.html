@@ -1686,32 +1686,6 @@
         font-size: 0.75rem;
     }
 
-    /* Responsive player controls: wrap cleanly on tablets, phones and narrow landscape screens */
-    .chrome-controls-row { display:flex; flex-wrap:wrap; align-items:center; row-gap:8px; }
-    .chrome-left, .chrome-right { display:flex; flex-wrap:wrap; align-items:center; min-width:0; }
-    .chrome-right { margin-left:auto; }
-    .chrome-btn { touch-action:manipulation; }
-
-    /* Fullscreen layout for browsers that support the Fullscreen API */
-    #videoStage.pseudo-fullscreen {
-        position:fixed !important; inset:0 !important; z-index:10000 !important;
-        width:100vw !important; height:100dvh !important; min-height:0 !important;
-        padding:0 !important; border-radius:0 !important; background:#000 !important;
-    }
-    #videoStage:fullscreen, #videoStage:-webkit-full-screen {
-        width:100vw !important; height:100vh !important; max-width:none !important;
-        min-height:0 !important; padding:0 !important; background:#000 !important;
-    }
-    #videoStage:fullscreen .video-wrapper, #videoStage:-webkit-full-screen .video-wrapper {
-        position:absolute; inset:0; width:100%; height:100%;
-    }
-    #videoStage:fullscreen .player-chrome, #videoStage:-webkit-full-screen .player-chrome {
-        opacity:1; pointer-events:auto;
-    }
-    #videoStage:fullscreen .player-chrome-bottom, #videoStage:-webkit-full-screen .player-chrome-bottom {
-        padding-bottom:max(14px, env(safe-area-inset-bottom));
-    }
-
     /* Tablet & below: player uses aspect ratio; controls stay inside player only */
     @media (max-width: 991.98px) {
         .app-container {
@@ -1787,25 +1761,11 @@
             padding: 20px 10px 10px;
         }
         .chrome-controls-row {
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 8px;
+            gap: 6px;
         }
         .chrome-left, .chrome-right {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            gap: 5px;
+            gap: 4px;
         }
-        .chrome-right { margin-left: 0; }
-        .chrome-btn {
-            flex: 0 1 auto;
-            min-width: 34px;
-            padding-inline: 7px;
-        }
-        .chrome-volume { min-width: 0; }
-        .chrome-volume input[type="range"] { width: 48px; }
         .chrome-btn {
             height: 32px;
             min-width: 32px;
@@ -1826,19 +1786,6 @@
             padding: 9px 32px;
             font-size: 0.85rem;
         }
-        .player-chrome-bottom { padding: 16px 8px 10px; }
-        .chrome-controls-row { gap: 7px; }
-        .chrome-left, .chrome-right { justify-content: space-between; gap: 4px; }
-        .chrome-btn { min-width: 30px; height: 32px; padding-inline: 6px; font-size: .72rem; }
-        #qualityBtn #qualityLabel { max-width: 42px; overflow: hidden; text-overflow: ellipsis; }
-        .chrome-volume input[type="range"] { width: 42px; }
-    }
-
-    @media (max-width: 380px) {
-        .chrome-btn { min-width: 28px; height: 30px; padding-inline: 5px; }
-        .chrome-left, .chrome-right { gap: 3px; }
-        .chrome-volume input[type="range"] { display:none; }
-        #qualityBtn #qualityLabel { display:none; }
     }
 
     /* Anti-select / protect media + hide download button */
@@ -3262,48 +3209,26 @@
         }
     });
 
-    async function toggleFullscreen() {
+    function toggleFullscreen() {
         const stage = document.getElementById('videoStage') || document.querySelector('.video-stage');
         if (!stage) return;
         const fsIcon = document.getElementById('fsIcon');
-        const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
-        try {
-            if (isFullscreen) {
-                const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
-                if (exit) await exit.call(document);
-                else if (videoElement && typeof videoElement.webkitExitFullscreen === 'function') videoElement.webkitExitFullscreen();
-                return;
-            }
-            // Prefer the player stage so custom controls remain visible in fullscreen.
+        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
             const req = stage.requestFullscreen || stage.webkitRequestFullscreen || stage.msRequestFullscreen;
-            if (req) {
-                await req.call(stage);
-            } else if (videoElement && typeof videoElement.webkitEnterFullscreen === 'function') {
-                // iPhone Safari supports fullscreen on the video element, not arbitrary containers.
-                videoElement.webkitEnterFullscreen();
-            } else {
-                stage.classList.toggle('pseudo-fullscreen');
-            }
-        } catch (err) {
-            console.warn('Fullscreen request failed; trying video fullscreen fallback:', err);
-            try {
-                if (videoElement && typeof videoElement.webkitEnterFullscreen === 'function') videoElement.webkitEnterFullscreen();
-            } catch (fallbackErr) { console.warn('Video fullscreen fallback failed:', fallbackErr); }
+            if (req) req.call(stage);
+            if (fsIcon) fsIcon.className = 'fas fa-compress';
+        } else {
+            const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+            if (exit) exit.call(document);
+            if (fsIcon) fsIcon.className = 'fas fa-expand';
         }
-        if (fsIcon) fsIcon.className = (document.fullscreenElement || document.webkitFullscreenElement) ? 'fas fa-compress' : 'fas fa-expand';
     }
-    if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
+    fullscreenBtn.addEventListener('click', toggleFullscreen);
     document.getElementById('fullscreenBtnMobile')?.addEventListener('click', toggleFullscreen);
-    function syncFullscreenIcon() {
+    document.addEventListener('fullscreenchange', () => {
         const fsIcon = document.getElementById('fsIcon');
-        const active = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
-        if (fsIcon) fsIcon.className = active ? 'fas fa-compress' : 'fas fa-expand';
-    }
-    ['fullscreenchange', 'webkitfullscreenchange', 'MSFullscreenChange'].forEach(evt => document.addEventListener(evt, syncFullscreenIcon));
-    if (videoElement) {
-        videoElement.addEventListener('webkitbeginfullscreen', syncFullscreenIcon);
-        videoElement.addEventListener('webkitendfullscreen', syncFullscreenIcon);
-    }
+        if (fsIcon) fsIcon.className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
+    });
 
     searchInput.addEventListener('input', (e) => {
         searchQuery = e.target.value.trim();
