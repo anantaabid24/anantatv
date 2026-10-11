@@ -222,10 +222,10 @@ https://streams2.sofast.tv/sofastplayout/WiseM3U8_1/master.m3u8
 //Movies
 
 
-#EXTINF:-1,logo="https://tinyurl.com/4c384ks7",group-title="Movies",Sony Pix
+#EXTINF:-1,logo="https://tinyurl.com/4c384ks7" group-title="Movies",Sony Pix
 https://drk6xq0vhn.gpcdn.net/live/pix_hd_abr/index.m3u8
 
-#EXTINF:-1,logo="https://tinyurl.com/6es5n69s",group-title="Movies",ZEE Cafe
+#EXTINF:-1,logo="https://tinyurl.com/6es5n69s" group-title="Movies",ZEE Cafe
 https://drk6xq0vhn.gpcdn.net/live/zee_cafe_hd_abr/index.m3u8
 
 #EXTINF:-1 tvg-logo="https://tinyurl.com/mwyrdmy6" group-title="Movies",Sony Max
