@@ -174,7 +174,6 @@ https://www.tbn24.com/live-tv-stream/20201_0.m3u8
 https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/iontvuk.stream/live-orgin/iontvuk.stream/chunks.m3u8
 
 #EXTINF:-1 tvg-logo="http://data.jaagobd.com/media/channel_logos/EPTV-Logo-400x400.png" group-title="Bangla Entertainment",EP TV
-
 https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/eptv.stream/playlist.m3u8
 
 
@@ -333,6 +332,12 @@ https://thelegitpro.in/pntv/rplusnews24x7/tracks-v1a1/mono.m3u8
 
 #EXTINF:-1 tvg-id="HiDost.in" tvg-logo="https://shorturl.at/wOyWC" group-title="Entertainment",1. Hi Dost!
 https://cdn.pishow.tv/ott/live/224/master.m3u8
+
+#EXTINF:-1 tvg-id="HiDost.in" tvg-logo="" group-title="Entertainment",1.Bigg Boss 24X7
+https://live09p.hotstar.com/mp2/incagbsgallow-biggboss-hin-2026/93e0d4ee03b34575bbf8f8a55824de63/index_1.m3u8
+
+
+
 
 
 //Infotainment
