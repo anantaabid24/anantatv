@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 <!-- Google Fonts & Icons -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1857,6 +1858,461 @@
     video::-webkit-media-controls {
         overflow: hidden !important;
     }
+
+    /* ===== Responsive layout improvements (desktop, tablet and mobile) ===== */
+    html {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: clip;
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+
+    body {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: clip;
+    }
+
+    img, video, canvas, iframe, svg {
+        max-width: 100%;
+    }
+
+    button, input, select, textarea {
+        font: inherit;
+        max-width: 100%;
+    }
+
+    .app-container {
+        width: 100%;
+        max-width: 1720px;
+        padding: clamp(10px, 2vw, 24px);
+    }
+
+    .app-container > .row {
+        min-width: 0;
+        align-items: stretch;
+    }
+
+    .app-container > .row > [class*="col-"] {
+        min-width: 0;
+    }
+
+    .player-card,
+    .sidebar-card {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .player-card {
+        height: min( calc(100dvh - 120px), 1000px );
+    }
+
+    .video-stage {
+        min-width: 0;
+        min-height: 0;
+    }
+
+    .video-wrapper,
+    .video-wrapper video {
+        max-width: 100%;
+    }
+
+    .player-header,
+    .player-footer-info {
+        min-width: 0;
+    }
+
+    .player-channel-info {
+        flex: 1 1 auto;
+        overflow: hidden;
+    }
+
+    .player-title {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .player-tags {
+        flex-wrap: wrap;
+        min-width: 0;
+    }
+
+    .nav-content {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .brand-logo,
+    .nav-links {
+        min-width: 0;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .channels-scroll-area {
+        min-height: 0;
+        overscroll-behavior: contain;
+    }
+
+    .channel-card {
+        min-width: 0;
+    }
+
+    .channel-card > * {
+        min-width: 0;
+    }
+
+    .channel-card h1,
+    .channel-card h2,
+    .channel-card h3,
+    .channel-card p,
+    .channel-card span {
+        overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 1199.98px) {
+        .app-container > .row > .col-lg-8,
+        .app-container > .row > .col-xl-9,
+        .app-container > .row > .col-xl-3 {
+            flex: 0 0 100%;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .player-card {
+            height: auto;
+            min-height: 0;
+        }
+
+        .video-stage {
+            flex: none;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            min-height: 0;
+            padding-top: 0;
+        }
+
+        .sidebar-card {
+            height: auto;
+            min-height: 0;
+            max-height: none;
+        }
+
+        .channels-scroll-area {
+            max-height: min(55vh, 560px);
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .app-navbar {
+            padding: 10px 12px;
+        }
+
+        .nav-content {
+            flex-wrap: wrap;
+            row-gap: 10px;
+        }
+
+        .brand-logo {
+            gap: 9px;
+        }
+
+        .brand-icon-box {
+            flex: 0 0 auto;
+        }
+
+        .nav-links {
+            gap: 5px;
+        }
+
+        .nav-btn {
+            min-height: 40px;
+            padding: 8px 10px;
+        }
+
+        .app-container {
+            padding: 10px;
+        }
+
+        .player-header {
+            padding: 10px 12px;
+            gap: 8px;
+        }
+
+        .player-title {
+            font-size: clamp(.9rem, 3.5vw, 1.05rem);
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .player-channel-info {
+            gap: 8px;
+        }
+
+        .player-tags {
+            gap: 4px;
+        }
+
+        .player-tag {
+            font-size: .68rem;
+            padding: 3px 7px;
+        }
+
+        .player-chrome-top {
+            padding: 10px;
+        }
+
+        .player-chrome-bottom {
+            padding: 22px 10px 10px;
+        }
+
+        .chrome-controls-row {
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chrome-left,
+        .chrome-right {
+            width: 100%;
+            justify-content: space-between;
+            gap: 5px;
+        }
+
+        .chrome-btn {
+            min-height: 36px;
+            min-width: 36px;
+            padding-inline: 8px;
+            touch-action: manipulation;
+        }
+
+        .chrome-volume input[type="range"] {
+            width: clamp(42px, 12vw, 76px);
+            opacity: 1;
+        }
+
+        .player-footer-info {
+            padding: 10px 12px;
+            flex-wrap: wrap;
+        }
+
+        .sidebar-header {
+            padding: 14px;
+        }
+
+        .sidebar-title {
+            font-size: 1rem;
+        }
+
+        .channel-card {
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .toast-notice {
+            left: 12px;
+            right: 12px;
+            bottom: max(12px, env(safe-area-inset-bottom));
+            width: auto;
+            max-width: none;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .app-navbar {
+            padding: 9px 10px;
+        }
+
+        .brand-text {
+            font-size: 1rem;
+            letter-spacing: .025em;
+        }
+
+        .brand-text-sub {
+            letter-spacing: .1em;
+        }
+
+        .nav-links {
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .nav-btn {
+            flex: 1 1 auto;
+            justify-content: center;
+            padding: 8px 7px;
+            font-size: .78rem;
+        }
+
+        .nav-btn span {
+            display: inline;
+        }
+
+        .app-container {
+            padding: 8px;
+        }
+
+        .app-container > .row {
+            --bs-gutter-x: .65rem;
+            --bs-gutter-y: .65rem;
+        }
+
+        .player-card,
+        .sidebar-card {
+            border-radius: 12px;
+        }
+
+        .video-stage {
+            aspect-ratio: 16 / 9;
+        }
+
+        .player-chrome-top .stream-meta {
+            max-width: 48%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: .68rem;
+        }
+
+        .player-chrome-top .live-pill {
+            font-size: .64rem;
+            padding: 4px 7px;
+        }
+
+        .big-play-btn {
+            width: 48px;
+            height: 48px;
+            font-size: 1.1rem;
+        }
+
+        .player-chrome-bottom {
+            padding: 18px 8px 8px;
+        }
+
+        .chrome-controls-row {
+            gap: 6px;
+        }
+
+        .chrome-left,
+        .chrome-right {
+            gap: 4px;
+        }
+
+        .chrome-btn {
+            height: 34px;
+            min-width: 32px;
+            padding: 0 7px;
+            font-size: .72rem;
+            border-radius: 8px;
+        }
+
+        .chrome-btn.go-live {
+            padding-inline: 7px;
+        }
+
+        .chrome-volume {
+            gap: 4px;
+        }
+
+        .chrome-volume input[type="range"] {
+            width: 38px;
+        }
+
+        .quality-menu {
+            right: 8px;
+            bottom: 52px;
+            min-width: 135px;
+        }
+
+        .sidebar-header {
+            padding: 12px;
+            gap: 10px;
+        }
+
+        .channels-scroll-area {
+            padding: 8px;
+            max-height: 52vh;
+        }
+
+        .channel-card {
+            min-height: 64px;
+            gap: 9px;
+        }
+
+        .search-input {
+            min-height: 42px;
+            font-size: 16px; /* prevents iOS input zoom */
+        }
+
+        .cat-chip {
+            min-height: 34px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .brand-text-wrap {
+            max-width: 105px;
+        }
+
+        .brand-text {
+            font-size: .92rem;
+        }
+
+        .brand-text-sub {
+            font-size: .5rem;
+        }
+
+        .nav-btn {
+            font-size: .72rem;
+            gap: 5px;
+        }
+
+        .chrome-btn {
+            min-width: 29px;
+            padding-inline: 5px;
+        }
+
+        .chrome-volume input[type="range"] {
+            display: none;
+        }
+
+        #qualityBtn #qualityLabel {
+            display: none;
+        }
+    }
+
+    @media (orientation: landscape) and (max-height: 520px) and (max-width: 900px) {
+        .app-navbar {
+            position: relative;
+        }
+
+        .player-card {
+            height: auto;
+        }
+
+        .video-stage {
+            aspect-ratio: 16 / 9;
+        }
+
+        .sidebar-card {
+            max-height: none;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            scroll-behavior: auto !important;
+        }
+    }
+
 </style>
 
 <div class="ambient-bg" aria-hidden="true">
