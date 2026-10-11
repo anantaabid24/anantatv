@@ -293,23 +293,42 @@ https://vods2.aynaott.com/hindimovies/index.m3u8
 
 //Entertainment
 
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://shorturl.at/Tu5XQ" group-title="Entertainment",Colors 
+https://da86m1sqpm3o0.cloudfront.net/28072023/smil:colorsme.smil/index.m3u8
+
 #EXTINF:-1 tvg-id="" tvg-logo="https://shorturl.at/qJAz9" group-title="Entertainment",Colors Rishtey
 https://manatv.akamaized.net/090823/smil:ristheyamerica.smil/playlist.m3u8
 
+#EXTINF:-1 tvg-id="" tvg-logo="https://shorturl.at/ClJl1" group-title="Entertainment",And Tv
+https://drk6xq0vhn.gpcdn.net/live/and_tv_hd_abr/index.m3u8
+
+#EXTINF:-1 tvg-logo="https://shorturl.at/Qjle9" group-title="Entertainment",Sony Sab
+https://drk6xq0vhn.gpcdn.net/live/sub_hd_abr/index.m3u8
+
+#EXTINF:-1 tvg-logo="https://shorturl.at/pU4lv" group-title="Entertainment",Sony entertainment tv
+https://drk6xq0vhn.gpcdn.net/live/sony_ent_hd_abr/index.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://shorturl.at/S4x3g" group-title="Entertainment",Star Plus
+https://d1rc86nwwc9fag.cloudfront.net/260723/starplusuk_2500/chunks.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://tinyurl.com/mvs4mjs6" group-title="Entertainment",Star Pravah HD
+https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starpravah.smil/index.m3u8
+
+#EXTINF:-1 tvg-id="" tvg-logo="https://tinyurl.com/mtunncnd" group-title="Entertainment",Star Bharat
+https://d1taaads3ztvmu.cloudfront.net/120723/smil:lifeokuk.smil/index.m3u8
+
 #EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/7x0Jd5YBEef-9-uVv_Gy/posters/f630a176-73cc-48d7-94cf-69ba0d201b36.png" group-title="Entertainment",Zee Anmol TV
 https://drk6xq0vhn.gpcdn.net/live/zee_anmol_abr/index.m3u8
+
+#EXTINF:-1 tvg-id="HiDost.in" tvg-logo="https://shorturl.at/noxmI" group-title="Entertainment",1.Kutingg Live
+https://vglivessai.akamaized.net/sg/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/af582535-607f-44eb-9e58-9c3894c547ab/7bfd3745-5d9e-443a-881d-e232a468424e/1.m3u8
 
 #EXTINF:-1 tvg-id="DangalTV.in" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/3/36/Dangalv2.png" group-title="Entertainment",ENT | Dangal TV
 https://live-dangal.akamaized.net/liveabr/pub-iodang10p4al/live_720p/chunks.m3u8
 
 #EXTINF:-1 tvg-id="" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/a/ac/Dangal_2.png" group-title="Entertainment",DANGAL2
 https://live-dangal2.akamaized.net/liveabr/playlist.m3u8
-
-#EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/f_png,w_300,q_85/ES55-JQBv9knK3AHNDWC/posters/13411be9-62b9-4a99-a062-b6e91dfb1099.webp" group-title="Entertainment",Sony Sab
-https://drk6xq0vhn.gpcdn.net/live/sub_hd_abr/index.m3u8
-
-#EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/f_png,w_300,q_85/2S5t-JQBv9knK3AHJTTW/posters/ae74f943-77c9-4395-a16c-8ed84b439080.webp" group-title="Entertainment",Sony entertainment tv
-https://drk6xq0vhn.gpcdn.net/live/sony_ent_hd_abr/index.m3u8
 
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/0ykfppN3/20240822-231405.png" group-title="Entertainment",Star Jalsha HD
 https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starjalsha.smil/index.m3u8
@@ -333,8 +352,7 @@ https://thelegitpro.in/pntv/rplusnews24x7/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-id="HiDost.in" tvg-logo="https://shorturl.at/wOyWC" group-title="Entertainment",1. Hi Dost!
 https://cdn.pishow.tv/ott/live/224/master.m3u8
 
-#EXTINF:-1 tvg-id="HiDost.in" tvg-logo="https://shorturl.at/noxmI" group-title="Entertainment",1.Kutingg Live
-https://vglivessai.akamaized.net/sg/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/af582535-607f-44eb-9e58-9c3894c547ab/7bfd3745-5d9e-443a-881d-e232a468424e/1.m3u8
+
 
 
 
