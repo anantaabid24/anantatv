@@ -2313,6 +2313,98 @@
         }
     }
 
+
+
+    /* Mobile player controls: keep every control on one horizontal line */
+    @media (max-width: 575.98px) {
+        .player-chrome-bottom {
+            padding: 12px 6px 8px !important;
+        }
+
+        .progress-track {
+            margin-bottom: 8px;
+            height: 3px;
+        }
+
+        .chrome-controls-row {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center;
+            justify-content: space-between;
+            gap: 3px !important;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .chrome-left,
+        .chrome-right {
+            display: flex !important;
+            flex: 0 1 auto;
+            flex-wrap: nowrap !important;
+            align-items: center;
+            justify-content: flex-start !important;
+            gap: 2px !important;
+            width: auto !important;
+            min-width: 0;
+            margin: 0 !important;
+        }
+
+        .chrome-btn {
+            flex: 0 1 auto;
+            width: clamp(25px, 8vw, 32px);
+            min-width: 0 !important;
+            height: clamp(27px, 8vw, 32px) !important;
+            padding: 0 !important;
+            border-radius: 7px;
+            font-size: clamp(.65rem, 2.8vw, .76rem) !important;
+            line-height: 1;
+            gap: 0;
+        }
+
+        .chrome-btn.go-live {
+            padding: 0 !important;
+        }
+
+        .chrome-btn.go-live span,
+        .time-display,
+        #qualityBtn #qualityLabel {
+            display: none !important;
+        }
+
+        .chrome-volume {
+            gap: 2px;
+            min-width: 0;
+        }
+
+        .chrome-volume input[type="range"] {
+            display: none !important;
+        }
+
+        .quality-menu {
+            right: 6px;
+            bottom: 46px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .player-chrome-bottom {
+            padding-inline: 4px !important;
+        }
+
+        .chrome-controls-row,
+        .chrome-left,
+        .chrome-right {
+            gap: 1px !important;
+        }
+
+        .chrome-btn {
+            width: 25px;
+            height: 27px !important;
+            font-size: .64rem !important;
+        }
+    }
+
 </style>
 
 <div class="ambient-bg" aria-hidden="true">
