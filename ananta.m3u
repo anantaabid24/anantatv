@@ -222,10 +222,10 @@ https://streams2.sofast.tv/sofastplayout/WiseM3U8_1/master.m3u8
 //Movies
 
 
-#EXTINF:-1,logo="https://shorturl.at/v8Awz",group-title="Movies",Sony Pix
+#EXTINF:-1,logo="https://shorturl.at/bzHg2",group-title="Movies",Sony Pix
 https://drk6xq0vhn.gpcdn.net/live/pix_hd_abr/index.m3u8
 
-#EXTINF:-1,logo="https://tinyurl.com/5xedh5mu",group-title="Movies",ZEE Cafe
+#EXTINF:-1,logo="https://shorturl.at/jRIOP",group-title="Movies",ZEE Cafe
 https://drk6xq0vhn.gpcdn.net/live/zee_cafe_hd_abr/index.m3u8
 
 #EXTINF:-1 tvg-logo="https://tinyurl.com/mwyrdmy6" group-title="Movies",Sony Max
@@ -278,7 +278,7 @@ https://box.bbaria.net:8083/Jalsha_Movie/index.m3u8
 
 #EXTINF:-1 tvg-logo="https://jiotv.catchup.cdn.jio.com/dare_images/images/Colors_Bangla_Cinema.png" group-title="Movies",Colors Bangla Cinema
 
-#EXTINF:-1 tvg-logo="https://tinyurl.com/3bajm9cf" group-title="Movies",Zee Bangla Sonar
+#EXTINF:-1 tvg-logo="https://shorturl.at/nQwui" group-title="Movies",Zee Bangla Sonar
 https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8
 
 #EXTINF:-1 tvg-id="" tvg-logo="https://i.ibb.co/KjjqnRH/Picsart-23-06-30-21-35-20-283.png" group-title="Movies",Sheemaroo Bollywood
@@ -322,7 +322,7 @@ https://d1taaads3ztvmu.cloudfront.net/120723/smil:lifeokuk.smil/index.m3u8
 https://drk6xq0vhn.gpcdn.net/live/zee_anmol_abr/index.m3u8
 
 #EXTINF:-1 tvg-id="HiDost.in" tvg-logo="https://shorturl.at/noxmI" group-title="Entertainment",1.Kutingg Live
-https://vglivessai.akamaized.net/sg/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/af582535-607f-44eb-9e58-9c3894c547ab/7bfd3745-5d9e-443a-881d-e232a468424e/1.m3u8
+https://vglivessai.akamaized.net/sg/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/af582535-607f-44eb-9e58-9c3894c547ab/7bfd3745-5d9e-443a-881d-e232a468424e/3.m3u8
 
 #EXTINF:-1 tvg-id="DangalTV.in" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/3/36/Dangalv2.png" group-title="Entertainment",ENT | Dangal TV
 https://live-dangal.akamaized.net/liveabr/pub-iodang10p4al/live_720p/chunks.m3u8
@@ -336,14 +336,14 @@ https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starjalsha.smil/index.m3u8
 #EXTINF:-1 tvg-id="" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/0/00/SONY_AATH.png" group-title="Entertainment",SONY AATH HD
 https://drk6xq0vhn.gpcdn.net/live/sony_aath_abr/index.m3u8
 
-#EXTINF:-1 tvg-logo="https://assets-prod.services.toffeelive.com/f_png,w_300,q_85/kK2aX5UBrjBfS2_RBcKf/posters/ba5dd8dc-4f87-414a-b57f-c9ecdeda5253.png" group-title="Entertainment",Zee Bangla HD
+#EXTINF:-1 tvg-logo="https://shorturl.at/qFfh7" group-title="Entertainment",Zee Bangla HD
 https://d1rc86nwwc9fag.cloudfront.net/260723/zeebangla_2500/chunks.m3u8
 
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/3w6F5VZ5/20240822-231514.png" group-title="Entertainment",Colors Bangla
 
 #EXTINF:-1 tvg-logo="https://i.postimg.cc/y88mJsQC/20240823_020415.png" group-title="Entertainment",Sun Bangla
 
-#EXTINF:-1 tvg-id="enter10bangla.in" tvg-logo="https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Enter%2010%20Bangla.jpeg" group-title="Entertainment",Enter10 Bangla HD
+#EXTINF:-1 tvg-id="enter10bangla.in" tvg-logo="https://shorturl.at/gVcYP" group-title="Entertainment",Enter10 Bangla HD
 https://live-bangla.akamaized.net/liveabr/pub-iobanglakp3sff/live_240p/chunks.m3u8
 
 #EXTINF:-1 tvg-id="RPlusGould" tvg-logo="https://static.wikia.nocookie.net/logopedia/images/c/c7/RPlus_Gold_logo_%282013%29.png" group-title="Entertainment",R Plus Gold
