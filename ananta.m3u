@@ -333,8 +333,9 @@ https://thelegitpro.in/pntv/rplusnews24x7/tracks-v1a1/mono.m3u8
 #EXTINF:-1 tvg-id="HiDost.in" tvg-logo="https://shorturl.at/wOyWC" group-title="Entertainment",1. Hi Dost!
 https://cdn.pishow.tv/ott/live/224/master.m3u8
 
-#EXTINF:-1 tvg-id="HiDost.in" tvg-logo="" group-title="Entertainment",1.Bigg Boss 24X7
-https://stream2.zoloj.com/stream/hindi.m3u8
+#EXTINF:-1 tvg-id="HiDost.in" tvg-logo="https://shorturl.at/noxmI" group-title="Entertainment",1.Kutingg Live
+https://vglivessai.akamaized.net/sg/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/af582535-607f-44eb-9e58-9c3894c547ab/7bfd3745-5d9e-443a-881d-e232a468424e/1.m3u8
+
 
 
 
