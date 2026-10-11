@@ -75,28 +75,71 @@
         padding: 0;
         color: var(--text-main);
         background-color: var(--bg-base);
+        background-image: linear-gradient(135deg, #090b16 0%, #111126 48%, #0b1020 100%);
+        background-size: 100% 100%;
         min-height: 100vh;
+        isolation: isolate;
         overflow-x: hidden;
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* Ambient Glow */
+    /* Layered aurora, subtle star-grid and drifting light across the whole site */
     .ambient-bg {
         position: fixed;
-        top: 0;
-        left: 0;
+        inset: 0;
         width: 100vw;
         height: 100vh;
         pointer-events: none;
-        z-index: -1;
+        z-index: 0;
         overflow: hidden;
+        background:
+            radial-gradient(ellipse at 50% 120%, rgba(124, 58, 237, .14), transparent 55%),
+            radial-gradient(ellipse at 0% 0%, rgba(14, 165, 233, .08), transparent 48%);
     }
 
+    .ambient-bg::before {
+        content: '';
+        position: absolute;
+        inset: -35%;
+        background:
+            radial-gradient(ellipse at 22% 35%, rgba(168, 85, 247, .22) 0%, transparent 32%),
+            radial-gradient(ellipse at 72% 30%, rgba(59, 130, 246, .20) 0%, transparent 30%),
+            radial-gradient(ellipse at 58% 75%, rgba(236, 72, 153, .12) 0%, transparent 34%),
+            radial-gradient(ellipse at 88% 82%, rgba(6, 182, 212, .12) 0%, transparent 28%);
+        filter: blur(35px);
+        background-size: 140% 140%;
+        animation: aurora-drift 28s ease-in-out infinite alternate;
+        opacity: .9;
+    }
+
+    .ambient-bg::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(148, 163, 184, .035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148, 163, 184, .035) 1px, transparent 1px);
+        background-size: 54px 54px;
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, transparent 78%);
+        mask-image: radial-gradient(ellipse at center, #000 0%, transparent 78%);
+        opacity: .45;
+    }
+
+    @keyframes aurora-drift {
+        0% { transform: translate3d(-3%, -2%, 0) rotate(-4deg) scale(.96); }
+        50% { transform: translate3d(2%, 3%, 0) rotate(2deg) scale(1.04); }
+        100% { transform: translate3d(4%, -1%, 0) rotate(5deg) scale(1.08); }
+    }
+
+    /* Ambient light blobs */
     .ambient-blob {
         position: absolute;
         filter: blur(120px);
         opacity: 0.15;
         border-radius: 50%;
+        will-change: transform;
+        animation: ambient-drift 19s ease-in-out infinite alternate;
+        mix-blend-mode: screen;
     }
 
     .ambient-blob-1 {
@@ -113,6 +156,13 @@
         width: 55vw;
         height: 55vw;
         background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+        animation-delay: -8s;
+    }
+
+    @keyframes ambient-drift {
+        0% { transform: translate3d(-2vw, -1vh, 0) scale(0.95); }
+        50% { transform: translate3d(3vw, 2vh, 0) scale(1.08); }
+        100% { transform: translate3d(-1vw, 4vh, 0) scale(1.02); }
     }
 
     /* Fire Sparks Canvas (lightweight) */
@@ -123,13 +173,35 @@
         width: 100vw;
         height: 100vh;
         pointer-events: none;
-        z-index: -1;
-        opacity: 0.82;
+        z-index: 0;
+        opacity: 0.24;
         will-change: contents;
     }
 
     body.light-theme #fireSparksCanvas {
-        opacity: 0.3;
+        opacity: 0.12;
+        filter: hue-rotate(190deg) saturate(1.4);
+    }
+
+    body.light-theme .ambient-bg::before { opacity: .42; }
+    body.light-theme .ambient-bg::after { opacity: .18; }
+
+
+    /* Slightly wider channel list on desktop without crowding the player */
+    @media (min-width: 1200px) {
+        .app-container > .row > .col-xl-9 {
+            flex: 0 0 72%;
+            max-width: 72%;
+        }
+        .app-container > .row > .col-xl-3 {
+            flex: 0 0 28%;
+            max-width: 28%;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .ambient-bg::before, .ambient-blob { animation: none !important; }
+        #fireSparksCanvas { display: none; }
     }
 
     /* Navbar */
@@ -728,6 +800,8 @@
 
     /* App Container */
     .app-container {
+        position: relative;
+        z-index: 1;
         max-width: 1720px;
         margin: 0 auto;
         padding: 24px;
@@ -1574,6 +1648,8 @@
     }
 
     .app-footer {
+        position: relative;
+        z-index: 1;
         margin-top: 40px;
         padding: 24px;
         text-align: center;
@@ -1608,6 +1684,32 @@
         color: var(--text-muted);
         font-family: monospace;
         font-size: 0.75rem;
+    }
+
+    /* Responsive player controls: wrap cleanly on tablets, phones and narrow landscape screens */
+    .chrome-controls-row { display:flex; flex-wrap:wrap; align-items:center; row-gap:8px; }
+    .chrome-left, .chrome-right { display:flex; flex-wrap:wrap; align-items:center; min-width:0; }
+    .chrome-right { margin-left:auto; }
+    .chrome-btn { touch-action:manipulation; }
+
+    /* Fullscreen layout for browsers that support the Fullscreen API */
+    #videoStage.pseudo-fullscreen {
+        position:fixed !important; inset:0 !important; z-index:10000 !important;
+        width:100vw !important; height:100dvh !important; min-height:0 !important;
+        padding:0 !important; border-radius:0 !important; background:#000 !important;
+    }
+    #videoStage:fullscreen, #videoStage:-webkit-full-screen {
+        width:100vw !important; height:100vh !important; max-width:none !important;
+        min-height:0 !important; padding:0 !important; background:#000 !important;
+    }
+    #videoStage:fullscreen .video-wrapper, #videoStage:-webkit-full-screen .video-wrapper {
+        position:absolute; inset:0; width:100%; height:100%;
+    }
+    #videoStage:fullscreen .player-chrome, #videoStage:-webkit-full-screen .player-chrome {
+        opacity:1; pointer-events:auto;
+    }
+    #videoStage:fullscreen .player-chrome-bottom, #videoStage:-webkit-full-screen .player-chrome-bottom {
+        padding-bottom:max(14px, env(safe-area-inset-bottom));
     }
 
     /* Tablet & below: player uses aspect ratio; controls stay inside player only */
@@ -1685,11 +1787,25 @@
             padding: 20px 10px 10px;
         }
         .chrome-controls-row {
-            gap: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
         }
         .chrome-left, .chrome-right {
-            gap: 4px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 5px;
         }
+        .chrome-right { margin-left: 0; }
+        .chrome-btn {
+            flex: 0 1 auto;
+            min-width: 34px;
+            padding-inline: 7px;
+        }
+        .chrome-volume { min-width: 0; }
+        .chrome-volume input[type="range"] { width: 48px; }
         .chrome-btn {
             height: 32px;
             min-width: 32px;
@@ -1710,6 +1826,19 @@
             padding: 9px 32px;
             font-size: 0.85rem;
         }
+        .player-chrome-bottom { padding: 16px 8px 10px; }
+        .chrome-controls-row { gap: 7px; }
+        .chrome-left, .chrome-right { justify-content: space-between; gap: 4px; }
+        .chrome-btn { min-width: 30px; height: 32px; padding-inline: 6px; font-size: .72rem; }
+        #qualityBtn #qualityLabel { max-width: 42px; overflow: hidden; text-overflow: ellipsis; }
+        .chrome-volume input[type="range"] { width: 42px; }
+    }
+
+    @media (max-width: 380px) {
+        .chrome-btn { min-width: 28px; height: 30px; padding-inline: 5px; }
+        .chrome-left, .chrome-right { gap: 3px; }
+        .chrome-volume input[type="range"] { display:none; }
+        #qualityBtn #qualityLabel { display:none; }
     }
 
     /* Anti-select / protect media + hide download button */
@@ -1729,6 +1858,12 @@
         overflow: hidden !important;
     }
 </style>
+
+<div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-blob ambient-blob-1"></div>
+    <div class="ambient-blob ambient-blob-2"></div>
+</div>
+<canvas id="fireSparksCanvas" aria-hidden="true"></canvas>
 
 <header class="app-navbar">
     <div class="nav-content">
@@ -2142,9 +2277,11 @@
             if (!line) continue;
 
             if (line.startsWith('#KODIPROP:inputstream.adaptive.license_key=')) {
-                current.licenseKey = line.substring(44).trim();
+                // Keep the complete value: it may be a license URL, ClearKey JSON,
+                // or URL|HeaderName=HeaderValue in Kodi-style playlists.
+                current.licenseKey = line.slice(line.indexOf('=') + 1).trim();
             } else if (line.startsWith('#KODIPROP:inputstream.adaptive.license_type=')) {
-                current.licenseType = line.substring(45).trim();
+                current.licenseType = line.slice(line.indexOf('=') + 1).trim();
             } else if (line.startsWith('#EXTINF:')) {
                 const idMatch = line.match(/tvg-id="([^"]+)"/);
                 current.id = idMatch ? idMatch[1] : String(result.length + 1);
@@ -2673,7 +2810,13 @@
 
         const url = (ch.url || '').trim();
         // broaden detection to include .mpd and .mdp (in case of typo), and dash path
-        const isMpd = /\.mpd(\?|$)/i.test(url) || /\.mdp(\?|$)/i.test(url) || url.includes('format=.mpd') || /\/dash\//i.test(url);
+        // Match .mpd URLs with query strings/fragments, common DASH paths, and
+        // explicit MPD format parameters without treating every URL as HLS.
+        const isMpd = /\.mpd(?:$|[?#])/i.test(url) ||
+            /\.mdp(?:$|[?#])/i.test(url) ||
+            /[?&](?:format|type)=dash(?:&|$)/i.test(url) ||
+            /[?&]format=\.mpd(?:&|$)/i.test(url) ||
+            /\/dash\//i.test(url);
         const isHls = /\.m3u8(\?|$)/i.test(url) || /m3u8/i.test(url) || (!isMpd && /^https?:\/\//i.test(url));
         playerStreamTypeTag.textContent = isMpd ? 'DASH / DRM' : (isHls ? 'HLS' : 'Stream');
         setQualityLabel('Auto');
@@ -2718,53 +2861,75 @@
                     }
                 };
 
-                // Build DRM config from KODIPROP license_key / license_type
+                // Parse Kodi-style license values. A value may be:
+                //   https://license.example/path
+                //   https://license.example/path|Authorization=Bearer ...
+                //   ClearKey JSON: {"keys":[{"kty":"oct","kid":"...","k":"..."}]}
+                // The license server and any required headers must be supplied by
+                // the stream provider; this does not bypass DRM or acquire keys.
                 if (ch.licenseKey) {
-                    const licenseType = (ch.licenseType || 'com.widevine.alpha').toLowerCase();
-                    const servers = {};
-                    if (licenseType.includes('widevine') || licenseType === 'org.w3.clearkey' || licenseType.includes('clearkey')) {
-                        // ClearKey often embeds keys as JSON in license_key
-                        if (licenseType.includes('clearkey') || licenseType === 'org.w3.clearkey') {
-                            try {
-                                const keyObj = typeof ch.licenseKey === 'string' && ch.licenseKey.trim().startsWith('{')
-                                    ? JSON.parse(ch.licenseKey)
-                                    : null;
-                                if (keyObj && keyObj.keys) {
-                                    cfg.drm = {
-                                        clearKeys: {}
-                                    };
-                                    // Map ClearKey kids → keys if provided as array
-                                    (keyObj.keys || []).forEach(function (k) {
-                                        if (k.kid && k.k) cfg.drm.clearKeys[k.kid] = k.k;
-                                    });
-                                } else {
-                                    // Fallback: treat as license server URL for Widevine
-                                    servers['com.widevine.alpha'] = ch.licenseKey;
-                                    cfg.drm = { servers: servers };
-                                }
-                            } catch (_) {
-                                servers['com.widevine.alpha'] = ch.licenseKey;
-                                cfg.drm = { servers: servers };
-                            }
-                        } else {
-                            servers['com.widevine.alpha'] = ch.licenseKey;
-                            if (licenseType.includes('playready')) {
-                                servers['com.microsoft.playready'] = ch.licenseKey;
-                            }
-                            cfg.drm = {
-                                servers: servers,
-                                advanced: {
-                                    'com.widevine.alpha': { videoRobustness: 'SW_SECURE_CRYPTO', audioRobustness: 'SW_SECURE_CRYPTO' }
-                                }
-                            };
+                    const licenseType = String(ch.licenseType || 'com.widevine.alpha').toLowerCase();
+                    const rawLicense = String(ch.licenseKey).trim();
+                    const licenseParts = rawLicense.split('|');
+                    const licenseUrl = licenseParts.shift().trim();
+                    const licenseHeaders = {};
+
+                    licenseParts.forEach(function (part) {
+                        const splitAt = part.indexOf('=');
+                        if (splitAt > 0) {
+                            const headerName = part.slice(0, splitAt).trim();
+                            const headerValue = part.slice(splitAt + 1).trim();
+                            if (headerName && headerValue) licenseHeaders[headerName] = headerValue;
                         }
-                    } else if (licenseType.includes('playready')) {
-                        servers['com.microsoft.playready'] = ch.licenseKey;
-                        cfg.drm = { servers: servers };
+                    });
+
+                    let clearKeyConfig = null;
+                    if (licenseType.includes('clearkey') || licenseType === 'org.w3.clearkey') {
+                        try {
+                            const keyObj = JSON.parse(licenseUrl);
+                            if (keyObj && Array.isArray(keyObj.keys)) {
+                                const clearKeys = {};
+                                keyObj.keys.forEach(function (key) {
+                                    if (key.kid && key.k) {
+                                        // Shaka ClearKey expects hex KID/key values.
+                                        clearKeys[String(key.kid).replace(/-/g, '').toLowerCase()] =
+                                            String(key.k).replace(/-/g, '').toLowerCase();
+                                    }
+                                });
+                                if (Object.keys(clearKeys).length) clearKeyConfig = { clearKeys: clearKeys };
+                            } else if (keyObj && keyObj.kid && keyObj.key) {
+                                clearKeyConfig = { clearKeys: {
+                                    [String(keyObj.kid).replace(/-/g, '').toLowerCase()]:
+                                    String(keyObj.key).replace(/-/g, '').toLowerCase()
+                                }};
+                            }
+                        } catch (_) {
+                            // A non-JSON ClearKey value may be a license server URL.
+                        }
+                    }
+
+                    if (clearKeyConfig) {
+                        cfg.drm = clearKeyConfig;
+                    } else if (/^https?:\/\//i.test(licenseUrl)) {
+                        let keySystem = 'com.widevine.alpha';
+                        if (licenseType.includes('playready')) keySystem = 'com.microsoft.playready';
+                        else if (licenseType.includes('clearkey')) keySystem = 'org.w3.clearkey';
+                        else if (licenseType.includes('widevine')) keySystem = 'com.widevine.alpha';
+
+                        cfg.drm = { servers: { [keySystem]: licenseUrl } };
+
+                        if (Object.keys(licenseHeaders).length) {
+                            shakaPlayer.getNetworkingEngine().registerRequestFilter(function (type, request) {
+                                if (type === shaka.net.NetworkingEngine.RequestType.LICENSE &&
+                                    request.uris.some(function (uri) { return uri === licenseUrl; })) {
+                                    Object.keys(licenseHeaders).forEach(function (name) {
+                                        request.headers[name] = licenseHeaders[name];
+                                    });
+                                }
+                            });
+                        }
                     } else {
-                        // Default Widevine
-                        servers['com.widevine.alpha'] = ch.licenseKey;
-                        cfg.drm = { servers: servers };
+                        console.warn('DRM license value is neither ClearKey JSON nor an HTTP(S) license URL.');
                     }
                 }
 
@@ -3097,26 +3262,48 @@
         }
     });
 
-    function toggleFullscreen() {
+    async function toggleFullscreen() {
         const stage = document.getElementById('videoStage') || document.querySelector('.video-stage');
         if (!stage) return;
         const fsIcon = document.getElementById('fsIcon');
-        if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        const isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+        try {
+            if (isFullscreen) {
+                const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+                if (exit) await exit.call(document);
+                else if (videoElement && typeof videoElement.webkitExitFullscreen === 'function') videoElement.webkitExitFullscreen();
+                return;
+            }
+            // Prefer the player stage so custom controls remain visible in fullscreen.
             const req = stage.requestFullscreen || stage.webkitRequestFullscreen || stage.msRequestFullscreen;
-            if (req) req.call(stage);
-            if (fsIcon) fsIcon.className = 'fas fa-compress';
-        } else {
-            const exit = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
-            if (exit) exit.call(document);
-            if (fsIcon) fsIcon.className = 'fas fa-expand';
+            if (req) {
+                await req.call(stage);
+            } else if (videoElement && typeof videoElement.webkitEnterFullscreen === 'function') {
+                // iPhone Safari supports fullscreen on the video element, not arbitrary containers.
+                videoElement.webkitEnterFullscreen();
+            } else {
+                stage.classList.toggle('pseudo-fullscreen');
+            }
+        } catch (err) {
+            console.warn('Fullscreen request failed; trying video fullscreen fallback:', err);
+            try {
+                if (videoElement && typeof videoElement.webkitEnterFullscreen === 'function') videoElement.webkitEnterFullscreen();
+            } catch (fallbackErr) { console.warn('Video fullscreen fallback failed:', fallbackErr); }
         }
+        if (fsIcon) fsIcon.className = (document.fullscreenElement || document.webkitFullscreenElement) ? 'fas fa-compress' : 'fas fa-expand';
     }
-    fullscreenBtn.addEventListener('click', toggleFullscreen);
+    if (fullscreenBtn) fullscreenBtn.addEventListener('click', toggleFullscreen);
     document.getElementById('fullscreenBtnMobile')?.addEventListener('click', toggleFullscreen);
-    document.addEventListener('fullscreenchange', () => {
+    function syncFullscreenIcon() {
         const fsIcon = document.getElementById('fsIcon');
-        if (fsIcon) fsIcon.className = document.fullscreenElement ? 'fas fa-compress' : 'fas fa-expand';
-    });
+        const active = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+        if (fsIcon) fsIcon.className = active ? 'fas fa-compress' : 'fas fa-expand';
+    }
+    ['fullscreenchange', 'webkitfullscreenchange', 'MSFullscreenChange'].forEach(evt => document.addEventListener(evt, syncFullscreenIcon));
+    if (videoElement) {
+        videoElement.addEventListener('webkitbeginfullscreen', syncFullscreenIcon);
+        videoElement.addEventListener('webkitendfullscreen', syncFullscreenIcon);
+    }
 
     searchInput.addEventListener('input', (e) => {
         searchQuery = e.target.value.trim();
